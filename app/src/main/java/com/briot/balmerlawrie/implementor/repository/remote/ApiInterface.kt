@@ -48,9 +48,9 @@ class Material {
 //    var updatedBy: User? = null
 }
 class PutawayItems {
-    var rackBarcodeSerial: String? = ""
-    var binBarcodeSerial: String? = ""
-    var materialBarcodeSerial: String? = ""
+    var rackBarcodeSerial: String? = null
+    var binBarcodeSerial: String? = null
+    var materialBarcodeSerial: String? = null
 }
 
 class DispatchSlip {

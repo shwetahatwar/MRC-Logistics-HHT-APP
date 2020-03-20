@@ -107,7 +107,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.dispatch_slip_item_row, parent, false)
+                .inflate(R.layout.putaway_row, parent, false)
 
         return ViewHolder(itemView)
     }
@@ -132,6 +132,8 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         protected val materialBarcodeSerial: TextView
 
         init {
+            Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
+
             rackBarcodeSerial = itemView.findViewById(R.id.rack_barcode)
             binBarcodeSerial = itemView.findViewById(R.id.bin_barcode)
             materialBarcodeSerial = itemView.findViewById(R.id.material_barcode)

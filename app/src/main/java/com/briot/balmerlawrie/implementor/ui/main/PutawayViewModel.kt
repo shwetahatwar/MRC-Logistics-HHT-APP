@@ -30,8 +30,8 @@ class PutawayViewModel : ViewModel() {
     }
 
     private fun handlePutawayItemsResponse(putawayItems: Array<PutawayItems?>) {
-        Log.d(TAG, "successful dispatch picking items details" + putawayItems.toString())
-       // (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = putawayItems
+        // Log.d(TAG, "handlePutw respone......." + putawayItems)
+        (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = putawayItems
 
     }
 
