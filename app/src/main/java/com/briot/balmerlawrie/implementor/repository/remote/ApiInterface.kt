@@ -47,6 +47,26 @@ class Material {
 //    var createdBy: User? = null
 //    var updatedBy: User? = null
 }
+class PutawayItems {
+    var rackBarcodeSerial: String? = ""
+    var binBarcodeSerial: String? = ""
+    var materialBarcodeSerial: String? = ""
+}
+
+class DispatchSlip {
+    var id: Number? = null
+    var dispatchSlipNumber: String = ""
+    var truckId: Number? = null
+    var depoId: Number? = null
+    var status: String = ""
+    var ttat: Ttat? = null
+    var dispatchSlipStatus: String? = null
+    var depot: Depo? = null
+    var createdBy: String? = null
+    var updatedBy: String? = null
+    var createdAt: String? = null
+    var updatdAt: String? = null
+}
 
 class  MaterialInward {
     var materialId: Number? = null
@@ -84,22 +104,6 @@ class Depo {
     var name: String  = ""
     var location: String = ""
     var status: String  = ""
-    var createdBy: String? = null
-    var updatedBy: String? = null
-    var createdAt: String? = null
-    var updatdAt: String? = null
-}
-
-
-class DispatchSlip {
-    var id: Number? = null
-    var dispatchSlipNumber: String = ""
-    var truckId: Number? = null
-    var depoId: Number? = null
-    var status: String = ""
-    var ttat: Ttat? = null
-    var dispatchSlipStatus: String? = null
-    var depot: Depo? = null
     var createdBy: String? = null
     var updatedBy: String? = null
     var createdAt: String? = null
@@ -173,6 +177,9 @@ class ProjectItem {
 interface ApiInterface {
     @POST("users/sign_in")
     fun login(@Body signInRequest: SignInRequest): Observable<SignInResponse>
+
+    @GET("putaways")
+    fun getPutaway(@Query("status")  status: String): Observable<Array<PutawayItems?>>
 
     @GET("materialinwards")
     fun getMaterialDetails(@Query("serialNumber")  serialNumber: String): Observable<Array<MaterialInward>>

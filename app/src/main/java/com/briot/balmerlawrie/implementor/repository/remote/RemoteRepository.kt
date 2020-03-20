@@ -3,7 +3,7 @@ package com.briot.balmerlawrie.implementor.repository.remote
 import com.briot.balmerlawrie.implementor.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.*
+import kotlin.reflect.KFunction1
 
 class RemoteRepository {
     companion object {
@@ -87,4 +87,13 @@ class RemoteRepository {
     }
 
 
+    fun getPutaway(status: String, handleResponse: KFunction1<Array<PutawayItems?>, Unit>, handleError: (Throwable) -> Unit) {
+        RetrofitHelper.retrofit.create(ApiInterface::class.java)
+                .getPutaway(status)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(handleResponse, handleError)
+    }
+
 }
+
