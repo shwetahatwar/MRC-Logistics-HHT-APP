@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/auditProject"
+                android:id="@+id/materialPutaway"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_width="350dp"

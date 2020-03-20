@@ -39,6 +39,9 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         (this.activity as AppCompatActivity).setTitle("Dashboard")
+        //Navigation.findNavController(login).navigate(R.id.action_loginFragment_to_homeFragment)
+Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
+        //auditProject.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
 
         //val roleName = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_NAME, "")
        // val roleId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_ID, "0").toInt()
@@ -55,11 +58,13 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialInward.setTextColor(disableTextColor)
 
             materialPicking.isEnabled = true
+            putaway.isEnabled = true
+
 
 //            materialLoading.isEnabled = false
 //            materialLoading.setTextColor(disableTextColor)
 
-            auditProject.isEnabled = false
+        materialPutaway.isEnabled = false
             //auditProject.setTextColor(disableTextColor)
 
 //        } else if (roleName.toLowerCase().equals("loader")) {
@@ -73,7 +78,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //
 //            materialLoading.isEnabled = true
 //
-            auditProject.isEnabled = false
+        materialPutaway.isEnabled = false
 //            auditProject.setTextColor(disableTextColor)
 //
 //        } else if (roleName.toLowerCase().equals("auditor")) {
@@ -88,7 +93,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialLoading.isEnabled = false
 //            materialLoading.setTextColor(disableTextColor)
 //
-//            auditProject.isEnabled = true
+        materialPutaway.isEnabled = true
 //        } else {
 //            materialDetails.isEnabled = true
 //
@@ -101,7 +106,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialLoading.isEnabled = false
 //            materialLoading.setTextColor(disableTextColor)
 //
-//            auditProject.isEnabled = false
+        materialPutaway.isEnabled = false
 //            auditProject.setTextColor(disableTextColor)
 //        }
 
@@ -135,16 +140,18 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
 //        this.viewModel.loadRoleAccess()
         versiontext.text = "app version " + BuildConfig.VERSION_NAME;
+//Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
+        //materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
 
         // hide all options initially,  enable it as per role only
         viewStatus(true)
-
             //materialDetails.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialDetailsScanFragment) }
        // materialInward.setOnClickListener {
             UiHelper.showWarningToast(this.activity as AppCompatActivity, "This feature is disabled for now as per request")
 //            @dinesh gajjar; kept out of scope for now on client request
 //            Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialInwardFragment)
         }
+
 //        materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchPickingListsFragment) }
 //        materialLoading.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchSlipsFragment) }
 //        auditProject.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_auditProjectsFragment) }
