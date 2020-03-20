@@ -60,20 +60,20 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialLoading.setTextColor(disableTextColor)
 
             auditProject.isEnabled = false
-            auditProject.setTextColor(disableTextColor)
+            //auditProject.setTextColor(disableTextColor)
 
 //        } else if (roleName.toLowerCase().equals("loader")) {
 //            materialDetails.isEnabled = true
 //
-//            materialInward.isEnabled = false
+//           materialInward.isEnabled = false
 //            materialInward.setTextColor(disableTextColor)
 //
-//            materialPicking.isEnabled = false
+           materialPicking.isEnabled = false
 //            materialPicking.setTextColor(disableTextColor)
 //
 //            materialLoading.isEnabled = true
 //
-//            auditProject.isEnabled = false
+            auditProject.isEnabled = false
 //            auditProject.setTextColor(disableTextColor)
 //
 //        } else if (roleName.toLowerCase().equals("auditor")) {
@@ -139,7 +139,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         // hide all options initially,  enable it as per role only
         viewStatus(true)
 
-            materialDetails.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialDetailsScanFragment) }
+            //materialDetails.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialDetailsScanFragment) }
        // materialInward.setOnClickListener {
             UiHelper.showWarningToast(this.activity as AppCompatActivity, "This feature is disabled for now as per request")
 //            @dinesh gajjar; kept out of scope for now on client request
