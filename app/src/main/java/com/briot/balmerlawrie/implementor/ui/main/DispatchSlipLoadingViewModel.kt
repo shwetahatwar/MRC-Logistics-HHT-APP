@@ -285,7 +285,7 @@ class DispatchSlipLoadingViewModel : ViewModel() {
 
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
-                (networkError as MutableLiveData<Boolean>).value = false
+                (networkError as MutableLiveData<Boolean>).value = false  
             }
         }
 
