@@ -155,8 +155,9 @@
                 android:layout_width="350dp"
                 android:layout_height="120dp"
                 app:cardBackgroundColor="@color/auditAssetButtonBackground"
-                app:cardCornerRadius="4dp">
-
+                app:cardCornerRadius="4dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <ImageView
                     android:id="@+id/pickingImage"

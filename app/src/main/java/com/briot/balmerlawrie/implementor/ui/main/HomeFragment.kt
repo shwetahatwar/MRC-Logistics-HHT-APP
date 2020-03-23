@@ -9,16 +9,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.navigation.Navigation
 import com.briot.balmerlawrie.implementor.R
 //import com.briot.balmerlawrie.implementor.repository.remote.RoleAccessRelation
 import kotlinx.android.synthetic.main.home_fragment.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.briot.balmerlawrie.implementor.BuildConfig
 import com.briot.balmerlawrie.implementor.UiHelper
 import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
 import com.briot.balmerlawrie.implementor.repository.local.PrefRepository
+import com.google.android.material.snackbar.Snackbar
 
 
 class HomeFragment : androidx.fragment.app.Fragment() {
@@ -41,7 +44,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         (this.activity as AppCompatActivity).setTitle("Dashboard")
         //Navigation.findNavController(login).navigate(R.id.action_loginFragment_to_homeFragment)
        // Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
-       Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
+      // Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
 
         //val roleName = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_NAME, "")
        // val roleId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_ID, "0").toInt()
@@ -94,6 +97,15 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialLoading.setTextColor(disableTextColor)
 //
         materialPutaway.isEnabled = true
+        materialPutaway.setOnClickListener { v: View  ->
+            //var position: Int = getAdapterPosition()
+            //materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchPickingListsFragment) }
+            //Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
+//            materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
+
+        }
+
+
 //        } else {
 //            materialDetails.isEnabled = true
 //
@@ -138,6 +150,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
         })*/
 
+
+
 //        this.viewModel.loadRoleAccess()
         versiontext.text = "app version " + BuildConfig.VERSION_NAME;
 //Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
@@ -171,5 +185,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialLoading.visibility = View.VISIBLE
 //            auditProject.visibility = View.GONE
         }
+
+
     }
-//}
+
+

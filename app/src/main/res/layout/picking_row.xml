@@ -9,6 +9,7 @@ android:layout_marginBottom="5dp"
 android:background="@color/listCellBackgroundColor"
 android:orientation="vertical"
 android:paddingTop="5dp"
+    android:clickable="true"
 android:paddingBottom="10dp">
 
 <LinearLayout
