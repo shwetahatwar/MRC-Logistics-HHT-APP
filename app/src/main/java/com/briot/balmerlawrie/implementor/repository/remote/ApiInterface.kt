@@ -173,6 +173,12 @@ class ProjectItem {
 
 }
 
+class PickingItems {
+    var rackBarcodeSerial: String? = null
+    var binBarcodeSerial: String? = null
+    var materialBarcodeSerial: String? = null
+}
+
 
 interface ApiInterface {
     @POST("users/sign_in")
@@ -180,6 +186,9 @@ interface ApiInterface {
 
     @GET("putaways")
     fun getPutaway(@Query("status")  status: String): Observable<Array<PutawayItems?>>
+
+    @GET("pickings")
+    fun getPickingItems():Observable<Array<PickingItems?>>
 
     @GET("materialinwards")
     fun getMaterialDetails(@Query("serialNumber")  serialNumber: String): Observable<Array<MaterialInward>>

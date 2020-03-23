@@ -40,8 +40,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
         (this.activity as AppCompatActivity).setTitle("Dashboard")
         //Navigation.findNavController(login).navigate(R.id.action_loginFragment_to_homeFragment)
-Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
-        //auditProject.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
+       // Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
+       Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
 
         //val roleName = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_NAME, "")
        // val roleId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_ID, "0").toInt()
@@ -74,7 +74,7 @@ Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_
 //            materialInward.setTextColor(disableTextColor)
 //
            materialPicking.isEnabled = false
-//            materialPicking.setTextColor(disableTextColor)
+         //   materialPicking.setTextColor(disableTextColor)
 //
 //            materialLoading.isEnabled = true
 //
@@ -87,8 +87,8 @@ Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_
 //            materialInward.isEnabled = false
 //            materialInward.setTextColor(disableTextColor)
 //
-//            materialPicking.isEnabled = false
-//            materialPicking.setTextColor(disableTextColor)
+           materialPicking.isEnabled = false
+          // materialPicking.setTextColor(disableTextColor)
 //
 //            materialLoading.isEnabled = false
 //            materialLoading.setTextColor(disableTextColor)
@@ -100,7 +100,7 @@ Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_
 //            materialInward.isEnabled = false
 //            materialInward.setTextColor(disableTextColor)
 //
-//            materialPicking.isEnabled = false
+           materialPicking.isEnabled = false
 //            materialPicking.setTextColor(disableTextColor)
 //
 //            materialLoading.isEnabled = false
