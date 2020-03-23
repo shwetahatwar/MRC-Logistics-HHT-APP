@@ -23,13 +23,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //buildConfigField "String", "HOSTNAME", "\"https://briot-balmer-lawrie.herokuapp.com/\""
-            buildConfigField "String", "HOSTNAME", "\"http://192.168.0.3:3000/\""
-         }
+            buildConfigField "String", "HOSTNAME", "\"http://192.168.43.89:3000/\""
+        }
 
         debug {
 //            buildConfigField "String", "HOSTNAME", "\"http://10.0.2.2:3000\""
-           // buildConfigField "String", "HOSTNAME", "\"https://briot-balmer-lawrie.herokuapp.com/\""
-            buildConfigField "String", "HOSTNAME", "\"http://192.168.0.3:3000/\""
+            // buildConfigField "String", "HOSTNAME", "\"https://briot-balmer-lawrie.herokuapp.com/\""
+            buildConfigField "String", "HOSTNAME", "\"http://192.168.43.89:3000/\""
         }
         lintOptions {
 //            checkReleaseBuilds false
@@ -49,6 +49,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -93,4 +96,5 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
 
     // Test helpers
-    testImplementation "androidx.room:room-testing:$room_version"}
+    testImplementation "androidx.room:room-testing:$room_version"
+}

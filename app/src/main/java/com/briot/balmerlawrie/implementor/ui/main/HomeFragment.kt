@@ -9,16 +9,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.navigation.Navigation
 import com.briot.balmerlawrie.implementor.R
 //import com.briot.balmerlawrie.implementor.repository.remote.RoleAccessRelation
 import kotlinx.android.synthetic.main.home_fragment.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.briot.balmerlawrie.implementor.BuildConfig
 import com.briot.balmerlawrie.implementor.UiHelper
 import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
 import com.briot.balmerlawrie.implementor.repository.local.PrefRepository
+import com.google.android.material.snackbar.Snackbar
 
 
 class HomeFragment : androidx.fragment.app.Fragment() {
@@ -39,6 +42,9 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         (this.activity as AppCompatActivity).setTitle("Dashboard")
+        //Navigation.findNavController(login).navigate(R.id.action_loginFragment_to_homeFragment)
+       // Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
+      // Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
 
         //val roleName = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_NAME, "")
        // val roleId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_ID, "0").toInt()
@@ -55,25 +61,27 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialInward.setTextColor(disableTextColor)
 
             materialPicking.isEnabled = true
+            putaway.isEnabled = true
+
 
 //            materialLoading.isEnabled = false
 //            materialLoading.setTextColor(disableTextColor)
 
-            auditProject.isEnabled = false
-            auditProject.setTextColor(disableTextColor)
+        materialPutaway.isEnabled = false
+            //auditProject.setTextColor(disableTextColor)
 
 //        } else if (roleName.toLowerCase().equals("loader")) {
 //            materialDetails.isEnabled = true
 //
-//            materialInward.isEnabled = false
+//           materialInward.isEnabled = false
 //            materialInward.setTextColor(disableTextColor)
 //
-//            materialPicking.isEnabled = false
-//            materialPicking.setTextColor(disableTextColor)
+           materialPicking.isEnabled = false
+         //   materialPicking.setTextColor(disableTextColor)
 //
 //            materialLoading.isEnabled = true
 //
-//            auditProject.isEnabled = false
+        materialPutaway.isEnabled = false
 //            auditProject.setTextColor(disableTextColor)
 //
 //        } else if (roleName.toLowerCase().equals("auditor")) {
@@ -82,26 +90,35 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialInward.isEnabled = false
 //            materialInward.setTextColor(disableTextColor)
 //
-//            materialPicking.isEnabled = false
-//            materialPicking.setTextColor(disableTextColor)
+           materialPicking.isEnabled = false
+          // materialPicking.setTextColor(disableTextColor)
 //
 //            materialLoading.isEnabled = false
 //            materialLoading.setTextColor(disableTextColor)
 //
-//            auditProject.isEnabled = true
+        materialPutaway.isEnabled = true
+        materialPutaway.setOnClickListener { v: View  ->
+            //var position: Int = getAdapterPosition()
+            //materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchPickingListsFragment) }
+            //Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
+//            materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
+
+        }
+
+
 //        } else {
 //            materialDetails.isEnabled = true
 //
 //            materialInward.isEnabled = false
 //            materialInward.setTextColor(disableTextColor)
 //
-//            materialPicking.isEnabled = false
+           materialPicking.isEnabled = false
 //            materialPicking.setTextColor(disableTextColor)
 //
 //            materialLoading.isEnabled = false
 //            materialLoading.setTextColor(disableTextColor)
 //
-//            auditProject.isEnabled = false
+        materialPutaway.isEnabled = false
 //            auditProject.setTextColor(disableTextColor)
 //        }
 
@@ -133,18 +150,22 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
         })*/
 
+
+
 //        this.viewModel.loadRoleAccess()
         versiontext.text = "app version " + BuildConfig.VERSION_NAME;
+//Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
+        //materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
 
         // hide all options initially,  enable it as per role only
         viewStatus(true)
-
-            materialDetails.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialDetailsScanFragment) }
+            //materialDetails.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialDetailsScanFragment) }
        // materialInward.setOnClickListener {
             UiHelper.showWarningToast(this.activity as AppCompatActivity, "This feature is disabled for now as per request")
 //            @dinesh gajjar; kept out of scope for now on client request
 //            Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialInwardFragment)
         }
+
 //        materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchPickingListsFragment) }
 //        materialLoading.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchSlipsFragment) }
 //        auditProject.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_auditProjectsFragment) }
@@ -164,5 +185,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //            materialLoading.visibility = View.VISIBLE
 //            auditProject.visibility = View.GONE
         }
+
+
     }
-//}
+
+
