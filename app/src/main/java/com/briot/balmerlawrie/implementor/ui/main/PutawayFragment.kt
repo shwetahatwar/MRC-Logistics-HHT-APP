@@ -147,12 +147,14 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
 
         fun bind() {
             val putawayItems = putawayItems.value!![adapterPosition]!!
-            Log.d(TAG, ">>>>>>>>>>>>>>>>>" + putawayItems.toString())
+            // Log.d(TAG, ">>>>>>>>>>>>>>>>>" + putawayItems.materialBarcodeSerial)
 
             rackBarcodeSerial.text = putawayItems.rackBarcodeSerial
             binBarcodeSerial.text = putawayItems.binBarcodeSerial
-            materialBarcodeSerial.text = putawayItems.materialBarcodeSerial
+            val barcodeComplete = putawayItems.materialBarcodeSerial
+            val barcodeValue = barcodeComplete?.split(",");
+            //Log.d(TAG, "////////////////" + (barcodeValue?.get(0) ?: 1))
+            materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
         }
     }
 }
-

@@ -34,7 +34,7 @@ class PutawayViewModel : ViewModel() {
     }
 
     private fun handlePutawayItemsResponse(putawayItems: Array<PutawayItems?>) {
-        // Log.d(TAG, "handlePutw respone......." + putawayItems)
+        // Log.d(TAG, "abcdef......." + putawayItems)
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = putawayItems
 //        responsePutawayLoadingItems = putawayItems
 //        updatedListAsPerDatabase(responsePutawayLoadingItems)
@@ -49,11 +49,11 @@ class PutawayViewModel : ViewModel() {
             (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = invalidPutawayItems
         }
     }
-    fun isMaterialBelongToSameGroup(materialBarcodeSerial: String, rackBarcodeSerial: String): Boolean {
-        val result = responsePutawayLoadingItems.filter {
-            (it?.materialBarcodeSerial.equals(materialBarcodeSerial) && it?.rackBarcodeSerial.equals(rackBarcodeSerial))
-        }
-        return (result.size > 0)
-    }
+//    fun isMaterialBelongToSameGroup(materialBarcodeSerial: String, rackBarcodeSerial: String): Boolean {
+//        val result = responsePutawayLoadingItems.filter {
+//            (it?.materialBarcodeSerial.equals(materialBarcodeSerial) && it?.rackBarcodeSerial.equals(rackBarcodeSerial))
+//        }
+//        return (result.size > 0)
+//    }
 
 }
