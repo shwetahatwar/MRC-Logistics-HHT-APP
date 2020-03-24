@@ -185,10 +185,10 @@ interface ApiInterface {
     fun login(@Body signInRequest: SignInRequest): Observable<SignInResponse>
 
     @GET("putaways")
-    fun getPutaway(@Query("status")  status: String): Observable<Array<PutawayItems?>>
+    fun getPutaway(): Observable<Array<PutawayItems?>>
 
-    @PUT("putaways/{id}")
-    fun putPutawayItems(@Query("status")  status: String): Observable<Array<PutawayItems?>>
+    @PUT("putaways/")
+    fun putPutawayItems(): Observable<Array<PutawayItems?>>
 
     @GET("pickings")
     fun getPickingItems():Observable<Array<PickingItems?>>
