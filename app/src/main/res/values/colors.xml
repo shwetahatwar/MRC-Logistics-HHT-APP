@@ -20,5 +20,6 @@
     <color name="reportButtonTitle">#FF275d33</color>
 
     <color name="listCellBackgroundColor">#F3F3F3</color>
+    <color name="putawaySubmitItem">#275D33</color>
 
 </resources>

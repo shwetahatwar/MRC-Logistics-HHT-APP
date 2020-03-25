@@ -46,7 +46,9 @@ class DispatchSlipLoadingViewModel : ViewModel() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.dispatchloadingItems as MutableLiveData<Array<DispatchSlipItem?>>).value = null
 
-        RemoteRepository.singleInstance.getDispatchSlipItems(dispatchSlipId, this::handleDispatchLoadingItemsResponse, this::handleDispatchLoadingItemsError)
+        RemoteRepository.singleInstance.getDispatchSlipItems(dispatchSlipId,
+                this::handleDispatchLoadingItemsResponse,
+                this::handleDispatchLoadingItemsError)
     }
 
     private fun handleDispatchLoadingItemsResponse(dispatchSlipItems: Array<DispatchSlipItem?>) {

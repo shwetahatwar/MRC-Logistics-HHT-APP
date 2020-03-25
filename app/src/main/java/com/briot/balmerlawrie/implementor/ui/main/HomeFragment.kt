@@ -37,15 +37,14 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     lateinit var cardView: CardView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.home_fragment, container, false)
-        this.cardView = rootView.findViewById(R.id.materialPutaway)
-        Log.d(TAG, ">>>>>>>>>>>>>>>>>")
-        this.cardView.setOnClickListener {
-            // your code to perform when the user clicks on the ImageView
-            Log.d(TAG, ".............")
-        }
-        return rootView
-        // return inflater.inflate(R.layout.home_fragment, container, false)
+//        val rootView = inflater.inflate(R.layout.home_fragment, container, false)
+//        this.cardView = rootView.findViewById(R.id.materialPutaway)
+//        this.cardView.setOnClickListener {
+//            // your code to perform when the user clicks on the ImageView
+//            Log.d(TAG, ".............")
+//        }
+//        return rootView
+        return inflater.inflate(R.layout.home_fragment, container, false)
     }
 
 
