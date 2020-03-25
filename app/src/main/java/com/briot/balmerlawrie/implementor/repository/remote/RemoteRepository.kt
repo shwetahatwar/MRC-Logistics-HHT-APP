@@ -116,7 +116,7 @@ class RemoteRepository {
                 .getPickingItems()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(handleResponse, handleError)
+                .subscribe(handleResponse, handleError)  
     }
 
 }
