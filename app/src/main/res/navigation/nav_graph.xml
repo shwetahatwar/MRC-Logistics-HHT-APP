@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_homeFragment_to_dispatchSlipsFragment"
             app:destination="@id/dispatchSlipsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_vendorMaterialScanFragment"
+            app:destination="@id/vendorMaterialScanFragment" />
 
         <!--        <action-->
 <!--            android:id="@+id/action_homeFragment_to_putawayFragment"-->
@@ -118,4 +121,9 @@
         android:name="com.briot.balmerlawrie.implementor.ui.main.PickingFragment"
         android:label="picking_mrc_fragment"
         tools:layout="@layout/picking_fragment" />
+    <fragment
+        android:id="@+id/vendorMaterialScanFragment"
+        android:name="com.briot.balmerlawrie.implementor.ui.main.VendorMaterialScanFragment"
+        android:label="vendor_material_scan_fragment"
+        tools:layout="@layout/vendor_material_scan_fragment" />
 </navigation>

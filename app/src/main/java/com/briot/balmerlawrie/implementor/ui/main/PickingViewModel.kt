@@ -1,8 +1,11 @@
 package com.briot.balmerlawrie.implementor.ui.main
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.briot.balmerlawrie.implementor.R
 import com.briot.balmerlawrie.implementor.UiHelper
 import com.briot.balmerlawrie.implementor.repository.remote.PickingItems
 import com.briot.balmerlawrie.implementor.repository.remote.RemoteRepository
@@ -27,7 +30,6 @@ class PickingViewModel : ViewModel() {
 
     private fun handlePickingItemsResponse(pickingItems: Array<PickingItems?>) {
         (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = pickingItems
-
     }
 
     private fun handlePickingItemsError(error: Throwable) {

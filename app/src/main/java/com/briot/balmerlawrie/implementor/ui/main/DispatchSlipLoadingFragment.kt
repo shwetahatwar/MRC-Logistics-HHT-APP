@@ -226,7 +226,9 @@ class DispatchSlipLoadingFragment : Fragment() {
     }
 }
 
-open class SimpleDispatchSlipLoadingItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView, private val dispatchSlipItems: LiveData<Array<DispatchSlipItem?>>, private val viewModel: DispatchSlipLoadingViewModel) : androidx.recyclerview.widget.RecyclerView.Adapter<SimpleDispatchSlipLoadingItemAdapter.ViewHolder>() {
+open class SimpleDispatchSlipLoadingItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
+                                                private val dispatchSlipItems: LiveData<Array<DispatchSlipItem?>>,
+                                                private val viewModel: DispatchSlipLoadingViewModel) : androidx.recyclerview.widget.RecyclerView.Adapter<SimpleDispatchSlipLoadingItemAdapter.ViewHolder>() {
 
 //    private var viewModel: DispatchSlipsViewModel = viewModel
 

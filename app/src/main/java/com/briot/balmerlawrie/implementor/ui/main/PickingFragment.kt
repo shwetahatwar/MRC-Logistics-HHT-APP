@@ -131,7 +131,6 @@ RecyclerView.Adapter<SimplePickingItemAdapter.ViewHolder>() {
 
         init {
             Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
-
             rackBarcodeSerial = itemView.findViewById(R.id.rack_barcode)
             binBarcodeSerial = itemView.findViewById(R.id.bin_barcode)
             materialBarcodeSerial = itemView.findViewById(R.id.material_barcode)

@@ -1,5 +1,7 @@
 package com.briot.balmerlawrie.implementor.repository.remote
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.briot.balmerlawrie.implementor.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -93,6 +95,9 @@ class RemoteRepository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(handleResponse, handleError)
+
+        Log.d(TAG,"handle response in remote" + handleResponse)
+
     }
 
 //    fun putPutawayItems(id: Int, requestbody: PutawayItems, handleResponse: (PutPutawayResponse?) -> Unit, handleError: (Throwable) -> Unit) {

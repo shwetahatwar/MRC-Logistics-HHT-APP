@@ -103,32 +103,6 @@ class DispatchSlipLoadingViewModel : ViewModel() {
             }
         }
 
-        /*
-//        var differentItems = Array<DispatchSlipItem>()
-
-        for (dbItem in dbItems.value!!.iterator()) {
-            var foundItems = updatedItems.filter {
-                return  (dbItem.batchCode.equals(it?.batchNumber))
-            }
-
-            if (foundItems!!.size == 0) {
-                var item = DispatchSlipItem()
-                item.id = 0
-                item.scannedPacks = 1
-                item.batchNumber = dbItem.batchCode
-                item.materialCode = dbItem.productCode
-                item.dispatchSlipId = dbItem.dispatchSlipId
-                item.numberOfPacks = 1
-                differentItems.add   (item)
-            }
-//            for (item in updatedItems) {
-//                if (item != null) {
-//                    var dbBatchwiseItems = dbDao.getItemsForBatch(dispatchSlipId, item!!.batchNumber)
-//                }
-//            }
-
-        }*/
-
         updatedItems.sortWith(compareBy<DispatchSlipItem?> {
             it!!.scannedPacks.toInt() == it!!.numberOfPacks.toInt()
         }.thenBy {
