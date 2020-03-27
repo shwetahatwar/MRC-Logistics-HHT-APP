@@ -219,20 +219,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
             val rackB = "RACK004"
             val matB = "NSN2017-468-160,SN0205,BP,M20x1.5x13x30 Gr8HT PLSLT ,300302790,300,4210-00006,39.885,11.97,12.42,101166,05.01.2020,12.03.2020,120320121418249"
 
-            if(rackBarcodeSerial.text==item.rackBarcodeSerial && binBarcodeSerial.text==item.binBarcodeSerial){
-                Log.d(TAG, "match----")
-
-                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-
-            }else {
-                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
-
-            }
-
-
-
-
-
+            
 //            val binB = viewModel.binBarcodeSerial
 //            val rackB =viewModel.rackBarcodeSerial
 //            val matB=viewModel.materialBarcodeSerial
