@@ -1,6 +1,7 @@
 package com.briot.balmerlawrie.implementor.ui.main
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -10,19 +11,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.briot.balmerlawrie.implementor.MainApplication
 
 import com.briot.balmerlawrie.implementor.R
 import com.briot.balmerlawrie.implementor.UiHelper
+import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
 import com.briot.balmerlawrie.implementor.repository.remote.PickingItems
 import io.github.pierry.progress.Progress
+import kotlinx.android.synthetic.main.material_details_scan_fragment.*
 import kotlinx.android.synthetic.main.picking_fragment.*
 import kotlinx.android.synthetic.main.picking_fragment.picking_materialBarcode
 import kotlinx.coroutines.GlobalScope
@@ -47,12 +54,12 @@ private var progress: Progress? = null
 private var oldPickingItems: Array<PickingItems?>? = null
 lateinit var recyclerView: RecyclerView
 
-override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                           savedInstanceState: Bundle?): View? {
     val rootView = inflater.inflate(R.layout.picking_fragment, container, false)
     this.recyclerView = rootView.findViewById(R.id.pickingItems)
-    recyclerView.layoutManager = LinearLayoutManager(this.activity)
-    pickingMaterialTextValue = rootView.findViewById(R.id.picking_materialBarcode)
+        recyclerView.layoutManager = LinearLayoutManager(this.activity)
+        pickingMaterialTextValue = rootView.findViewById(R.id.picking_materialBarcode)
     binMaterialTextValue = rootView.findViewById(R.id.picking_binBarcode)
     rackMaterialTextValue = rootView.findViewById(R.id.picking_rackBarcode)
     materialBarcodeScanButton = rootView.findViewById(R.id.picking_material_scanButton)
@@ -61,8 +68,6 @@ override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
     picking_submitItemButton = rootView.findViewById(R.id.picking_submit_button)
 
     // Log.d("materialbtn: ", "materialbtn")
-
-
     return rootView
 }
 
@@ -122,15 +127,34 @@ override fun onActivityCreated(savedInstanceState: Bundle?) {
     viewModel.loadPickingItems("In progress")
 
     // After click on submit button need to call put method to update database
+
+
+
     picking_submit_button.setOnClickListener({
+        var thisObject = this
+
         viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
         viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
         viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
 
-        GlobalScope.launch {
-            viewModel.handleSubmitPicking()
-        }
+                    AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
+                        setTitle("Confirm")
+                        setMessage("Are you sure you want to update this picking list items")
+                        setButton(AlertDialog.BUTTON_NEUTRAL, "No", { dialog, _ -> dialog.dismiss() })
+                        setButton(AlertDialog.BUTTON_POSITIVE, "Yes", { dialog, _ ->
+                            dialog.dismiss()
+                            thisObject.progress = UiHelper.showProgressIndicator(thisObject.activity as AppCompatActivity, "Please wait")
+                            linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
 
+                            GlobalScope.launch {
+                                viewModel.handleSubmitPicking()
+                            }
+
+                        })
+                        show()
+
+
+                    }
     });
 }
 }
@@ -166,12 +190,17 @@ RecyclerView.Adapter<SimplePickingItemAdapter.ViewHolder>() {
         protected val rackBarcodeSerial: TextView
         protected val binBarcodeSerial: TextView
         protected val materialBarcodeSerial: TextView
+        protected val linearLayout: LinearLayout
+
+
 
         init {
             Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
             rackBarcodeSerial = itemView.findViewById(R.id.rack_barcode)
             binBarcodeSerial = itemView.findViewById(R.id.bin_barcode)
             materialBarcodeSerial = itemView.findViewById(R.id.material_barcode)
+            linearLayout = itemView.findViewById(R.id.dispatch_slip_layout)
+
         }
 
         fun bind() {
@@ -180,7 +209,21 @@ RecyclerView.Adapter<SimplePickingItemAdapter.ViewHolder>() {
 
             rackBarcodeSerial.text = pickingItems.rackBarcodeSerial
             binBarcodeSerial.text = pickingItems.binBarcodeSerial
-            materialBarcodeSerial.text = pickingItems.materialBarcodeSerial
+
+            val barcodeComplete = pickingItems.materialBarcodeSerial
+            val barcodeValue = barcodeComplete?.split(",");
+            materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
+
+
+
+            if(rackBarcodeSerial.text==pickingItems.rackBarcodeSerial && binBarcodeSerial.text==pickingItems.binBarcodeSerial &&
+                    materialBarcodeSerial.text==pickingItems.materialBarcodeSerial){
+                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+
+            }else {
+                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+
+            }
         }
     }
 }
