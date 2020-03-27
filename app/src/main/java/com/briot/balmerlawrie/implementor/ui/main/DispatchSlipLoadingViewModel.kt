@@ -266,8 +266,6 @@ class DispatchSlipLoadingViewModel : ViewModel() {
         }
 
         RemoteRepository.singleInstance.postDispatchSlipLoadedMaterials(dispatchSlipId, dispatchSlipRequestObject, this::handleDispatchLoadingItemsSubmissionResponse, this::handleDispatchLoadingItemsSubmissionError)
-
-
     }
 
     private fun handleDispatchLoadingItemsSubmissionResponse(dispatchSlipResponse: DispatchSlipItemResponse?) {

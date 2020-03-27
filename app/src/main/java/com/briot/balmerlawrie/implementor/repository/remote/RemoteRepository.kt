@@ -139,9 +139,21 @@ class RemoteRepository {
                             handleError: (Throwable) -> Unit) {
         RetrofitHelper.retrofit.create(ApiInterface::class.java)
                 .postMaterialInwards(requestbody)
+//    fun putPickingItems(id: Int, requestbody: PickingRequest, handleResponse: (PutPickingResponse?) -> Unit, handleError: (Throwable) -> Unit) {
+//        RetrofitHelper.retrofit.create(ApiInterface::class.java)
+//                .putPickingItems(id, requestbody)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(handleResponse, handleError)
+//    }
+
+    fun putPickingItems(requestbody: PickingItems, handleResponse: (PutPickingResponse?) -> Unit, handleError: (Throwable) -> Unit) {
+        RetrofitHelper.retrofit.create(ApiInterface::class.java)
+                .putPickingItems(requestbody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(handleResponse, handleError)
     }
+
 
 }

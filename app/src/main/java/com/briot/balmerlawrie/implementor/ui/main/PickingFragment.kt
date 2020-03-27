@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
@@ -22,12 +24,24 @@ import com.briot.balmerlawrie.implementor.UiHelper
 import com.briot.balmerlawrie.implementor.repository.remote.PickingItems
 import io.github.pierry.progress.Progress
 import kotlinx.android.synthetic.main.picking_fragment.*
+import kotlinx.android.synthetic.main.picking_fragment.picking_materialBarcode
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class PickingFragment : Fragment() {
 
     companion object {
         fun newInstance() = PickingFragment()
     }
+
+    lateinit var pickingMaterialTextValue: EditText
+    lateinit var binMaterialTextValue: EditText
+    lateinit var rackMaterialTextValue: EditText
+    lateinit var materialBarcodeScanButton: Button
+    lateinit var rackBarcodeScanButton: Button
+    lateinit var binBarcodeScanButton: Button
+    lateinit var picking_submitItemButton: Button
+
 private lateinit var viewModel: PickingViewModel
 private var progress: Progress? = null
 private var oldPickingItems: Array<PickingItems?>? = null
@@ -38,6 +52,17 @@ override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
     val rootView = inflater.inflate(R.layout.picking_fragment, container, false)
     this.recyclerView = rootView.findViewById(R.id.pickingItems)
     recyclerView.layoutManager = LinearLayoutManager(this.activity)
+    pickingMaterialTextValue = rootView.findViewById(R.id.picking_materialBarcode)
+    binMaterialTextValue = rootView.findViewById(R.id.picking_binBarcode)
+    rackMaterialTextValue = rootView.findViewById(R.id.picking_rackBarcode)
+    materialBarcodeScanButton = rootView.findViewById(R.id.picking_material_scanButton)
+    rackBarcodeScanButton = rootView.findViewById(R.id.picking_bin_scanButton)
+    binBarcodeScanButton = rootView.findViewById(R.id.picking_rack_scanButton)
+    picking_submitItemButton = rootView.findViewById(R.id.picking_submit_button)
+
+    // Log.d("materialbtn: ", "materialbtn")
+
+
     return rootView
 }
 
@@ -96,9 +121,22 @@ override fun onActivityCreated(savedInstanceState: Bundle?) {
     this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
     viewModel.loadPickingItems("In progress")
 
+    // After click on submit button need to call put method to update database
+    picking_submit_button.setOnClickListener({
+        viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
+        viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
+        viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
+
+        GlobalScope.launch {
+            viewModel.handleSubmitPicking()
+        }
+
+    });
+}
 }
 
-}
+
+
 open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
                                     private val pickingItems: LiveData<Array<PickingItems?>>) : androidx.recyclerview.widget.
 RecyclerView.Adapter<SimplePickingItemAdapter.ViewHolder>() {

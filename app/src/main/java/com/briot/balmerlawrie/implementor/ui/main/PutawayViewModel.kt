@@ -30,7 +30,7 @@ class PutawayViewModel : ViewModel() {
     val networkError: LiveData<Boolean> = MutableLiveData()
     val putawayItems: LiveData<Array<PutawayItems?>> = MutableLiveData()
     val invalidPutawayItems: Array<PutawayItems?> = arrayOf(null)
-    val invalidPutawayPutItems: LiveData<Array<PutPutawayResponse?>> = MutableLiveData()
+    //val invalidPutawayPutItems: LiveData<Array<PutPutawayResponse?>> = MutableLiveData()
     var responsePutawayLoadingItems: Array<PutawayItems?> = arrayOf(null)
     val invalidputawayloadingItems: Array<DispatchSlipItem?> = arrayOf(null)
     var getResponsePutwayData: Array<PutawayItems?> = arrayOf(null)

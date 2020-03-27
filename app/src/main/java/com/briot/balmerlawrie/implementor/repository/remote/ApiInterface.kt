@@ -157,7 +157,7 @@ class DispatchSlipRequest {
 }
 
 class Project {
-        var name: String = ""
+    var name: String = ""
     var auditors: String = ""
     var start: String = ""
     var end: String = ""
@@ -192,6 +192,16 @@ class PickingItems {
     var binBarcodeSerial: String? = null
     var materialBarcodeSerial: String? = null
 }
+//
+//class PickingRequest{
+//    var rackBarcodeSerial: String? = null
+//    var binBarcodeSerial: String? = null
+//    var materialBarcodeSerial: String? = null
+//}
+class PutPickingResponse {
+    var message: String? = null
+}
+
 
 
 interface ApiInterface {
@@ -213,6 +223,11 @@ interface ApiInterface {
     @GET("pickings")
     fun getPickingItems():Observable<Array<PickingItems?>>
 
+
+    @PUT("pickings/1")
+    fun putPickingItems(@Body requestbody: PickingItems): Observable<PutPickingResponse?>
+
+
     @GET("materialinwards")
     fun getMaterialDetails(@Query("serialNumber")  serialNumber: String): Observable<Array<MaterialInward>>
 
@@ -232,8 +247,7 @@ interface ApiInterface {
         fun postDispatchSlipPickedMaterials(@Path("id") id: Int, @Body requestbody: DispatchSlipRequest): Observable<DispatchSlipItemResponse?>
 
     @POST("dispatchslips/{id}/dispatchsliploadermaterials")
-    fun postDispatchSlipLoadedMaterials(@Path("id") id: Int,
-                                        @Body requestbody: DispatchSlipRequest):
+    fun postDispatchSlipLoadedMaterials(@Path("id") id: Int, @Body requestbody: DispatchSlipRequest):
             Observable<DispatchSlipItemResponse?>
 
     @GET("/projects/{status}")
