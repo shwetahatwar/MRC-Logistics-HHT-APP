@@ -208,8 +208,6 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
 
         fun bind() {
             val item = putawayItems.value!![adapterPosition]!!
-            // Log.d(TAG, ">>>>>>>>>>>>>>>>>333" + viewModel.rackBarcodeSerial)
-            //Log.d(TAG, "******************" + itemView.id)
             rackBarcodeSerial.text = item.rackBarcodeSerial
             binBarcodeSerial.text = item.binBarcodeSerial
             val barcodeComplete = item.materialBarcodeSerial
@@ -217,20 +215,38 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
             //Log.d(TAG, "////////////////" + (barcodeValue?.get(0) ?: 1))
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?: "NA")
 
-            val binB = viewModel.binBarcodeSerial
-            val rackB =viewModel.rackBarcodeSerial
-            val matB=viewModel.materialBarcodeSerial
+            val binB = "BIN004"
+            val rackB = "RACK004"
+            val matB = "NSN2017-468-160,SN0205,BP,M20x1.5x13x30 Gr8HT PLSLT ,300302790,300,4210-00006,39.885,11.97,12.42,101166,05.01.2020,12.03.2020,120320121418249"
 
-             Log.d(TAG, ">>>>>>>>>>>>>>>>>binb" + viewModel.binBarcodeSerial)
+            if(rackBarcodeSerial.text==item.rackBarcodeSerial && binBarcodeSerial.text==item.binBarcodeSerial){
+                Log.d(TAG, "match----")
 
-            if (binB == item!!.binBarcodeSerial && rackB == item!!.rackBarcodeSerial && matB == item!!.materialBarcodeSerial) {
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-                Log.d(TAG, "yes-------------"+item!!.binBarcodeSerial)
 
-            }else{
+            }else {
                 linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
 
             }
+
+
+
+
+
+//            val binB = viewModel.binBarcodeSerial
+//            val rackB =viewModel.rackBarcodeSerial
+//            val matB=viewModel.materialBarcodeSerial
+//
+//             Log.d(TAG, ">>>>>>>>>>>>>>>>>binb" + viewModel.binBarcodeSerial)
+//
+//            if (binB == item!!.binBarcodeSerial && rackB == item!!.rackBarcodeSerial && matB == item!!.materialBarcodeSerial) {
+//                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+//                Log.d(TAG, "yes-------------"+item!!.binBarcodeSerial)
+//
+//            }else{
+//                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+//
+//            }
 
 
         }

@@ -71,15 +71,15 @@ class PutawayViewModel : ViewModel() {
         val rackB = "RACK004"
         val matB = "NSN2017-468-160,SN0205,BP,M20x1.5x13x30 Gr8HT PLSLT ,300302790,300,4210-00006,39.885,11.97,12.42,101166,05.01.2020,12.03.2020,120320121418249"
          Log.d(TAG, "getResponsePutwayData,......." + getResponsePutwayData[1]!!.binBarcodeSerial)
-        for (item in getResponsePutwayData) {
-            if (binB == item!!.binBarcodeSerial && rackB == item!!.rackBarcodeSerial && matB == item!!.materialBarcodeSerial){
-         Log.d(TAG, "yes-------------"+binB)
-         Log.d(TAG, "yes-------------"+item!!.binBarcodeSerial)
-            }
-            else{
-                Log.d(TAG, "noooooooo.")
-            }
-    }
+//        for (item in getResponsePutwayData) {
+//            if (binB == item!!.binBarcodeSerial && rackB == item!!.rackBarcodeSerial && matB == item!!.materialBarcodeSerial){
+//         Log.d(TAG, "yes-------------"+binB)
+//         Log.d(TAG, "yes-------------"+item!!.binBarcodeSerial)
+//            }
+//            else{
+//                Log.d(TAG, "noooooooo.")
+//            }
+//    }
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (networkError as MutableLiveData<Boolean>).value = false
