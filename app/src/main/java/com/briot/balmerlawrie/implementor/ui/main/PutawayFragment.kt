@@ -56,7 +56,6 @@ class PutawayFragment : Fragment() {
     private lateinit var viewModel: PutawayViewModel
     private var progress: Progress? = null
     private var oldPutawayItems: Array<PutawayItems?>? = null
-    // var inputData: Array<PutawayItems?> = arrayOf(null)
     var inputData = PutawayItems()
     lateinit var recyclerView: RecyclerView
 
@@ -72,20 +71,11 @@ class PutawayFragment : Fragment() {
         rackbtn = rootView.findViewById(R.id.bin_scanButton)
         binbtn = rootView.findViewById(R.id.rack_scanButton)
         putawaysubmit = rootView.findViewById(R.id.putaway_items_submit_button)
-
-        // Log.d("materialbtn: ", "materialbtn")
-        return rootView
-
-//        val material_barcode_edit_text = rootView.findViewById<EditText>(R.id.putaway_materialBarcode)
-//        val bin_barcode_edit_text = rootView.findViewById<EditText>(R.id.bin_materialBarcode)
-//        val rack_barcode_edit_text = rootView.findViewById<EditText>(R.id.rack_materialBarcode)
-
+       return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProviders.of(this).get(PutawayViewModel::class.java)
-//        (this.activity as AppCompatActivity).setTitle("Putaway")
         viewModel = ViewModelProvider(this).get(PutawayViewModel::class.java)
         (this.activity as AppCompatActivity).setTitle("Putaway")
 
@@ -108,13 +98,9 @@ class PutawayFragment : Fragment() {
                     putawayItems.adapter?.notifyDataSetChanged()
                 }
             }
-
-         //   Log.d("oldPutawayItems:" + oldPutawayItems)
-
             oldPutawayItems = viewModel.putawayItems.value
         })
 
-        // Log.d(TAG, "putaway text values ----- in fragment-----"+ viewModel.putawayItems.value)
         viewModel.networkError.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
                 UiHelper.hideProgress(this.progress)
@@ -137,39 +123,35 @@ class PutawayFragment : Fragment() {
             handled
         }
         this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
+        // Display dabase data to screen
         viewModel.loadPutawayItems()
 
-        // --------------------------------------------------------------------------------------------------------------------
         // After click on submit button need to call put method to update database
-        putaway_items_submit_button.setOnClickListener({
+        putaway_items_submit_button.setOnClickListener {
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
-            // println("print ------after click "+ viewModel.rackBarcodeSerial) o/p = value printed 3
 
-//            Log.d(TAG, "putaway text values -----"+ putawayMaterialTextValue.getText())
-//            Log.d(TAG, "putaway text values -----"+ binMaterialTextValue.getText())
-//            Log.d(TAG, "putaway text values -----"+ rackMaterialTextValue.getText())
+            // call adapter class with updated value shw
+            recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
 
             GlobalScope.launch {
                 viewModel.handleSubmitPutaway()
             }
-
-        });
-
-        // --------------------------------------------------------------------------------------------------------------------
+        };
+        // recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
     }
+
 }
 
 open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
                                     private val putawayItems: LiveData<Array<PutawayItems?>>,
-                                    private val viewModel: PutawayViewModel) :
+                                    private val viewModel: PutawayViewModel ) :
         androidx.recyclerview.widget.RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.putaway_row, parent, false)
-        Log.d(TAG, ">>>>>>>>>>>>>>>>>111--" + viewModel)
         return ViewHolder(itemView)
     }
 
@@ -178,7 +160,6 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         val putawayItems = putawayItems.value!![position]!!
         Log.d(TAG, "position" + position)
         holder.itemView.setOnClickListener{
-            Log.d(TAG, ">>>>>>>>>>>>>>>>>111--" + viewModel)
 
             if (viewModel.putawayItems.toString().toLowerCase().contains("complete")) {
                 return@setOnClickListener
@@ -196,10 +177,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         protected val materialBarcodeSerial: TextView
         protected val linearLayout: LinearLayout
 
-
         init {
-            //Log.d(TAG, ">>>>>>>>>>>>>>>>>222" + viewModel)
-            // Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
             rackBarcodeSerial = itemView.findViewById(R.id.rack_barcode)
             binBarcodeSerial = itemView.findViewById(R.id.bin_barcode)
             materialBarcodeSerial = itemView.findViewById(R.id.material_barcode)
@@ -212,30 +190,15 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
             binBarcodeSerial.text = item.binBarcodeSerial
             val barcodeComplete = item.materialBarcodeSerial
             val barcodeValue = barcodeComplete?.split(",");
-            //Log.d(TAG, "////////////////" + (barcodeValue?.get(0) ?: 1))
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?: "NA")
 
-            val binB = "BIN004"
-            val rackB = "RACK004"
-            val matB = "NSN2017-468-160,SN0205,BP,M20x1.5x13x30 Gr8HT PLSLT ,300302790,300,4210-00006,39.885,11.97,12.42,101166,05.01.2020,12.03.2020,120320121418249"
-
-            
-//            val binB = viewModel.binBarcodeSerial
-//            val rackB =viewModel.rackBarcodeSerial
-//            val matB=viewModel.materialBarcodeSerial
-//
-//             Log.d(TAG, ">>>>>>>>>>>>>>>>>binb" + viewModel.binBarcodeSerial)
-//
-//            if (binB == item!!.binBarcodeSerial && rackB == item!!.rackBarcodeSerial && matB == item!!.materialBarcodeSerial) {
-//                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-//                Log.d(TAG, "yes-------------"+item!!.binBarcodeSerial)
-//
-//            }else{
-//                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
-//
-//            }
-
-
+            if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
+                    viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
+                    viewModel.materialBarcodeSerial == (barcodeValue?.get(0) ?: "NA")){
+                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+            }else{
+                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+            }
         }
     }
 }
