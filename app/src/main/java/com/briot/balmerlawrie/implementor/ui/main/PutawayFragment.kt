@@ -12,10 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +42,14 @@ class PutawayFragment : Fragment() {
         fun newInstance() = PutawayFragment()
     }
 
+    lateinit var putawayMaterialTextValue: EditText
+    lateinit var binMaterialTextValue: EditText
+    lateinit var rackMaterialTextValue: EditText
+    lateinit var materialbtn: Button
+    lateinit var rackbtn: Button
+    lateinit var binbtn: Button
+    lateinit var putawaysubmit: Button
+
     private lateinit var viewModel: PutawayViewModel
     private var progress: Progress? = null
     private var oldPutawayItems: Array<PutawayItems?>? = null
@@ -49,14 +60,29 @@ class PutawayFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.putaway_fragment, container, false)
         this.recyclerView = rootView.findViewById(R.id.putawayItems)
         recyclerView.layoutManager = LinearLayoutManager(this.activity)
+        putawayMaterialTextValue = rootView.findViewById(R.id.putaway_materialBarcode)
+        binMaterialTextValue = rootView.findViewById(R.id.bin_materialBarcode)
+        rackMaterialTextValue = rootView.findViewById(R.id.rack_materialBarcode)
+        materialbtn = rootView.findViewById(R.id.putaway_scanButton)
+        rackbtn = rootView.findViewById(R.id.bin_scanButton)
+        binbtn = rootView.findViewById(R.id.rack_scanButton)
+        putawaysubmit = rootView.findViewById(R.id.putaway_items_submit_button)
+
+        // Log.d("materialbtn: ", "materialbtn")
         return rootView
+
+//        val material_barcode_edit_text = rootView.findViewById<EditText>(R.id.putaway_materialBarcode)
+//        val bin_barcode_edit_text = rootView.findViewById<EditText>(R.id.bin_materialBarcode)
+//        val rack_barcode_edit_text = rootView.findViewById<EditText>(R.id.rack_materialBarcode)
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(PutawayViewModel::class.java)
-        // TODO: Use the ViewModel
+//        viewModel = ViewModelProviders.of(this).get(PutawayViewModel::class.java)
+//        (this.activity as AppCompatActivity).setTitle("Putaway")
 
+        viewModel = ViewModelProvider(this).get(PutawayViewModel::class.java)
         (this.activity as AppCompatActivity).setTitle("Putaway")
 
         if (this.arguments != null) {
@@ -81,6 +107,7 @@ class PutawayFragment : Fragment() {
             oldPutawayItems = viewModel.putawayItems.value
         })
 
+        // Log.d(TAG, "putaway text values ----- in fragment-----"+ viewModel.putawayItems.value)
         viewModel.networkError.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
                 UiHelper.hideProgress(this.progress)
@@ -105,11 +132,33 @@ class PutawayFragment : Fragment() {
         this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
         viewModel.loadPutawayItems("In progress")
 
-    }
 
+        // --------------------------------------------------------------------------------------------------------------------
+        // After click on submit button need to call put method to update database
+        putaway_items_submit_button.setOnClickListener({
+            viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
+            viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
+            viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
+            // viewModel.id = this.arguments!!.getInt("id")
+//            Log.d(TAG, "putaway text values -----"+ putawayMaterialTextValue.getText())
+//            Log.d(TAG, "putaway text values -----"+ binMaterialTextValue.getText())
+//            Log.d(TAG, "putaway text values -----"+ rackMaterialTextValue.getText())
+
+            GlobalScope.launch {
+                viewModel.handleSubmitPutaway()
+            }
+
+        });
+
+        // --------------------------------------------------------------------------------------------------------------------
+
+
+    }
 }
 
-open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView, private val putawayItems: LiveData<Array<PutawayItems?>>) : androidx.recyclerview.widget.RecyclerView.Adapter<ViewHolder>() {
+open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
+                                    private val putawayItems: LiveData<Array<PutawayItems?>>) :
+        androidx.recyclerview.widget.RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -138,7 +187,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         protected val materialBarcodeSerial: TextView
 
         init {
-            Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
+            // Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
 
             rackBarcodeSerial = itemView.findViewById(R.id.rack_barcode)
             binBarcodeSerial = itemView.findViewById(R.id.bin_barcode)
@@ -147,7 +196,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
 
         fun bind() {
             val putawayItems = putawayItems.value!![adapterPosition]!!
-            // Log.d(TAG, ">>>>>>>>>>>>>>>>>" + putawayItems.materialBarcodeSerial)
+             Log.d(TAG, ">>>>>>>>>>>>>>>>>" + putawayItems.materialBarcodeSerial)
 
             rackBarcodeSerial.text = putawayItems.rackBarcodeSerial
             binBarcodeSerial.text = putawayItems.binBarcodeSerial

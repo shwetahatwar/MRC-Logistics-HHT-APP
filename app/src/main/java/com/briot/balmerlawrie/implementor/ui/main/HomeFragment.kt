@@ -1,27 +1,29 @@
 package com.briot.balmerlawrie.implementor.ui.main
 
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
+//import com.briot.balmerlawrie.implementor.repository.remote.RoleAccessRelation
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.navigation.Navigation
-import com.briot.balmerlawrie.implementor.R
-//import com.briot.balmerlawrie.implementor.repository.remote.RoleAccessRelation
-import kotlinx.android.synthetic.main.home_fragment.*
-import androidx.lifecycle.Observer
+import androidx.annotation.IdRes
+import androidx.annotation.Nullable
+import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.createNavigateOnClickListener
+import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.briot.balmerlawrie.implementor.BuildConfig
+import com.briot.balmerlawrie.implementor.R
 import com.briot.balmerlawrie.implementor.UiHelper
-import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
-import com.briot.balmerlawrie.implementor.repository.local.PrefRepository
-import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.home_fragment.*
 
 
 class HomeFragment : androidx.fragment.app.Fragment() {
@@ -32,161 +34,62 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var viewModel: HomeViewModel
 
+    lateinit var cardView: CardView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+//        val rootView = inflater.inflate(R.layout.home_fragment, container, false)
+//        this.cardView = rootView.findViewById(R.id.materialPutaway)
+//        this.cardView.setOnClickListener {
+//            // your code to perform when the user clicks on the ImageView
+//            Log.d(TAG, ".............")
+//        }
+//        return rootView
         return inflater.inflate(R.layout.home_fragment, container, false)
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         (this.activity as AppCompatActivity).setTitle("Dashboard")
-        //Navigation.findNavController(login).navigate(R.id.action_loginFragment_to_homeFragment)
-       // Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
-      // Navigation.findNavController(materialPicking).navigate(R.id.action_homeFragment_to_pickingFragment)
 
-        //val roleName = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_NAME, "")
-       // val roleId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_ID, "0").toInt()
+        Log.d(TAG, "////////////////")
 
-        viewStatus(true)
-        var disableTextColor = Color.parseColor("#FFa3a3a3")
-//        if (roleName.toLowerCase().equals("admin")) {
-//            materialInward.isEnabled = false
-//            materialInward.setTextColor(disableTextColor)
-//        } else if (roleName.toLowerCase().equals("picker")) {
-//            materialDetails.isEnabled = true
+        materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
+        Log.d(TAG, " materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }")
+      //  val recyclerView = findViewById<CardView>(R.id.materialPutaway)
+        materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_pickingFragment) }
 
-//            materialInward.isEnabled = false
-//            materialInward.setTextColor(disableTextColor)
+       // putawayBtn.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
+        //navigate to putaway fragment
+        //Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
 
-            materialPicking.isEnabled = true
-            putaway.isEnabled = true
+//        materialPicking.isEnabled = true
+//        materialPutaway.isEnabled = true
+//        materialPicking.isEnabled = false
+//        materialPutaway.isEnabled = false
 
+//        fun onClick(v: View) {
+//            materialPutaway.setOnClickListener { view ->
+//               // view.findNavController().navigate(R.id.action_homeFragment_to_putawayFragment)
+//                view.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
+//            }
 
-//            materialLoading.isEnabled = false
-//            materialLoading.setTextColor(disableTextColor)
-
-        materialPutaway.isEnabled = false
-            //auditProject.setTextColor(disableTextColor)
-
-//        } else if (roleName.toLowerCase().equals("loader")) {
-//            materialDetails.isEnabled = true
-//
-//           materialInward.isEnabled = false
-//            materialInward.setTextColor(disableTextColor)
-//
-           materialPicking.isEnabled = false
-         //   materialPicking.setTextColor(disableTextColor)
-//
-//            materialLoading.isEnabled = true
-//
-        materialPutaway.isEnabled = false
-//            auditProject.setTextColor(disableTextColor)
-//
-//        } else if (roleName.toLowerCase().equals("auditor")) {
-//            materialDetails.isEnabled = true
-//
-//            materialInward.isEnabled = false
-//            materialInward.setTextColor(disableTextColor)
-//
-           materialPicking.isEnabled = false
-          // materialPicking.setTextColor(disableTextColor)
-//
-//            materialLoading.isEnabled = false
-//            materialLoading.setTextColor(disableTextColor)
-//
-        materialPutaway.isEnabled = true
-        materialPutaway.setOnClickListener { v: View  ->
-            //var position: Int = getAdapterPosition()
-            //materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchPickingListsFragment) }
-            //Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
-//            materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
-
-        }
-
-
-//        } else {
-//            materialDetails.isEnabled = true
-//
-//            materialInward.isEnabled = false
-//            materialInward.setTextColor(disableTextColor)
-//
-           materialPicking.isEnabled = false
-//            materialPicking.setTextColor(disableTextColor)
-//
-//            materialLoading.isEnabled = false
-//            materialLoading.setTextColor(disableTextColor)
-//
-        materialPutaway.isEnabled = false
-//            auditProject.setTextColor(disableTextColor)
+        //}
+//        materialPutaway.setOnClickListener(clickListener)
+//        val clickListener: View.OnClickListener = View.OnClickListener { view ->
+//            when (view.id) {
+//                R.id.materialPutaway -> gotoXScreent()
+//            }
 //        }
-
-        /*this.viewModel.roleAccessRelations.observe(this, Observer<Array<RoleAccessRelation>> {
-            if (it != null) {
-                val roleName = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_NAME, "")
-                val roleId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().ROLE_ID, "0").toInt()
-                if (roleName.toLowerCase().equals("admin")) {
-                    viewStatus(true)
-                } else {
-                    for (item in it) {
-                        if (item.roleId?.id == roleId) {
-                            if (item.accessId?.uri?.toLowerCase().equals("/JobProcessSequenceRelation/create".toLowerCase())) {
-                                materialDetails.visibility = View.VISIBLE
-                            } else if (item.accessId?.uri?.toLowerCase().equals("jobProcessSequenceRelation/update".toLowerCase())) {
-                                materialInward.visibility =  View.VISIBLE
-                            } else if (item.accessId?.uri?.toLowerCase().equals("joblocationrelation".toLowerCase())) {
-                                materialPicking.visibility = View.VISIBLE
-                                receiveAtStore.visibility = View.VISIBLE
-                            } else if (item.accessId?.uri?.toLowerCase().equals("MaintenanceTransaction".toLowerCase())) {
-                                machineMaintenance.visibility = View.VISIBLE
-                            }
-
-                        }
-                    }
-                }
-
-            }
-
-        })*/
-
-
-
-//        this.viewModel.loadRoleAccess()
-        versiontext.text = "app version " + BuildConfig.VERSION_NAME;
-//Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
-        //materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
-
-        // hide all options initially,  enable it as per role only
-        viewStatus(true)
-            //materialDetails.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialDetailsScanFragment) }
-       // materialInward.setOnClickListener {
-            UiHelper.showWarningToast(this.activity as AppCompatActivity, "This feature is disabled for now as per request")
-//            @dinesh gajjar; kept out of scope for now on client request
-//            Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_materialInwardFragment)
-        }
-
-//        materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchPickingListsFragment) }
-//        materialLoading.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_dispatchSlipsFragment) }
-//        auditProject.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_auditProjectsFragment) }
+//        fun goToXScreen() {
+//
+//            val intent = Intent(this, PutawayFragment)
+//            startActivity(intent)
+//        }
+//        fun onClick(v: View) {
+//            Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
+//        }
     }
-
-    fun viewStatus( show: Boolean) {
-        if (show) {
-//            materialDetails.visibility = View.VISIBLE
-//            materialInward.visibility = View.VISIBLE
-//            materialPicking.visibility = View.VISIBLE
-//            materialLoading.visibility = View.VISIBLE
-//            auditProject.visibility = View.VISIBLE
-        } else {
-//            materialDetails.visibility = View.GONE
-//            materialInward.visibility = View.GONE
-//            materialPicking.visibility = View.GONE
-//            materialLoading.visibility = View.VISIBLE
-//            auditProject.visibility = View.GONE
-        }
-
-
-    }
-
-
+}

@@ -129,6 +129,10 @@ class DispatchSlipItemRequest {
     var materialCode: String? = null
 }
 
+class PutPutawayResponse {
+    var message: String? = null
+}
+
 class DispatchSlipItemResponse {
     var message: String? = null
 }
@@ -185,10 +189,13 @@ interface ApiInterface {
     fun login(@Body signInRequest: SignInRequest): Observable<SignInResponse>
 
     @GET("putaways")
-    fun getPutaway(@Query("status")  status: String): Observable<Array<PutawayItems?>>
+    fun getPutaway(): Observable<Array<PutawayItems?>>
 
-    @PUT("putaways/{id}")
-    fun putPutawayItems(@Query("status")  status: String): Observable<Array<PutawayItems?>>
+//    @PUT("putaways/{id}")
+//    fun putPutawayItems(@Path("id") id: Int, @Body requestbody: PutawayItems): Observable<PutPutawayResponse?>
+
+    @PUT("putaways/1")
+    fun putPutawayItems(@Body requestbody: PutawayItems): Observable<PutPutawayResponse?>
 
     @GET("pickings")
     fun getPickingItems():Observable<Array<PickingItems?>>

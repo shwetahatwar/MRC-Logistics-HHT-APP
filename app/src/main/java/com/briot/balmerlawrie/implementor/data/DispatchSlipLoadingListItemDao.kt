@@ -49,4 +49,5 @@ interface DispatchSlipLoadingListItemDao {
 
     @Query("DELETE from dispatchslip_loading_list_item")
     suspend fun deleteAll()
+
 }
