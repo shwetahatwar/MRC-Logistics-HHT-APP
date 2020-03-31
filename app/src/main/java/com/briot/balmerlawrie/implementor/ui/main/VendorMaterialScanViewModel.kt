@@ -17,6 +17,7 @@ class VendorMaterialScanViewModel : ViewModel() {
 
     var materialBarcode: String? = ""
     var userId: String? = ""
+    var logedInUsername: String? = ""
 
     val TAG = "VendorMaterialScanViewModel"
 
@@ -24,12 +25,38 @@ class VendorMaterialScanViewModel : ViewModel() {
     val vendorItems: LiveData<Array<VendorMaterialInward?>> = MutableLiveData()
     val invalidVendorItems: Array<VendorMaterialInward?> = arrayOf(null)
     val invalidvendorPutItems: LiveData<Array<PostVendorResponse?>> = MutableLiveData()
+    val users: LiveData<Array<User?>> = MutableLiveData()
+    var userResponseData: Array<User?> = arrayOf(null)
+    // var username: String?=""
+
+//    fun getUserID(responseData: Array<>, logedInUsername: String?){
+//        Log.d(ContentValues.TAG, "from function userResponseData ---- " + responseData)
+//        Log.d(ContentValues.TAG, "from function logedInUsername ---- " + logedInUsername)
+//    }
 
     fun handleSubmitVendor() {
         var VendorMaterialInward = VendorMaterialInward()
-        VendorMaterialInward.materialBarcode = materialBarcode
-        VendorMaterialInward.userId = userId
 
+        VendorMaterialInward.materialBarcode = materialBarcode
+        // VendorMaterialInward.userId = userId
+
+//        Log.d(ContentValues.TAG, "item logedInUsername ---- " + logedInUsername)
+//        Log.d(ContentValues.TAG, "item userResponseData ---- " + userResponseData[1]!!.id)
+//        Log.d(ContentValues.TAG, "item userResponseData ---- " + userResponseData[1]!!.username)
+
+        for (item in userResponseData) {
+            if (item!!.username == logedInUsername){
+                Log.d(ContentValues.TAG, "item ----id " + item!!.id)
+                VendorMaterialInward.userId = item.id?.toString()
+            }
+        }
+        Log.d(ContentValues.TAG, "item ---- VendorMaterialInward " + VendorMaterialInward)
+
+        // username = logedInUsername
+//        Log.d(ContentValues.TAG, "userResponseData ---- " + userResponseData[1]!!.username)
+//        Log.d(ContentValues.TAG, "logedInUsername ---- " + logedInUsername)
+
+        // this.getUserID(userResponseData, logedInUsername)
 
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
@@ -53,4 +80,24 @@ class VendorMaterialScanViewModel : ViewModel() {
             (this.vendorItems as MutableLiveData<Array<VendorMaterialInward?>>).value = invalidVendorItems
         }
     }
+
+    fun getUsers(){
+        RemoteRepository.singleInstance.getUsers(
+                this::handleUserResponse, this::handleVendorItemsError)
+    }
+
+    private fun handleUserResponse(users: Array<User?>) {
+
+        userResponseData = users
+        Log.d(ContentValues.TAG, "item  response----- " + userResponseData)
+        Log.d(ContentValues.TAG, "item  handleUserResponse----- " + userResponseData[1]!!.username)
+
+
+        (this.users as MutableLiveData<Array<User?>>).value = users
+        // return handleUserResponse(users)
+//        return this.users
+        // Log.d(TAG, "Handle get response......." + putawayItems)
+        // responsePutawayLoadingItems = putawayItems
+    }
+
 }

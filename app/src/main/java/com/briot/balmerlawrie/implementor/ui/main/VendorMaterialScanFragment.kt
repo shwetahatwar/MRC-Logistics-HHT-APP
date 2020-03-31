@@ -18,11 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.briot.balmerlawrie.implementor.R
+import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
+import com.briot.balmerlawrie.implementor.repository.local.PrefRepository
 import com.briot.balmerlawrie.implementor.repository.remote.VendorMaterialInward
 import kotlinx.android.synthetic.main.vendor_material_scan_fragment.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import com.briot.balmerlawrie.implementor.ui.main.SimpleVendorItemAdapter.ViewHolder
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.login_fragment.*
+import kotlinx.android.synthetic.main.picking_row.*
 
 
 class VendorMaterialScanFragment : Fragment() {
@@ -53,13 +58,12 @@ class VendorMaterialScanFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(VendorMaterialScanViewModel::class.java)
 
+        viewModel.getUsers()
         (this.activity as AppCompatActivity).setTitle("Vendor Material Scan")
 
         if (this.arguments != null) {
             viewModel.materialBarcode = this.arguments!!.getString("materialBarcode")
-            viewModel.userId = this.arguments!!.getString("userId")
             viewModel.materialBarcode = vendorMaterialTextValue.getText().toString()
-
         }
         // recyclerView.adapter = SimpleVendorItemAdapter(recyclerView, viewModel.vendorItems, viewModel)
 //        viewModel.vendorItems.observe(viewLifecycleOwner, Observer<Array<VendorMaterialInward?>> {
@@ -102,6 +106,12 @@ class VendorMaterialScanFragment : Fragment() {
 
         vendor_items_submit_button.setOnClickListener {
             viewModel.materialBarcode = vendorMaterialTextValue.getText().toString()
+
+            val logedInUsername = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username,"")
+            // Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
+            viewModel.logedInUsername = logedInUsername
+            // viewModel.getUsers()
+            // Log.d(ContentValues.TAG, "api get response....." + v)
 
             GlobalScope.launch {
                 viewModel.handleSubmitVendor()

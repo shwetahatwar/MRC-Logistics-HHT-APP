@@ -198,6 +198,9 @@ interface ApiInterface {
     @POST("users/sign_in")
     fun login(@Body signInRequest: SignInRequest): Observable<SignInResponse>
 
+    @GET("users")
+    fun getUsers(): Observable<Array<User?>>
+
     @GET("putaways")
     fun getPutaway(): Observable<Array<PutawayItems?>>
 

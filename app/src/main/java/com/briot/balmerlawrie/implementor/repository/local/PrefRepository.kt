@@ -14,6 +14,10 @@ class PrefRepository {
         prefs[key] = value;
     }
 
+//    fun getValueOrDefault(): HashMap<String, String> {
+//        return prefs;
+//    }
+
     fun getValueOrDefault(key: String, defaultValue: String) : String {
         return prefs[key] ?: defaultValue;
     }

@@ -97,4 +97,5 @@ dependencies {
 
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
+    implementation 'com.google.firebase:firebase-auth:18.1.0'
 }

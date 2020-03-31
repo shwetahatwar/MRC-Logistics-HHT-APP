@@ -196,9 +196,21 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
                     viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
                     viewModel.materialBarcodeSerial == (barcodeValue?.get(0) ?: "NA")){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+
+
             }else{
                 linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+
             }
         }
     }
 }
+
+
+
+//if (viewModel.errorMessage != null) {
+//    UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.errorMessage)
+//} else {
+//    UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
+//}
+
