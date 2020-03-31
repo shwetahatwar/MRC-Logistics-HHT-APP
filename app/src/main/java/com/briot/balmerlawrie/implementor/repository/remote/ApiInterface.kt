@@ -175,16 +175,6 @@ class ProjectItem {
     var batchNumber: String? = null
     var serialNumber: String? = null
     var itemStatus: String? = null
-//    "id": 82,
-//    "projectId": 8,
-//    "materialCode": "6005581",
-//    "batchNumber": "s20/817262",
-//    "serialNumber": "6005581#s20/817262#000002",
-//    "status": true,
-//    "itemStatus": "Scrap",
-//    "createdBy": "nikhil",
-//    "updatedBy": "nikhil"
-
 }
 
 class PickingItems {
@@ -192,18 +182,18 @@ class PickingItems {
     var binBarcodeSerial: String? = null
     var materialBarcodeSerial: String? = null
 }
-//
-//class PickingRequest{
-//    var rackBarcodeSerial: String? = null
-//    var binBarcodeSerial: String? = null
-//    var materialBarcodeSerial: String? = null
-//}
+
 class PutPickingResponse {
     var message: String? = null
 }
 
-
-
+class AuditItem {
+    var materialBarcode: String? = null
+    var userId: String? = null
+}
+class AuditItemResponse {
+    var message: String? = null
+}
 interface ApiInterface {
     @POST("users/sign_in")
     fun login(@Body signInRequest: SignInRequest): Observable<SignInResponse>
@@ -223,10 +213,8 @@ interface ApiInterface {
     @GET("pickings")
     fun getPickingItems():Observable<Array<PickingItems?>>
 
-
     @PUT("pickings/1")
     fun putPickingItems(@Body requestbody: PickingItems): Observable<PutPickingResponse?>
-
 
     @GET("materialinwards")
     fun getMaterialDetails(@Query("serialNumber")  serialNumber: String): Observable<Array<MaterialInward>>
@@ -267,4 +255,7 @@ interface ApiInterface {
             Observable<PostVendorResponse?>
 
 
+    @POST("/audits")
+    fun postAuditsItems(@Body requestbody: AuditItem): Observable<AuditItemResponse?>
 }
+

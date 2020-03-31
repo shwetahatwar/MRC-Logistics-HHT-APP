@@ -61,6 +61,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
       //  val recyclerView = findViewById<CardView>(R.id.materialPutaway)
         materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_pickingFragment) }
         vendorMaterialScan.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_vendorMaterialScanFragment) }
+        physicalStock.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_physicalStockVerificationFragment) }
+
        // putawayBtn.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
         //navigate to putaway fragment
         //Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)

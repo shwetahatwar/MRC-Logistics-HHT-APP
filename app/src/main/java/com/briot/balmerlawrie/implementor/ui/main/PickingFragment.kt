@@ -56,8 +56,7 @@ class PickingFragment : Fragment() {
     private var oldPickingItems: Array<PickingItems?>? = null
     lateinit var recyclerView: RecyclerView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.picking_fragment, container, false)
         this.recyclerView = rootView.findViewById(R.id.pickingItems)
         recyclerView.layoutManager = LinearLayoutManager(this.activity)
@@ -136,7 +135,6 @@ class PickingFragment : Fragment() {
 
         picking_submit_button.setOnClickListener{
             var thisObject = this
-
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
