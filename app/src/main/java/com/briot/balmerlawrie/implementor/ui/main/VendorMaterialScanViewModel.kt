@@ -65,15 +65,18 @@ class VendorMaterialScanViewModel : ViewModel() {
         }
         RemoteRepository.singleInstance.postMaterialInwards(VendorMaterialInward,
                 this::handleVendorItemsResponse, this::handleVendorItemsError)
+        Log.d(ContentValues.TAG, " after post ------")
+
     }
 
-    private fun handleVendorItemsResponse(postVendorResponse: PostVendorResponse?) {
+    private fun handleVendorItemsResponse(postVendorItemResponse: VendorMaterialInward?) {
        // (this.vendorItems as MutableLiveData<Array<VendorMaterialInward?>>).value = vendorItems
       // Log.d(TAG,"Data Putaway Put Response"+ postVendorResponse)
-        Log.d(ContentValues.TAG, " response ----- " + postVendorResponse)
+        Log.d(ContentValues.TAG, " response ----- " + postVendorItemResponse)
     }
 
     private fun handleVendorItemsError(error: Throwable) {
+        Log.d(ContentValues.TAG, " error ----- " + error)
         if (UiHelper.isNetworkError(error)) {
             (networkError as MutableLiveData<Boolean>).value = true
         } else {

@@ -257,7 +257,7 @@ interface ApiInterface {
 
     @POST("/materialinwards")
     fun postMaterialInwards(@Body requestbody: VendorMaterialInward):
-            Observable<PostVendorResponse?>
+            Observable<VendorMaterialInward?>
 
 
     @POST("/audits")

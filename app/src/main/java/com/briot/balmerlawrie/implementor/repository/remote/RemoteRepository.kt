@@ -136,10 +136,14 @@ class RemoteRepository {
     }
 
     fun postMaterialInwards(requestbody: VendorMaterialInward,
-                            handleResponse: (PostVendorResponse?) -> Unit,
+                            handleResponse: (VendorMaterialInward?) -> Unit,
                             handleError: (Throwable) -> Unit) {
-        RetrofitHelper.retrofit.create(ApiInterface::class.java)
+            RetrofitHelper.retrofit.create(ApiInterface::class.java)
                 .postMaterialInwards(requestbody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(handleResponse, handleError)
+    }
 //    fun putPickingItems(id: Int, requestbody: PickingRequest, handleResponse: (PutPickingResponse?) -> Unit, handleError: (Throwable) -> Unit) {
 //        RetrofitHelper.retrofit.create(ApiInterface::class.java)
 //                .putPickingItems(id, requestbody)
@@ -148,27 +152,26 @@ class RemoteRepository {
 //                .subscribe(handleResponse, handleError)
 //    }
 
-    fun putPickingItems(requestbody: PickingItems, handleResponse: (PutPickingResponse?) -> Unit, handleError: (Throwable) -> Unit) {
-        RetrofitHelper.retrofit.create(ApiInterface::class.java)
-                .putPickingItems(requestbody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(handleResponse, handleError)
-    }
+        fun putPickingItems(requestbody: PickingItems, handleResponse: (PutPickingResponse?) -> Unit, handleError: (Throwable) -> Unit) {
+            RetrofitHelper.retrofit.create(ApiInterface::class.java)
+                    .putPickingItems(requestbody)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(handleResponse, handleError)
+        }
 
-//    fun postAuditsItems( requestbody: AuditItem, handleResponse: (AuditItemResponse?) -> Unit, handleError: (Throwable) -> Unit) {
+        //    fun postAuditsItems( requestbody: AuditItem, handleResponse: (AuditItemResponse?) -> Unit, handleError: (Throwable) -> Unit) {
 //        RetrofitHelper.retrofit.create(ApiInterface::class.java)
 //                .postAuditsItems(requestbody)
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(handleResponse, handleError)
 //    }
-    fun postAuditsItems(requestbody: AuditItem, handleResponse: (AuditItemResponse?) -> Unit, handleError: (Throwable) -> Unit) {
-        RetrofitHelper.retrofit.create(ApiInterface::class.java)
-                .postAuditsItems(requestbody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(handleResponse, handleError)
-    }
-
+        fun postAuditsItems(requestbody: AuditItem, handleResponse: (AuditItemResponse?) -> Unit, handleError: (Throwable) -> Unit) {
+            RetrofitHelper.retrofit.create(ApiInterface::class.java)
+                    .postAuditsItems(requestbody)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(handleResponse, handleError)
+        }
 }
