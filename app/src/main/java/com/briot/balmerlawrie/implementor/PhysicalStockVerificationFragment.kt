@@ -31,6 +31,7 @@ import com.briot.balmerlawrie.implementor.PhysicalStockVerificationViewModel
 import com.briot.balmerlawrie.implementor.R
 import com.briot.balmerlawrie.implementor.UiHelper
 import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
+import com.briot.balmerlawrie.implementor.repository.local.PrefRepository
 import com.briot.balmerlawrie.implementor.repository.remote.AuditItem
 import com.briot.balmerlawrie.implementor.repository.remote.PickingItems
 import com.briot.balmerlawrie.implementor.repository.remote.PutPickingResponse
@@ -39,6 +40,7 @@ import kotlinx.android.synthetic.main.material_details_scan_fragment.*
 import kotlinx.android.synthetic.main.physical_stock_verification_fragment.*
 import kotlinx.android.synthetic.main.picking_fragment.*
 import kotlinx.android.synthetic.main.picking_fragment.picking_materialBarcode
+import kotlinx.android.synthetic.main.user_profile_fragment.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -54,6 +56,8 @@ class PhysicalStockVerificationFragment : Fragment() {
     var inputData = AuditItem()
     private var progress: Progress? = null
     lateinit var recyclerView: RecyclerView
+    private var userId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_ID, "0").toInt()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -73,31 +77,30 @@ class PhysicalStockVerificationFragment : Fragment() {
 
         if (this.arguments != null) {
             viewModel.materialBarcode = this.arguments!!.getString("materialBarcode")
-            viewModel.userId = this.arguments!!.getString("userId")
             viewModel.materialBarcode = auditScanMaterialTextValue.getText().toString()
 
         }
 
         audit_submitItemsButton.setOnClickListener {
             viewModel.materialBarcode = auditScanMaterialTextValue.getText().toString()
+           // PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID, it.userNameId!!.toString())
+
 
             GlobalScope.launch {
                 viewModel.handleSubmitAudit()
             }
         };
-        recyclerView.adapter = SimpleAuditItemAdapter(recyclerView, viewModel.vendorItems, viewModel)
+        recyclerView.adapter = SimpleAuditItemAdapter(recyclerView, viewModel.auditItems, viewModel)
     }
 }
 open class SimpleAuditItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
-                                  private val vendorItems: LiveData<Array<AuditItem?>>,
+                                  private val auditItems: LiveData<Array<AuditItem?>>,
                                   private val viewModel: PhysicalStockVerificationViewModel) :
         androidx.recyclerview.widget.RecyclerView.Adapter<SimpleAuditItemAdapter.ViewHolder>() {
-    
     override fun onBindViewHolder(holder: SimpleAuditItemAdapter.ViewHolder, position: Int) {
         holder.bind()
-        val vendorItems = vendorItems.value!![position]!!
+        val auditItems = auditItems.value!![position]!!
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.physical_stock_verification_fragment, parent, false)
@@ -105,8 +108,8 @@ open class SimpleAuditItemAdapter(private val recyclerView: androidx.recyclervie
     }
 
     override fun getItemCount(): Int {
-        Log.d(ContentValues.TAG, "getItemCount" + vendorItems.value)
-        return vendorItems.value?.size ?: 0
+        Log.d(ContentValues.TAG, "getItemCount" + auditItems.value)
+        return auditItems.value?.size ?: 0
     }
     open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         protected val materialBarcode: TextView
@@ -114,7 +117,7 @@ open class SimpleAuditItemAdapter(private val recyclerView: androidx.recyclervie
             materialBarcode = itemView.findViewById(R.id.audit_materialBarcode)
         }
         fun bind() {
-            val item = vendorItems.value!![adapterPosition]!!
+            val item = auditItems.value!![adapterPosition]!!
             materialBarcode.text = item.materialBarcode
         }
     }

@@ -2,9 +2,12 @@ package com.briot.balmerlawrie.implementor
 
 import android.content.ContentValues
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
+import com.briot.balmerlawrie.implementor.repository.local.PrefRepository
 import com.briot.balmerlawrie.implementor.repository.remote.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -13,19 +16,20 @@ import kotlinx.coroutines.withContext
 
 class PhysicalStockVerificationViewModel : ViewModel() {
         var materialBarcode: String? = ""
-        var userId: String? = ""
+        var userId: Int=0
 
         val TAG = "PhysicalStockVerificationViewModel"
 
         val networkError: LiveData<Boolean> = MutableLiveData()
-        val vendorItems: LiveData<Array<AuditItem?>> = MutableLiveData()
-        val invalidVendorItems: Array<AuditItem?> = arrayOf(null)
-        val invalidvendorPutItems: LiveData<Array<AuditItemResponse?>> = MutableLiveData()
+        val auditItems: LiveData<Array<AuditItem?>> = MutableLiveData()
+        val invalidAuditItems: Array<AuditItem?> = arrayOf(null)
+        val invalidAuditPutItems: LiveData<Array<AuditItemResponse?>> = MutableLiveData()
 
         fun handleSubmitAudit() {
             var auditItems = AuditItem()
             auditItems.materialBarcode = materialBarcode
-            auditItems.userId = userId
+            //auditItems.userId=userId
+            auditItems.userId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_ID, "0").toInt()
 
 
             GlobalScope.launch {
@@ -51,7 +55,7 @@ class PhysicalStockVerificationViewModel : ViewModel() {
             if (UiHelper.isNetworkError(error)) {
                 (networkError as MutableLiveData<Boolean>).value = true
             } else {
-                (this.vendorItems as MutableLiveData<Array<AuditItem?>>).value = invalidVendorItems
+                (this.auditItems as MutableLiveData<Array<AuditItem?>>).value = invalidAuditItems
             }
         }
     }

@@ -182,14 +182,19 @@ class PickingItems {
     var binBarcodeSerial: String? = null
     var materialBarcodeSerial: String? = null
 }
-
+//
+//class PickingRequest{
+//    var rackBarcodeSerial: String? = null
+//    var binBarcodeSerial: String? = null
+//    var materialBarcodeSerial: String? = null
+//}
 class PutPickingResponse {
     var message: String? = null
 }
 
 class AuditItem {
     var materialBarcode: String? = null
-    var userId: String? = null
+    var userId: Number? = null
 }
 class AuditItemResponse {
     var message: String? = null
