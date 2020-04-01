@@ -14,6 +14,10 @@ class PrefRepository {
         prefs[key] = value;
     }
 
+//    fun getValueOrDefault(): HashMap<String, String> {
+//        return prefs;
+//    }
+
     fun getValueOrDefault(key: String, defaultValue: String) : String {
         return prefs[key] ?: defaultValue;
     }
@@ -38,6 +42,7 @@ class PrefRepository {
 }
 
 class PrefConstants {
+
 
     public val USER_TOKEN = "USERTOKEN"
     public val USER_ID = "USER_ID"

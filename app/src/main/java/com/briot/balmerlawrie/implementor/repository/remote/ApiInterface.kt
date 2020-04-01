@@ -83,6 +83,11 @@ class  MaterialInward {
 //    var updatedBy: User? = null
     }
 
+class VendorMaterialInward{
+    var materialBarcode: String? = null
+    var userId: String? = null
+}
+
 class Ttat {
     var truckNumber: String = ""
     var capacity: String = ""
@@ -133,6 +138,11 @@ class PutPutawayResponse {
     var message: String? = null
 }
 
+class PostVendorResponse{
+    var message: String? = null
+
+}
+
 class DispatchSlipItemResponse {
     var message: String? = null
 }
@@ -147,7 +157,7 @@ class DispatchSlipRequest {
 }
 
 class Project {
-        var name: String = ""
+    var name: String = ""
     var auditors: String = ""
     var start: String = ""
     var end: String = ""
@@ -165,16 +175,6 @@ class ProjectItem {
     var batchNumber: String? = null
     var serialNumber: String? = null
     var itemStatus: String? = null
-//    "id": 82,
-//    "projectId": 8,
-//    "materialCode": "6005581",
-//    "batchNumber": "s20/817262",
-//    "serialNumber": "6005581#s20/817262#000002",
-//    "status": true,
-//    "itemStatus": "Scrap",
-//    "createdBy": "nikhil",
-//    "updatedBy": "nikhil"
-
 }
 
 class PickingItems {
@@ -182,11 +182,29 @@ class PickingItems {
     var binBarcodeSerial: String? = null
     var materialBarcodeSerial: String? = null
 }
+//
+//class PickingRequest{
+//    var rackBarcodeSerial: String? = null
+//    var binBarcodeSerial: String? = null
+//    var materialBarcodeSerial: String? = null
+//}
+class PutPickingResponse {
+    var message: String? = null
+}
 
-
+class AuditItem {
+    var materialBarcode: String? = null
+    var userId: Number? = null
+}
+class AuditItemResponse {
+    var message: String? = null
+}
 interface ApiInterface {
     @POST("users/sign_in")
     fun login(@Body signInRequest: SignInRequest): Observable<SignInResponse>
+
+    @GET("users")
+    fun getUsers(): Observable<Array<User?>>
 
     @GET("putaways")
     fun getPutaway(): Observable<Array<PutawayItems?>>
@@ -199,6 +217,9 @@ interface ApiInterface {
 
     @GET("pickings")
     fun getPickingItems():Observable<Array<PickingItems?>>
+
+    @PUT("pickings/1")
+    fun putPickingItems(@Body requestbody: PickingItems): Observable<PutPickingResponse?>
 
     @GET("materialinwards")
     fun getMaterialDetails(@Query("serialNumber")  serialNumber: String): Observable<Array<MaterialInward>>
@@ -219,7 +240,8 @@ interface ApiInterface {
         fun postDispatchSlipPickedMaterials(@Path("id") id: Int, @Body requestbody: DispatchSlipRequest): Observable<DispatchSlipItemResponse?>
 
     @POST("dispatchslips/{id}/dispatchsliploadermaterials")
-    fun postDispatchSlipLoadedMaterials(@Path("id") id: Int, @Body requestbody: DispatchSlipRequest): Observable<DispatchSlipItemResponse?>
+    fun postDispatchSlipLoadedMaterials(@Path("id") id: Int, @Body requestbody: DispatchSlipRequest):
+            Observable<DispatchSlipItemResponse?>
 
     @GET("/projects/{status}")
     fun getAuditProjects(@Path("status") status: String): Observable<Array<Project?>>
@@ -229,4 +251,16 @@ interface ApiInterface {
 
     @POST("/project/{id}/projectitems")
     fun postProjectItems(@Path("id") id: String): Observable<Array<ProjectItem?>>
+
+//    @POST("/materialinwards")
+//    fun postMaterialInwards(@Path("userId") userId: String,@Body requestbody: VendorMaterialInward): Observable<Array<VendorMaterialInward?>>
+
+    @POST("/materialinwards")
+    fun postMaterialInwards(@Body requestbody: VendorMaterialInward):
+            Observable<VendorMaterialInward?>
+
+
+    @POST("/audits")
+    fun postAuditsItems(@Body requestbody: AuditItem): Observable<AuditItemResponse?>
 }
+

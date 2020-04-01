@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.briot.balmerlawrie.implementor.R
 import com.briot.balmerlawrie.implementor.UiHelper
+import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
 import com.briot.balmerlawrie.implementor.repository.remote.DispatchSlipItem
 import com.briot.balmerlawrie.implementor.repository.remote.PutawayItems
 import com.briot.balmerlawrie.implementor.ui.main.SimplePutawayItemAdapter.ViewHolder
@@ -50,9 +52,11 @@ class PutawayFragment : Fragment() {
     lateinit var binbtn: Button
     lateinit var putawaysubmit: Button
 
+    var getResponsePutwayData: Array<PutawayItems?> = arrayOf(null)
     private lateinit var viewModel: PutawayViewModel
     private var progress: Progress? = null
     private var oldPutawayItems: Array<PutawayItems?>? = null
+    var inputData = PutawayItems()
     lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -67,21 +71,11 @@ class PutawayFragment : Fragment() {
         rackbtn = rootView.findViewById(R.id.bin_scanButton)
         binbtn = rootView.findViewById(R.id.rack_scanButton)
         putawaysubmit = rootView.findViewById(R.id.putaway_items_submit_button)
-
-        // Log.d("materialbtn: ", "materialbtn")
-        return rootView
-
-//        val material_barcode_edit_text = rootView.findViewById<EditText>(R.id.putaway_materialBarcode)
-//        val bin_barcode_edit_text = rootView.findViewById<EditText>(R.id.bin_materialBarcode)
-//        val rack_barcode_edit_text = rootView.findViewById<EditText>(R.id.rack_materialBarcode)
-
+       return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProviders.of(this).get(PutawayViewModel::class.java)
-//        (this.activity as AppCompatActivity).setTitle("Putaway")
-
         viewModel = ViewModelProvider(this).get(PutawayViewModel::class.java)
         (this.activity as AppCompatActivity).setTitle("Putaway")
 
@@ -89,9 +83,10 @@ class PutawayFragment : Fragment() {
             viewModel.rackBarcodeSerial = this.arguments!!.getString("rackBarcodeSerial")
             viewModel.binBarcodeSerial = this.arguments!!.getString("binBarcodeSerial")
             viewModel.materialBarcodeSerial = this.arguments!!.getString("materialBarcodeSerial")
+            viewModel.rackBarcodeSerial = binMaterialTextValue.getText().toString()
 
         }
-        recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems)
+        recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
         viewModel.putawayItems.observe(viewLifecycleOwner, Observer<Array<PutawayItems?>> {
             if (it != null) {
                 UiHelper.hideProgress(this.progress)
@@ -103,11 +98,9 @@ class PutawayFragment : Fragment() {
                     putawayItems.adapter?.notifyDataSetChanged()
                 }
             }
-
             oldPutawayItems = viewModel.putawayItems.value
         })
 
-        // Log.d(TAG, "putaway text values ----- in fragment-----"+ viewModel.putawayItems.value)
         viewModel.networkError.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
                 UiHelper.hideProgress(this.progress)
@@ -130,80 +123,94 @@ class PutawayFragment : Fragment() {
             handled
         }
         this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
-        viewModel.loadPutawayItems("In progress")
+        // Display dabase data to screen
+        viewModel.loadPutawayItems()
 
-
-        // --------------------------------------------------------------------------------------------------------------------
         // After click on submit button need to call put method to update database
-        putaway_items_submit_button.setOnClickListener({
+        putaway_items_submit_button.setOnClickListener {
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
-            // viewModel.id = this.arguments!!.getInt("id")
-//            Log.d(TAG, "putaway text values -----"+ putawayMaterialTextValue.getText())
-//            Log.d(TAG, "putaway text values -----"+ binMaterialTextValue.getText())
-//            Log.d(TAG, "putaway text values -----"+ rackMaterialTextValue.getText())
+
+            // call adapter class with updated value shw
+            recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
 
             GlobalScope.launch {
                 viewModel.handleSubmitPutaway()
             }
-
-        });
-
-        // --------------------------------------------------------------------------------------------------------------------
-
-
+        };
+        // recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
     }
+
 }
 
 open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
-                                    private val putawayItems: LiveData<Array<PutawayItems?>>) :
+                                    private val putawayItems: LiveData<Array<PutawayItems?>>,
+                                    private val viewModel: PutawayViewModel ) :
         androidx.recyclerview.widget.RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.putaway_row, parent, false)
-
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
-
         val putawayItems = putawayItems.value!![position]!!
+        Log.d(TAG, "position" + position)
         holder.itemView.setOnClickListener{
 
+            if (viewModel.putawayItems.toString().toLowerCase().contains("complete")) {
+                return@setOnClickListener
+            }
         }
     }
 
     override fun getItemCount(): Int {
+        Log.d(TAG, "getItemCount" + putawayItems.value)
         return putawayItems.value?.size ?: 0
     }
-
-
     open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         protected val rackBarcodeSerial: TextView
         protected val binBarcodeSerial: TextView
         protected val materialBarcodeSerial: TextView
+        protected val linearLayout: LinearLayout
 
         init {
-            // Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
-
             rackBarcodeSerial = itemView.findViewById(R.id.rack_barcode)
             binBarcodeSerial = itemView.findViewById(R.id.bin_barcode)
             materialBarcodeSerial = itemView.findViewById(R.id.material_barcode)
+            linearLayout = itemView.findViewById(R.id.putaway_layout)
         }
 
         fun bind() {
-            val putawayItems = putawayItems.value!![adapterPosition]!!
-             Log.d(TAG, ">>>>>>>>>>>>>>>>>" + putawayItems.materialBarcodeSerial)
-
-            rackBarcodeSerial.text = putawayItems.rackBarcodeSerial
-            binBarcodeSerial.text = putawayItems.binBarcodeSerial
-            val barcodeComplete = putawayItems.materialBarcodeSerial
+            val item = putawayItems.value!![adapterPosition]!!
+            rackBarcodeSerial.text = item.rackBarcodeSerial
+            binBarcodeSerial.text = item.binBarcodeSerial
+            val barcodeComplete = item.materialBarcodeSerial
             val barcodeValue = barcodeComplete?.split(",");
-            //Log.d(TAG, "////////////////" + (barcodeValue?.get(0) ?: 1))
-            materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
+            materialBarcodeSerial.text = (barcodeValue?.get(0) ?: "NA")
+
+            if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
+                    viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
+                    viewModel.materialBarcodeSerial == (barcodeValue?.get(0) ?: "NA")){
+                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+
+
+            }else{
+                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+
+            }
         }
     }
 }
+
+
+
+//if (viewModel.errorMessage != null) {
+//    UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.errorMessage)
+//} else {
+//    UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
+//}
+

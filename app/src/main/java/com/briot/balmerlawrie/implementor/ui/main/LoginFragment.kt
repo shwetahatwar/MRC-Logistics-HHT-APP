@@ -1,8 +1,10 @@
 package com.briot.balmerlawrie.implementor.ui.main
 
+import android.content.ContentValues
 import androidx.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -59,6 +61,9 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().status, it.status!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID,"1")
 
+                //Log.d(ContentValues.TAG, "login" + PrefRepository)
+                //Log.d(ContentValues.TAG, "context" +   context)
+
 
                 this.context?.let { it1 -> PrefRepository.singleInstance.serializePrefs(it1) }
 
@@ -92,7 +97,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 
             // @dineshgajjar - remove following coments later on
             this.progress = UiHelper.showProgressIndicator(this.activity as AppCompatActivity, "Please wait")
-            viewModel.loginUser(username.text.toString(), password.text.toString(),"device3")
+            viewModel.loginUser(username.text.toString(), password.text.toString(),"device4")
         }
     }
 
