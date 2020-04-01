@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 class PhysicalStockVerificationViewModel : ViewModel() {
         var materialBarcode: String? = ""
         var userId: Int=0
+        var logedInUsername: String? = ""
 
         val TAG = "PhysicalStockVerificationViewModel"
 
@@ -24,13 +25,20 @@ class PhysicalStockVerificationViewModel : ViewModel() {
         val auditItems: LiveData<Array<AuditItem?>> = MutableLiveData()
         val invalidAuditItems: Array<AuditItem?> = arrayOf(null)
         val invalidAuditPutItems: LiveData<Array<AuditItemResponse?>> = MutableLiveData()
+        val users: LiveData<Array<User?>> = MutableLiveData()
+        var userResponseData: Array<User?> = arrayOf(null)
 
         fun handleSubmitAudit() {
             var auditItems = AuditItem()
             auditItems.materialBarcode = materialBarcode
             //auditItems.userId=userId
-            auditItems.userId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_ID, "0").toInt()
-
+            // auditItems.userId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_ID, "0").toInt()
+            for (item in userResponseData) {
+                if (item!!.username == logedInUsername){
+                    Log.d(ContentValues.TAG, "item ----id " + item!!.id)
+                    auditItems.userId = item.id
+                }
+            }
 
             GlobalScope.launch {
                 withContext(Dispatchers.Main) {
@@ -40,10 +48,28 @@ class PhysicalStockVerificationViewModel : ViewModel() {
 
             RemoteRepository.singleInstance.postAuditsItems(auditItems,this::handleAuditItemsResponse, this::handleAuditItemsError)
         }
-
-//
 //            RemoteRepository.singleInstance.postAuditsItems(AuditItem,this::handleAuditItemsResponse, this::handleAuditItemsError)
 //        }
+
+    fun getUsers(){
+        RemoteRepository.singleInstance.getUsers(
+                this::handleUserResponse, this::handleAuditItemsError)
+    }
+
+    private fun handleUserResponse(users: Array<User?>) {
+
+        userResponseData = users
+        Log.d(ContentValues.TAG, "item  response----- " + userResponseData)
+        Log.d(ContentValues.TAG, "item  handleUserResponse----- " + userResponseData[1]!!.username)
+
+
+        (this.users as MutableLiveData<Array<User?>>).value = users
+        // return handleUserResponse(users)
+//        return this.users
+        // Log.d(TAG, "Handle get response......." + putawayItems)
+        // responsePutawayLoadingItems = putawayItems
+    }
+
 
         private fun handleAuditItemsResponse(auditItemResponse: AuditItemResponse?) {
             // (this.vendorItems as MutableLiveData<Array<VendorMaterialInward?>>).value = vendorItems

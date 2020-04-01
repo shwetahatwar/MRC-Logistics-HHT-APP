@@ -73,6 +73,7 @@ class PhysicalStockVerificationFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PhysicalStockVerificationViewModel::class.java)
 
+        viewModel.getUsers()
         (this.activity as AppCompatActivity).setTitle("Physical stock verification Material Scan")
 
         if (this.arguments != null) {
@@ -84,6 +85,10 @@ class PhysicalStockVerificationFragment : Fragment() {
         audit_submitItemsButton.setOnClickListener {
             viewModel.materialBarcode = auditScanMaterialTextValue.getText().toString()
            // PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID, it.userNameId!!.toString())
+
+            val logedInUsername = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username,"")
+            // Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
+            viewModel.logedInUsername = logedInUsername
 
 
             GlobalScope.launch {
