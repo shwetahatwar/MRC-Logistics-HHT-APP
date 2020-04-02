@@ -61,35 +61,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_pickingFragment) }
         vendorMaterialScan.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_vendorMaterialScanFragment) }
        physicalStock.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_physicalStockVerificationFragment) }
-
-
-        try {
-            val TelephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-
-            Log.d(ContentValues.TAG, "-----get------" + TelephonyManager)
-            if (ActivityCompat.checkSelfPermission(requireContext(),
-                            Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                return
-            }
-            Log.d(ContentValues.TAG, "-----deviceID2------" + TelephonyManager.getDeviceId(1))
-            Log.d(ContentValues.TAG, "-----deviceID1------" + TelephonyManager.getDeviceId(0))
-
-//            val tmDevice: String
-//            val tmSerial: String
-//            val androidId: String
-//            // tmDevice = "" + TelephonyManager.getDeviceId()
-//            tmSerial = "" + TelephonyManager.getSimSerialNumber()
-            Log.d(ContentValues.TAG, "-----tmSerial------" + TelephonyManager.getSimSerialNumber())
-
-            val androidId = Settings.Secure.getString(context!!.getContentResolver(),
-                    Settings.Secure.ANDROID_ID)
-            Log.d(ContentValues.TAG, "-----androidId------" + androidId)
-            Log.d(ContentValues.TAG, "-----serial number------"+Build.getSerial())
-
-            }
-            catch ( exception: Throwable ){
-                Log.d(ContentValues.TAG, "-----exception------" + exception)
-            }
         }
 
     }

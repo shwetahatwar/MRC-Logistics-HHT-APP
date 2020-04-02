@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -55,6 +56,21 @@ class LoginFragment : androidx.fragment.app.Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         username.requestFocus()
+        var deviceSerialNumber: String = ""
+        try {
+            val TelephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            if (ActivityCompat.checkSelfPermission(requireContext(),
+                            Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return
+            }
+            else {
+                Log.d(ContentValues.TAG, "Got Device serial number " + Build.getSerial())
+                deviceSerialNumber = Build.getSerial()
+            }
+        }
+        catch ( exception: Throwable ){
+            Log.d(ContentValues.TAG, "Getting exception while getting serial number " + exception)
+        }
 
         viewModel.signInResponse.observe(this, Observer<SignInResponse> {
             UiHelper.hideProgress(this.progress)
@@ -66,7 +82,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().id, it.id!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().username, it.username!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().password, it.password!!)
-                PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, it.deviceId!!.toString())
+                PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, deviceSerialNumber)
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().status, it.status!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID,"1")
 
@@ -105,29 +121,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 
             // @dineshgajjar - remove following coments later on
             this.progress = UiHelper.showProgressIndicator(this.activity as AppCompatActivity, "Please wait")
-            viewModel.loginUser(username.text.toString(), password.text.toString(),"device4")
-
-//            try {
-//                val tel = context!!.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-//                Log.d(ContentValues.TAG, "-----before permission------" + tel)
-//                if (ActivityCompat.checkSelfPermission(context!!.createPackageContext(TELEPHONY_SERVICE, 0),
-//                                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-//                    Log.d(ContentValues.TAG, "-----READ_PHONE_STATE------" + Manifest.permission.READ_PHONE_STATE)
-//                    Log.d(ContentValues.TAG, "-----PERMISSION_GRANTED------" + PackageManager.PERMISSION_GRANTED)
-//                    // return@setOnClickListener
-//                }
-//                Log.d(ContentValues.TAG, "-----get------" + tel)
-//            }
-//            catch ( exception: Throwable ){
-//                Log.d(ContentValues.TAG, "-----exception------" + exception)
-//            }
-
-
-
-
-//        Log.d(ContentValues.TAG, "-----get------" + tel.getDeviceId(1))
-//        Log.d(ContentValues.TAG, "-----get------" + tel.imei)
-//         Log.d(ContentValues.TAG, "-----get------" + tel.getImei(1))
+            viewModel.loginUser(username.text.toString(), password.text.toString(),deviceSerialNumber)
 
         }
     }
