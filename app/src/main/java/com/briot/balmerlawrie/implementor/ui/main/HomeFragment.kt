@@ -1,29 +1,25 @@
 package com.briot.balmerlawrie.implementor.ui.main
 
 //import com.briot.balmerlawrie.implementor.repository.remote.RoleAccessRelation
+import android.Manifest
+import android.content.ContentValues
 import android.content.ContentValues.TAG
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.IdRes
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import androidx.navigation.Navigation.createNavigateOnClickListener
-import androidx.navigation.Navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.briot.balmerlawrie.implementor.BuildConfig
 import com.briot.balmerlawrie.implementor.R
-import com.briot.balmerlawrie.implementor.UiHelper
-import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.home_fragment.*
+
+import android.content.Context;
+import android.content.pm.PackageManager
+import android.telephony.TelephonyManager;
+import androidx.core.app.ActivityCompat
 
 
 class HomeFragment : androidx.fragment.app.Fragment() {
@@ -33,6 +29,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     }
 
     private lateinit var viewModel: HomeViewModel
+    private val RECORD_REQUEST_CODE = 101
 
     lateinit var cardView: CardView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -58,40 +55,38 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
         materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
         Log.d(TAG, " materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }")
-      //  val recyclerView = findViewById<CardView>(R.id.materialPutaway)
+        //  val recyclerView = findViewById<CardView>(R.id.materialPutaway)
         materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_pickingFragment) }
         vendorMaterialScan.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_vendorMaterialScanFragment) }
-        physicalStock.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_physicalStockVerificationFragment) }
+       physicalStock.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_physicalStockVerificationFragment) }
 
-       // putawayBtn.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
-        //navigate to putaway fragment
-        //Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
 
-//        materialPicking.isEnabled = true
-//        materialPutaway.isEnabled = true
-//        materialPicking.isEnabled = false
-//        materialPutaway.isEnabled = false
+        try {
+            val TelephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
-//        fun onClick(v: View) {
-//            materialPutaway.setOnClickListener { view ->
-//               // view.findNavController().navigate(R.id.action_homeFragment_to_putawayFragment)
-//                view.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
-//            }
+            // Log.d(ContentValues.TAG, "-----get------" + TelephonyManager)
+            if (ActivityCompat.checkSelfPermission(requireContext(),
+                            Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            Log.d(ContentValues.TAG, "-----deviceID2------" + TelephonyManager.getDeviceId(1))
+            Log.d(ContentValues.TAG, "-----deviceID1------" + TelephonyManager.getDeviceId(0))
+            Log.d(ContentValues.TAG, "-----meid------" + TelephonyManager.deviceId)
 
-        //}
-//        materialPutaway.setOnClickListener(clickListener)
-//        val clickListener: View.OnClickListener = View.OnClickListener { view ->
-//            when (view.id) {
-//                R.id.materialPutaway -> gotoXScreent()
-//            }
-//        }
-//        fun goToXScreen() {
-//
-//            val intent = Intent(this, PutawayFragment)
-//            startActivity(intent)
-//        }
-//        fun onClick(v: View) {
-//            Navigation.findNavController(materialPutaway).navigate(R.id.action_homeFragment_to_putawayFragment)
-//        }
+
+            }
+            catch ( exception: Throwable ){
+                Log.d(ContentValues.TAG, "-----exception------" + exception)
+            }
+
+
     }
-}
+
+    }

@@ -112,7 +112,7 @@ class VendorMaterialScanFragment : Fragment() {
             viewModel.logedInUsername = logedInUsername
             // viewModel.getUsers()
             // Log.d(ContentValues.TAG, "api get response....." + v)
-
+            
             GlobalScope.launch {
                 viewModel.handleSubmitVendor()
             }
