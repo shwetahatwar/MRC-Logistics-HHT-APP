@@ -1,26 +1,28 @@
 package com.briot.balmerlawrie.implementor.ui.main
 
 //import com.briot.balmerlawrie.implementor.repository.remote.RoleAccessRelation
+
 import android.Manifest
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.briot.balmerlawrie.implementor.R
 import kotlinx.android.synthetic.main.home_fragment.*
-
-import android.content.Context;
-import android.content.pm.PackageManager
-import android.telephony.TelephonyManager;
-import androidx.core.app.ActivityCompat
-
+// import java.util.UUID;
+import android.os.Build;
 
 class HomeFragment : androidx.fragment.app.Fragment() {
 
@@ -64,29 +66,30 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         try {
             val TelephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
-            // Log.d(ContentValues.TAG, "-----get------" + TelephonyManager)
+            Log.d(ContentValues.TAG, "-----get------" + TelephonyManager)
             if (ActivityCompat.checkSelfPermission(requireContext(),
                             Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return
             }
             Log.d(ContentValues.TAG, "-----deviceID2------" + TelephonyManager.getDeviceId(1))
             Log.d(ContentValues.TAG, "-----deviceID1------" + TelephonyManager.getDeviceId(0))
-            Log.d(ContentValues.TAG, "-----meid------" + TelephonyManager.deviceId)
 
+//            val tmDevice: String
+//            val tmSerial: String
+//            val androidId: String
+//            // tmDevice = "" + TelephonyManager.getDeviceId()
+//            tmSerial = "" + TelephonyManager.getSimSerialNumber()
+            Log.d(ContentValues.TAG, "-----tmSerial------" + TelephonyManager.getSimSerialNumber())
+
+            val androidId = Settings.Secure.getString(context!!.getContentResolver(),
+                    Settings.Secure.ANDROID_ID)
+            Log.d(ContentValues.TAG, "-----androidId------" + androidId)
+            Log.d(ContentValues.TAG, "-----serial number------"+Build.getSerial())
 
             }
             catch ( exception: Throwable ){
                 Log.d(ContentValues.TAG, "-----exception------" + exception)
             }
-
-
-    }
+        }
 
     }
