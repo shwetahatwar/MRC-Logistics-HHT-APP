@@ -9,7 +9,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.briot.balmerlawrie.implementor"
+        applicationId "com.briot.mrclogistics.implementor"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
@@ -22,13 +22,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //buildConfigField "String", "HOSTNAME", "\"https://briot-balmer-lawrie.herokuapp.com/\""
+            //buildConfigField "String", "HOSTNAME", "\"https://briot-mrclogistics.herokuapp.com/\""
             buildConfigField "String", "HOSTNAME", "\"http://192.168.0.110:3000/\""
         }
 
         debug {
 //            buildConfigField "String", "HOSTNAME", "\"http://10.0.2.2:3000\""
-            // buildConfigField "String", "HOSTNAME", "\"https://briot-balmer-lawrie.herokuapp.com/\""
+            // buildConfigField "String", "HOSTNAME", "\"https://briot-mrclogistics.herokuapp.com/\""
             buildConfigField "String", "HOSTNAME", "\"http://192.168.0.110:3000/\""
         }
         lintOptions {
