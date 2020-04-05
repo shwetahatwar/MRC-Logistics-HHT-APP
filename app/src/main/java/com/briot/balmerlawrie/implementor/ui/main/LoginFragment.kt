@@ -1,29 +1,39 @@
 package com.briot.balmerlawrie.implementor.ui.main
 
+import android.Manifest
+import android.Manifest.permission.READ_PHONE_STATE
 import android.content.ContentValues
-import androidx.lifecycle.Observer
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Context.TELEPHONY_SERVICE
+import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
-import android.view.KeyEvent
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import com.briot.balmerlawrie.implementor.MainActivity
 import com.briot.balmerlawrie.implementor.R
+import com.briot.balmerlawrie.implementor.UiHelper
 import com.briot.balmerlawrie.implementor.repository.local.PrefConstants
 import com.briot.balmerlawrie.implementor.repository.local.PrefRepository
-import com.briot.balmerlawrie.implementor.repository.remote.User
+import com.briot.balmerlawrie.implementor.repository.remote.SignInResponse
 import io.github.pierry.progress.Progress
 import kotlinx.android.synthetic.main.login_fragment.*
-import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProvider
-import com.briot.balmerlawrie.implementor.UiHelper
-import com.briot.balmerlawrie.implementor.repository.remote.SignInResponse
+import kotlinx.coroutines.handleCoroutineException
 
 
 class LoginFragment : androidx.fragment.app.Fragment() {
@@ -38,14 +48,29 @@ class LoginFragment : androidx.fragment.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.login_fragment, container, false)
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        // TODO: Use the ViewModel
-
         username.requestFocus()
+        var deviceSerialNumber: String = ""
+        try {
+            val TelephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            if (ActivityCompat.checkSelfPermission(requireContext(),
+                            Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return
+            }
+            else {
+                Log.d(ContentValues.TAG, "Got Device serial number " + Build.getSerial())
+                deviceSerialNumber = Build.getSerial()
+            }
+        }
+        catch ( exception: Throwable ){
+            Log.d(ContentValues.TAG, "Getting exception while getting serial number " + exception)
+        }
 
         viewModel.signInResponse.observe(this, Observer<SignInResponse> {
             UiHelper.hideProgress(this.progress)
@@ -57,7 +82,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().id, it.id!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().username, it.username!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().password, it.password!!)
-                PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, it.deviceId!!.toString())
+                PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, deviceSerialNumber)
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().status, it.status!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID,"1")
 
@@ -91,13 +116,13 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 
 
         login.setOnClickListener {
-            val keyboard = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val keyboard = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(activity?.currentFocus?.getWindowToken(), 0)
-
 
             // @dineshgajjar - remove following coments later on
             this.progress = UiHelper.showProgressIndicator(this.activity as AppCompatActivity, "Please wait")
-            viewModel.loginUser(username.text.toString(), password.text.toString(),"device4")
+            viewModel.loginUser(username.text.toString(), password.text.toString(),deviceSerialNumber)
+
         }
     }
 
