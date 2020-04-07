@@ -125,10 +125,9 @@ class PickingFragment : Fragment() {
             handled
         }
         this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
-        viewModel.loadPickingItems("In progress")
+        viewModel.loadPickingItems()
 
         picking_submit_button.setOnClickListener{
-            var thisObject = this
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
@@ -138,6 +137,7 @@ class PickingFragment : Fragment() {
             GlobalScope.launch {
                 viewModel.handleSubmitPicking()
             }
+            viewModel.loadPickingItems()
         };
     }
 }
@@ -199,11 +199,15 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
 
             val barcodeComplete = pickingItems.materialBarcodeSerial
             val barcodeValue = barcodeComplete?.split(",");
+
+            val scannedMaterialBarcodeValue = viewModel.materialBarcodeSerial
+            val scannedSplitedValue = scannedMaterialBarcodeValue?.split(",")
+
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
 
             if (viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
                     viewModel.binBarcodeSerial == pickingItems!!.binBarcodeSerial &&
-                    viewModel.materialBarcodeSerial == (barcodeValue?.get(0) ?: "NA")){
+                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
             }else{
                 linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)

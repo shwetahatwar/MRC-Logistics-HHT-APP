@@ -56,6 +56,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.home_fragment, container, false)
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel.loadPickingsDashboardItems()
+        viewModel.loadPutawayDashboardItems()
+
 //        totalTextValue = rootView.findViewById(R.id.totalText)
 //        putawayTextValue = rootView.findViewById(R.id.putawayText)
 //        pendingTextValue = rootView.findViewById(R.id.pendingText)
@@ -64,10 +68,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
-        viewModel.loadPutawayDashboardItems()
-        viewModel.loadPickingsDashboardItems()
+//        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+//
+//        viewModel.loadPutawayDashboardItems()
+//        viewModel.loadPickingsDashboardItems()
 
         (this.activity as AppCompatActivity).setTitle("Dashboard")
 
@@ -85,18 +89,14 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 //                Log.d(TAG, "-----in homeFragment"+ viewModel.putawayDashboardData)
 //                Log.d(TAG, "-----in putawayCount"+ viewModel.putawayCount)
 
+                totalPickingValue.text = viewModel.pickedTotalCount.toString()
+                pickingValue.text = viewModel.pickedCount.toString()
+                pickingPendingValue.text = viewModel.pickedPendingCount.toString()
+
                 putawayText.text = viewModel.putawayCount.toString()
                 pendingText.text = viewModel.pendingCount.toString()
                 totalText.text = viewModel.totalCount.toString()
 
-
-//                Log.d(TAG, "-----in viewModel.pickedTotalCount"+ viewModel.pickedTotalCount)
-//                Log.d(TAG, "-----in viewModel.pickedCount"+ viewModel.pickedCount)
-//                Log.d(TAG, "-----in viewModel.pickedPendingCount"+ viewModel.pickedPendingCount)
-
-                totalPickingValue.text = viewModel.pickedTotalCount.toString()
-                pickingValue.text = viewModel.pickedCount.toString()
-                pickingPendingValue.text = viewModel.pickedPendingCount.toString()
 
                 if ( viewModel.putawayDashboardData.value == null) {
                     UiHelper.showSomethingWentWrongSnackbarMessage(this.activity as AppCompatActivity)

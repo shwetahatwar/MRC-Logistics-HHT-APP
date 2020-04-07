@@ -51,6 +51,7 @@ class PutawayItems {
     var rackBarcodeSerial: String? = null
     var binBarcodeSerial: String? = null
     var materialBarcodeSerial: String? = null
+    var scanStatus: String? = null
 }
 
 class DispatchSlip {
@@ -207,7 +208,7 @@ class PutawayDashboardData{
 }
 class PickingsDashboardData{
     var totalCount: Number? = null
-        var pickedCount: Number? = null
+    var pickedCount: Number? = null
     var pendingCount: Number? = null
 }
 

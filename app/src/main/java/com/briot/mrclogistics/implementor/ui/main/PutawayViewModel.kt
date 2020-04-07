@@ -32,17 +32,34 @@ class PutawayViewModel : ViewModel() {
     fun loadPutawayItems() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = emptyArray()
-
         RemoteRepository.singleInstance.getPutaway(this::handlePutawayItemsResponse, this::handlePutawayItemsError)
     }
 
     private fun handlePutawayItemsResponse(putawayItems: Array<PutawayItems?>) {
 
-        getResponsePutwayData = putawayItems
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = putawayItems
     }
 
     private fun handlePutawayItemsError(error: Throwable) {
+        if (UiHelper.isNetworkError(error)) {
+            (networkError as MutableLiveData<Boolean>).value = true
+        } else {
+            (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = invalidPutawayItems
+        }
+    }
+
+    fun loadPutawayRefreshItems() {
+        (networkError as MutableLiveData<Boolean>).value = false
+        (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = emptyArray()
+        RemoteRepository.singleInstance.getPutaway(this::handlePutawayRefreshItemsResponse, this::handlePutawayRefreshItemsError)
+    }
+
+    private fun handlePutawayRefreshItemsResponse(putawayItems: Array<PutawayItems?>) {
+
+        (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = putawayItems
+    }
+
+    private fun handlePutawayRefreshItemsError(error: Throwable) {
         if (UiHelper.isNetworkError(error)) {
             (networkError as MutableLiveData<Boolean>).value = true
         } else {

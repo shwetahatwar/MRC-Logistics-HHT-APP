@@ -125,19 +125,19 @@ class PutawayFragment : Fragment() {
         this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
         // Display dabase data to screen
         viewModel.loadPutawayItems()
-
+        viewModel.loadPutawayRefreshItems()
         // After click on submit button need to call put method to update database
         putaway_items_submit_button.setOnClickListener {
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
-
             // call adapter class with updated value shw
             recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
-
             GlobalScope.launch {
                 viewModel.handleSubmitPutaway()
             }
+            viewModel.loadPutawayRefreshItems()
+
         };
     }
 }
@@ -155,7 +155,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
         val putawayItems = putawayItems.value!![position]!!
-        Log.d(TAG, "position" + position)
+//        Log.d(TAG, "putawayItems -->" + putawayItems.scanStatus)
         holder.itemView.setOnClickListener{
 
             if (viewModel.putawayItems.toString().toLowerCase().contains("complete")) {
@@ -182,19 +182,27 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         }
 
         fun bind() {
+
+            Log.d(TAG, "position -> " + putawayItems.value!![adapterPosition]!!)
+
             val item = putawayItems.value!![adapterPosition]!!
+//            Log.d(TAG, "position -> " + item.scanStatus)
+            // if (item.scanStatus != 1.toString())
             rackBarcodeSerial.text = item.rackBarcodeSerial
             binBarcodeSerial.text = item.binBarcodeSerial
             val barcodeComplete = item.materialBarcodeSerial
             val barcodeValue = barcodeComplete?.split(",");
+
+            val scannedMaterialBarcodeValue = viewModel.materialBarcodeSerial
+            val scannedSplitedValue = scannedMaterialBarcodeValue?.split(",")
+
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?: "NA")
             if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
                     viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
-                    viewModel.materialBarcodeSerial == (barcodeValue?.get(0) ?: "NA")){
+                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
             }else{
                 linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
-
             }
         }
     }

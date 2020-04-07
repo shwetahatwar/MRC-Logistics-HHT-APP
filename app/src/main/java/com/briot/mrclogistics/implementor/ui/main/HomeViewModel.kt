@@ -69,20 +69,10 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun handlePickingDashboardItemsResponse(pickingsDashboardData: PickingsDashboardData?) {
-
-//        Log.d(TAG,"respone pickedCount  "+ pickingsDashboardData!!.pickedCount)
-//        Log.d(TAG,"respone pickedTotalCount  "+ pickingsDashboardData!!.totalCount)
-//        Log.d(TAG,"respone pickedPendingCount  "+ pickingsDashboardData!!.pendingCount)
-
         // Setting response data to display
         pickedTotalCount = pickingsDashboardData!!.totalCount
         pickedCount = pickingsDashboardData!!.pickedCount
         pickedPendingCount = pickingsDashboardData!!.pendingCount
-
-//        Log.d(TAG,"after assign pickedPendingCount  "+ pickedPendingCount)
-//        Log.d(TAG,"after assign pickedCount  "+ pickedCount)
-//        Log.d(TAG,"after assign pickedTotalCount  "+ pickedTotalCount)
-
 
         (this.pickingsDashboardData as MutableLiveData<PickingsDashboardData>).value = pickingsDashboardData
     }

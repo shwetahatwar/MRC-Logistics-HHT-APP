@@ -124,7 +124,7 @@ class RemoteRepository {
                 .getPickingsCount()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(handleResponse, handleError) 
+                .subscribe(handleResponse, handleError)
     }
 
 //    fun putPutawayItems(id: Int, requestbody: PutawayItems, handleResponse: (PutawayDashboardData?) -> Unit, handleError: (Throwable) -> Unit) {

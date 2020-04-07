@@ -28,7 +28,7 @@ class PickingViewModel : ViewModel() {
 
     var errorMessage: String = ""
 
-    fun loadPickingItems(status: String) {
+    fun loadPickingItems() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = emptyArray()
 
@@ -70,9 +70,7 @@ class PickingViewModel : ViewModel() {
 
     private fun handlePickingPutItemsError(error: Throwable) {
         Log.d(TAG, error.localizedMessage)
-
     }
-
 }
 
 
