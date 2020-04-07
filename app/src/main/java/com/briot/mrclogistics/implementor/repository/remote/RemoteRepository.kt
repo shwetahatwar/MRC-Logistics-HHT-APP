@@ -111,7 +111,23 @@ class RemoteRepository {
 
     }
 
-//    fun putPutawayItems(id: Int, requestbody: PutawayItems, handleResponse: (PutPutawayResponse?) -> Unit, handleError: (Throwable) -> Unit) {
+    fun getPutawayCount( handleResponse: (PutawayDashboardData?) -> Unit, handleError: (Throwable) -> Unit) {
+        RetrofitHelper.retrofit.create(ApiInterface::class.java)
+                .getPutawayCount()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(handleResponse, handleError)
+    }
+
+    fun getPickingsCount( handleResponse: (PickingsDashboardData?) -> Unit, handleError: (Throwable) -> Unit) {
+        RetrofitHelper.retrofit.create(ApiInterface::class.java)
+                .getPickingsCount()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(handleResponse, handleError)
+    }
+
+//    fun putPutawayItems(id: Int, requestbody: PutawayItems, handleResponse: (PutawayDashboardData?) -> Unit, handleError: (Throwable) -> Unit) {
 //        RetrofitHelper.retrofit.create(ApiInterface::class.java)
 //                .putPutawayItems(id, requestbody)
 //                .subscribeOn(Schedulers.io())

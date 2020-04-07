@@ -23,6 +23,18 @@ import com.briot.mrclogistics.implementor.R
 import kotlinx.android.synthetic.main.home_fragment.*
 // import java.util.UUID;
 import android.os.Build;
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.briot.mrclogistics.implementor.UiHelper
+import com.briot.mrclogistics.implementor.repository.remote.PutawayDashboardData
+import com.briot.mrclogistics.implementor.repository.remote.PutawayItems
+import io.github.pierry.progress.Progress
+import kotlinx.android.synthetic.main.putaway_fragment.*
 
 class HomeFragment : androidx.fragment.app.Fragment() {
 
@@ -31,36 +43,76 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     }
 
     private lateinit var viewModel: HomeViewModel
-    private val RECORD_REQUEST_CODE = 101
+//    lateinit var totalTextValue: TextView
+//    lateinit var putawayTextValue: TextView
+//    lateinit var pendingTextValue: TextView
 
-    lateinit var cardView: CardView
+    private var progress: Progress? = null
+    private var oldPutawayDashboardItems: PutawayDashboardData? = null
+    var inputData = PutawayDashboardData()
+
+//    lateinit var cardView: CardView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-//        val rootView = inflater.inflate(R.layout.home_fragment, container, false)
-//        this.cardView = rootView.findViewById(R.id.materialPutaway)
-//        this.cardView.setOnClickListener {
-//            // your code to perform when the user clicks on the ImageView
-//            Log.d(TAG, ".............")
-//        }
-//        return rootView
-        return inflater.inflate(R.layout.home_fragment, container, false)
-    }
 
+        val rootView = inflater.inflate(R.layout.home_fragment, container, false)
+//        totalTextValue = rootView.findViewById(R.id.totalText)
+//        putawayTextValue = rootView.findViewById(R.id.putawayText)
+//        pendingTextValue = rootView.findViewById(R.id.pendingText)
+        return rootView
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
+        viewModel.loadPutawayDashboardItems()
+        viewModel.loadPickingsDashboardItems()
+
         (this.activity as AppCompatActivity).setTitle("Dashboard")
 
-        Log.d(TAG, "////////////////")
+        if (this.arguments != null) {
+            viewModel.totalCount = this.arguments!!.getInt("totalCount")
+            viewModel.pendingCount = this.arguments!!.getInt("pendingCount")
+            viewModel.putawayCount = this.arguments!!.getInt("putawayCount")
+        }
+        // recyclerView.adapter = SimpleDashboardItemAdapter(recyclerView, viewModel.putawayDashboardData, viewModel)
+        viewModel.putawayDashboardData.observe(viewLifecycleOwner, Observer<PutawayDashboardData?> {
+            if (it != null) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
+
+//                Log.d(TAG, "-----in homeFragment"+ viewModel.putawayDashboardData)
+//                Log.d(TAG, "-----in putawayCount"+ viewModel.putawayCount)
+
+                putawayText.text = viewModel.putawayCount.toString()
+                pendingText.text = viewModel.pendingCount.toString()
+                totalText.text = viewModel.totalCount.toString()
+
+
+//                Log.d(TAG, "-----in viewModel.pickedTotalCount"+ viewModel.pickedTotalCount)
+//                Log.d(TAG, "-----in viewModel.pickedCount"+ viewModel.pickedCount)
+//                Log.d(TAG, "-----in viewModel.pickedPendingCount"+ viewModel.pickedPendingCount)
+
+                totalPickingValue.text = viewModel.pickedTotalCount.toString()
+                pickingValue.text = viewModel.pickedCount.toString()
+                pickingPendingValue.text = viewModel.pickedPendingCount.toString()
+
+                if ( viewModel.putawayDashboardData.value == null) {
+                    UiHelper.showSomethingWentWrongSnackbarMessage(this.activity as AppCompatActivity)
+                } else if (it != oldPutawayDashboardItems) {
+                    Log.d(TAG, "oldPutwayDashboard data")
+                    //putawayItems.adapter?.notifyDataSetChanged()
+                }
+            }
+            oldPutawayDashboardItems = viewModel.putawayDashboardData.value
+        })
+
 
         materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
         Log.d(TAG, " materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }")
-        //  val recyclerView = findViewById<CardView>(R.id.materialPutaway)
         materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_pickingFragment) }
         vendorMaterialScan.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_vendorMaterialScanFragment) }
-       physicalStock.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_physicalStockVerificationFragment) }
-        }
-
+        physicalStock.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_physicalStockVerificationFragment) }
     }
+}

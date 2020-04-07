@@ -13,8 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class VendorMaterialScanViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
-
     var materialBarcode: String? = ""
     var userId: String? = ""
     var logedInUsername: String? = ""
@@ -27,22 +25,11 @@ class VendorMaterialScanViewModel : ViewModel() {
     val invalidvendorPutItems: LiveData<Array<PostVendorResponse?>> = MutableLiveData()
     val users: LiveData<Array<User?>> = MutableLiveData()
     var userResponseData: Array<User?> = arrayOf(null)
-    // var username: String?=""
-
-//    fun getUserID(responseData: Array<>, logedInUsername: String?){
-//        Log.d(ContentValues.TAG, "from function userResponseData ---- " + responseData)
-//        Log.d(ContentValues.TAG, "from function logedInUsername ---- " + logedInUsername)
-//    }
 
     fun handleSubmitVendor() {
         var VendorMaterialInward = VendorMaterialInward()
 
         VendorMaterialInward.materialBarcode = materialBarcode
-        // VendorMaterialInward.userId = userId
-
-//        Log.d(ContentValues.TAG, "item logedInUsername ---- " + logedInUsername)
-//        Log.d(ContentValues.TAG, "item userResponseData ---- " + userResponseData[1]!!.id)
-//        Log.d(ContentValues.TAG, "item userResponseData ---- " + userResponseData[1]!!.username)
 
         for (item in userResponseData) {
             if (item!!.username == logedInUsername){
@@ -51,12 +38,6 @@ class VendorMaterialScanViewModel : ViewModel() {
             }
         }
         Log.d(ContentValues.TAG, "item ---- VendorMaterialInward " + VendorMaterialInward)
-
-        // username = logedInUsername
-//        Log.d(ContentValues.TAG, "userResponseData ---- " + userResponseData[1]!!.username)
-//        Log.d(ContentValues.TAG, "logedInUsername ---- " + logedInUsername)
-
-        // this.getUserID(userResponseData, logedInUsername)
 
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
@@ -70,8 +51,6 @@ class VendorMaterialScanViewModel : ViewModel() {
     }
 
     private fun handleVendorItemsResponse(postVendorItemResponse: VendorMaterialInward?) {
-       // (this.vendorItems as MutableLiveData<Array<VendorMaterialInward?>>).value = vendorItems
-      // Log.d(TAG,"Data Putaway Put Response"+ postVendorResponse)
         Log.d(ContentValues.TAG, " response ----- " + postVendorItemResponse)
     }
 
@@ -94,13 +73,8 @@ class VendorMaterialScanViewModel : ViewModel() {
         userResponseData = users
         Log.d(ContentValues.TAG, "item  response----- " + userResponseData)
         Log.d(ContentValues.TAG, "item  handleUserResponse----- " + userResponseData[1]!!.username)
-
-
         (this.users as MutableLiveData<Array<User?>>).value = users
-        // return handleUserResponse(users)
-//        return this.users
-        // Log.d(TAG, "Handle get response......." + putawayItems)
-        // responsePutawayLoadingItems = putawayItems
+
     }
 
 }

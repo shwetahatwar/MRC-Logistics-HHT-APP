@@ -65,54 +65,12 @@ class VendorMaterialScanFragment : Fragment() {
             viewModel.materialBarcode = this.arguments!!.getString("materialBarcode")
             viewModel.materialBarcode = vendorMaterialTextValue.getText().toString()
         }
-        // recyclerView.adapter = SimpleVendorItemAdapter(recyclerView, viewModel.vendorItems, viewModel)
-//        viewModel.vendorItems.observe(viewLifecycleOwner, Observer<Array<VendorMaterialInward?>> {
-//            if (it != null) {
-//                UiHelper.hideProgress(this.progress)
-//                this.progress = null
-//
-//                if (viewModel.vendorItems.value.orEmpty().isNotEmpty() && viewModel.vendorItems.value?.first() == null) {
-//                    UiHelper.showSomethingWentWrongSnackbarMessage(this.activity as AppCompatActivity)
-//                } else if (it != oldVendorItems) {
-//                    putawayItems.adapter?.notifyDataSetChanged()
-//                }
-//            }
-//            oldVendorItems = viewModel.vendorItems.value
-//        })
-//
-//        viewModel.networkError.observe(viewLifecycleOwner, Observer<Boolean> {
-//            if (it == true) {
-//                UiHelper.hideProgress(this.progress)
-//                this.progress = null
-//
-//                UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
-//            }
-//        })
-//        vendor_materialBarcode.setOnEditorActionListener { _, i, keyEvent ->
-//            var handled = false
-//            if (keyEvent == null) {
-//                Log.d("putaway: ", "event is null")
-//            } else if ((vendor_materialBarcode.text != null && vendor_materialBarcode.text!!.isNotEmpty()) && i == EditorInfo.IME_ACTION_DONE || ((keyEvent.keyCode == KeyEvent.KEYCODE_ENTER || keyEvent.keyCode == KeyEvent.KEYCODE_TAB) && keyEvent.action == KeyEvent.ACTION_DOWN)) {
-//                this.progress = UiHelper.showProgressIndicator(this.activity as AppCompatActivity, "Please wait")
-//                UiHelper.hideProgress(this.progress)
-//                this.progress = null
-//                handled = true
-//            }
-//            handled
-//        }
-        // this.progress = UiHelper.showProgressIndicator(activity!!, "Vendor Items")
-        // Display dabase data to screen
-        // viewModel.handleSubmitVendor()
-
         vendor_items_submit_button.setOnClickListener {
             viewModel.materialBarcode = vendorMaterialTextValue.getText().toString()
 
             val logedInUsername = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username,"")
-            // Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
             viewModel.logedInUsername = logedInUsername
-            // viewModel.getUsers()
-            // Log.d(ContentValues.TAG, "api get response....." + v)
-            
+
             GlobalScope.launch {
                 viewModel.handleSubmitVendor()
             }

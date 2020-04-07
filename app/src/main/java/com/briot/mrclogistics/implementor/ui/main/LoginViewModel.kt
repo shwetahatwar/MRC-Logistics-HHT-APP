@@ -25,6 +25,7 @@ class LoginViewModel : ViewModel() {
 
     fun loginUser(username: String, password: String , deviceId: String) {
         (networkError as MutableLiveData<Boolean>).value = false
+       // Log.d(TAG, "loginUser user" + loginUser("abc","abc","47b590aa"))
         RemoteRepository.singleInstance.loginUser(username, password, deviceId ,this::handleLoginResponse, this::handleLoginError)
     }
 

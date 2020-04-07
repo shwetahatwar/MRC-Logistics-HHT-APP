@@ -199,12 +199,31 @@ class AuditItem {
 class AuditItemResponse {
     var message: String? = null
 }
+
+class PutawayDashboardData{
+    var totalCount: Number? = null
+    var putawayCount: Number? = null
+    var pendingCount: Number? = null
+}
+class PickingsDashboardData{
+    var totalCount: Number? = null
+        var pickedCount: Number? = null
+    var pendingCount: Number? = null
+}
+
 interface ApiInterface {
     @POST("users/sign_in")
     fun login(@Body signInRequest: SignInRequest): Observable<SignInResponse>
 
     @GET("users")
     fun getUsers(): Observable<Array<User?>>
+
+    @GET("putaways/get/dashboardCount")
+    fun getPutawayCount(): Observable<PutawayDashboardData?>
+
+    @GET("pickings/get/dashboardCount")
+    fun getPickingsCount(): Observable<PickingsDashboardData?>
+
 
     @GET("putaways")
     fun getPutaway(): Observable<Array<PutawayItems?>>
@@ -258,7 +277,6 @@ interface ApiInterface {
     @POST("/materialinwards")
     fun postMaterialInwards(@Body requestbody: VendorMaterialInward):
             Observable<VendorMaterialInward?>
-
 
     @POST("/audits")
     fun postAuditsItems(@Body requestbody: AuditItem): Observable<AuditItemResponse?>

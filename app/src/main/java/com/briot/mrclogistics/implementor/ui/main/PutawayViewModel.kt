@@ -1,16 +1,10 @@
 package com.briot.mrclogistics.implementor.ui.main
 
 import android.util.Log
-import android.widget.LinearLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.briot.mrclogistics.implementor.MainApplication
-import com.briot.mrclogistics.implementor.R
 import com.briot.mrclogistics.implementor.UiHelper
-import com.briot.mrclogistics.implementor.data.AppDatabase
-import com.briot.mrclogistics.implementor.repository.local.PrefConstants
 import com.briot.mrclogistics.implementor.repository.remote.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,7 +14,6 @@ import com.briot.mrclogistics.implementor.repository.remote.PutawayItems
 
 class PutawayViewModel : ViewModel() {
 
-    // var id: Int = 0
     var rackBarcodeSerial: String? = ""
     var binBarcodeSerial: String? = ""
     var materialBarcodeSerial: String? = ""
@@ -30,7 +23,6 @@ class PutawayViewModel : ViewModel() {
     val networkError: LiveData<Boolean> = MutableLiveData()
     val putawayItems: LiveData<Array<PutawayItems?>> = MutableLiveData()
     val invalidPutawayItems: Array<PutawayItems?> = arrayOf(null)
-    //val invalidPutawayPutItems: LiveData<Array<PutPutawayResponse?>> = MutableLiveData()
     var responsePutawayLoadingItems: Array<PutawayItems?> = arrayOf(null)
     val invalidputawayloadingItems: Array<DispatchSlipItem?> = arrayOf(null)
     var getResponsePutwayData: Array<PutawayItems?> = arrayOf(null)
@@ -48,9 +40,6 @@ class PutawayViewModel : ViewModel() {
 
         getResponsePutwayData = putawayItems
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = putawayItems
-
-        // Log.d(TAG, "Handle get response......." + putawayItems)
-        // responsePutawayLoadingItems = putawayItems
     }
 
     private fun handlePutawayItemsError(error: Throwable) {
@@ -67,28 +56,11 @@ class PutawayViewModel : ViewModel() {
         putawayRequestObject.materialBarcodeSerial = materialBarcodeSerial
         putawayRequestObject.rackBarcodeSerial = rackBarcodeSerial
 
-        val binB = "BIN004"
-        val rackB = "RACK004"
-        val matB = "NSN2017-468-160,SN0205,BP,M20x1.5x13x30 Gr8HT PLSLT ,300302790,300,4210-00006,39.885,11.97,12.42,101166,05.01.2020,12.03.2020,120320121418249"
-         // Log.d(TAG, "getResponsePutwayData,......." + getResponsePutwayData[1]!!.binBarcodeSerial)
-//        for (item in getResponsePutwayData) {
-//            if (binB == item!!.binBarcodeSerial && rackB == item!!.rackBarcodeSerial && matB == item!!.materialBarcodeSerial){
-//         Log.d(TAG, "yes-------------"+binB)
-//         Log.d(TAG, "yes-------------"+item!!.binBarcodeSerial)
-//            }
-//            else{
-//                Log.d(TAG, "noooooooo.")
-//            }
-//    }
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (networkError as MutableLiveData<Boolean>).value = false
             }
         }
-
-// code with id
-//        RemoteRepository.singleInstance.putPutawayItems(id, putawayRequestObject,
-//                this::handlePutawayPutItemsResponse, this::handlePutawayPutItemsError)
 
         // put call for putaway
         RemoteRepository.singleInstance.putPutawayItems(putawayRequestObject,

@@ -31,8 +31,6 @@ class PhysicalStockVerificationViewModel : ViewModel() {
         fun handleSubmitAudit() {
             var auditItems = AuditItem()
             auditItems.materialBarcode = materialBarcode
-            //auditItems.userId=userId
-            // auditItems.userId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_ID, "0").toInt()
             for (item in userResponseData) {
                 if (item!!.username == logedInUsername){
                     Log.d(ContentValues.TAG, "item ----id " + item!!.id)
@@ -48,8 +46,6 @@ class PhysicalStockVerificationViewModel : ViewModel() {
 
             RemoteRepository.singleInstance.postAuditsItems(auditItems,this::handleAuditItemsResponse, this::handleAuditItemsError)
         }
-//            RemoteRepository.singleInstance.postAuditsItems(AuditItem,this::handleAuditItemsResponse, this::handleAuditItemsError)
-//        }
 
     fun getUsers(){
         RemoteRepository.singleInstance.getUsers(
@@ -59,21 +55,9 @@ class PhysicalStockVerificationViewModel : ViewModel() {
     private fun handleUserResponse(users: Array<User?>) {
 
         userResponseData = users
-        Log.d(ContentValues.TAG, "item  response----- " + userResponseData)
-        Log.d(ContentValues.TAG, "item  handleUserResponse----- " + userResponseData[1]!!.username)
-
-
         (this.users as MutableLiveData<Array<User?>>).value = users
-        // return handleUserResponse(users)
-//        return this.users
-        // Log.d(TAG, "Handle get response......." + putawayItems)
-        // responsePutawayLoadingItems = putawayItems
     }
-
-
         private fun handleAuditItemsResponse(auditItemResponse: AuditItemResponse?) {
-            // (this.vendorItems as MutableLiveData<Array<VendorMaterialInward?>>).value = vendorItems
-            // Log.d(TAG,"Data Putaway Put Response"+ postVendorResponse)
             Log.d(ContentValues.TAG, " response ----- " + auditItemResponse)
         }
 

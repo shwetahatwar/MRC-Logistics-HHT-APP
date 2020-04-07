@@ -67,8 +67,6 @@ class PickingFragment : Fragment() {
         rackBarcodeScanButton = rootView.findViewById(R.id.picking_bin_scanButton)
         binBarcodeScanButton = rootView.findViewById(R.id.picking_rack_scanButton)
         picking_submitItemButton = rootView.findViewById(R.id.picking_submit_button)
-
-        // Log.d("materialbtn: ", "materialbtn")
         return rootView
     }
 
@@ -128,10 +126,6 @@ class PickingFragment : Fragment() {
         }
         this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
         viewModel.loadPickingItems("In progress")
-
-        // After click on submit button need to call put method to update database
-
-
 
         picking_submit_button.setOnClickListener{
             var thisObject = this
@@ -214,8 +208,6 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
             }else{
                 linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
             }
-
-
         }
     }
 }

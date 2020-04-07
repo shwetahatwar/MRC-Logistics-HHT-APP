@@ -1,28 +1,22 @@
 package com.briot.mrclogistics.implementor.ui.main
 
 import android.Manifest
-import android.Manifest.permission.READ_PHONE_STATE
 import android.content.ContentValues
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Context.TELEPHONY_SERVICE
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -33,7 +27,6 @@ import com.briot.mrclogistics.implementor.repository.local.PrefRepository
 import com.briot.mrclogistics.implementor.repository.remote.SignInResponse
 import io.github.pierry.progress.Progress
 import kotlinx.android.synthetic.main.login_fragment.*
-import kotlinx.coroutines.handleCoroutineException
 
 
 class LoginFragment : androidx.fragment.app.Fragment() {
@@ -48,6 +41,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.login_fragment, container, false)
+        Log.d(ContentValues.TAG, "onCreateView ")
 
     }
 
@@ -56,11 +50,15 @@ class LoginFragment : androidx.fragment.app.Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         username.requestFocus()
+//        Log.d(ContentValues.TAG, "onActivityCreated ")
         var deviceSerialNumber: String = ""
         try {
             val TelephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        //    requestPermissions("TelephonyManager","")
             if (ActivityCompat.checkSelfPermission(requireContext(),
                             Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                Log.d(ContentValues.TAG, "return ------------>"+PackageManager.PERMISSION_GRANTED)
+                Log.d(ContentValues.TAG, "return ------------>"+ Manifest.permission.READ_PHONE_STATE)
                 return
             }
             else {
@@ -77,8 +75,9 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             this.progress = null
 
             if (it != null) {
+                Log.d(ContentValues.TAG, "it ")
                 this.activity?.invalidateOptionsMenu()
-                PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN, "1")
+                PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN,"1")
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().id, it.id!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().username, it.username!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().password, it.password!!)
@@ -113,12 +112,10 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 UiHelper.showSnackbarMessage(this.activity as AppCompatActivity, message, 3000);
             }
         })
-
-
         login.setOnClickListener {
             val keyboard = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(activity?.currentFocus?.getWindowToken(), 0)
-
+            Log.d(ContentValues.TAG, "setOnClickListener ")
             // @dineshgajjar - remove following coments later on
             this.progress = UiHelper.showProgressIndicator(this.activity as AppCompatActivity, "Please wait")
             viewModel.loginUser(username.text.toString(), password.text.toString(),deviceSerialNumber)

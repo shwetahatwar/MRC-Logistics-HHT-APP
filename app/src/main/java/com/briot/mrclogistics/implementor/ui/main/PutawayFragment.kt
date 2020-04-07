@@ -139,9 +139,7 @@ class PutawayFragment : Fragment() {
                 viewModel.handleSubmitPutaway()
             }
         };
-        // recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
     }
-
 }
 
 open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
@@ -154,7 +152,6 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
                 .inflate(R.layout.putaway_row, parent, false)
         return ViewHolder(itemView)
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
         val putawayItems = putawayItems.value!![position]!!
@@ -191,13 +188,10 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
             val barcodeComplete = item.materialBarcodeSerial
             val barcodeValue = barcodeComplete?.split(",");
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?: "NA")
-
             if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
                     viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
                     viewModel.materialBarcodeSerial == (barcodeValue?.get(0) ?: "NA")){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-
-
             }else{
                 linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
 
@@ -205,12 +199,4 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         }
     }
 }
-
-
-
-//if (viewModel.errorMessage != null) {
-//    UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.errorMessage)
-//} else {
-//    UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
-//}
 

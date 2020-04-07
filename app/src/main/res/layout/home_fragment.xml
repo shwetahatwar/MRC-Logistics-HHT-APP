@@ -83,7 +83,7 @@
                         android:layout_marginTop="45dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1234567891234567"
+                        android:text=""
                         android:layout_weight="1"
                         android:gravity="right"
                         android:textStyle="bold" />
@@ -111,7 +111,7 @@
                         android:layout_marginTop="62dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="123456789"
+                        android:text=""
                         android:layout_weight="1"
                         android:gravity="right"
                         android:textStyle="bold" />
@@ -139,7 +139,7 @@
                     android:layout_marginTop="77dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="987654321"
+                    android:text=""
                     android:layout_weight="1"
                     android:gravity="right"
                     android:textStyle="bold" />
@@ -212,7 +212,7 @@
                         android:layout_marginTop="45dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1234567891234567"
+                        android:text=""
                         android:layout_weight="1"
                         android:gravity="right"
                         android:textStyle="bold" />
@@ -230,7 +230,7 @@
                         android:layout_marginLeft="65dp"
                         android:layout_toRightOf="@+id/info_image"
                         android:layout_alignParentTop="true"
-                        android:text="Picking:"
+                        android:text="Picked:"
                         android:textSize="15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -240,7 +240,7 @@
                         android:layout_marginTop="62dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="123456789"
+                        android:text=""
                         android:layout_weight="1"
                         android:gravity="right"
                         android:textStyle="bold" />
@@ -268,7 +268,7 @@
                         android:layout_marginTop="77dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="987654321"
+                        android:text=""
                         android:layout_weight="1"
                         android:gravity="right"
                         android:textStyle="bold" />
@@ -328,25 +328,25 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/scannedLable"
-                        android:layout_marginTop="45dp"
-                        android:layout_marginLeft="65dp"
-                        android:layout_alignParentTop="true"
-                        android:text="Scanned:"
-                        android:textSize="15dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/scannedLable"-->
+<!--                        android:layout_marginTop="45dp"-->
+<!--                        android:layout_marginLeft="65dp"-->
+<!--                        android:layout_alignParentTop="true"-->
+<!--                        android:text="Scanned:"-->
+<!--                        android:textSize="15dp"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content" />-->
 
-                    <TextView
-                        android:id="@+id/scannedValue"
-                        android:layout_marginTop="45dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1234567891234567"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:textStyle="bold" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/scannedValue"-->
+<!--                        android:layout_marginTop="45dp"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="1234567891234567"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="right"-->
+<!--                        android:textStyle="bold" />-->
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
