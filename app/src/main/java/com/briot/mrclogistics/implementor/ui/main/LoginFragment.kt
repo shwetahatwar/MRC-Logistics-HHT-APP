@@ -88,7 +88,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             Log.d(ContentValues.TAG, "Getting exception while getting serial number " + exception)
         }
 
-        viewModel.signInResponse.observe(this, Observer<SignInResponse> {
+        viewModel.signInResponse.observe(viewLifecycleOwner, Observer<SignInResponse> {
             UiHelper.hideProgress(this.progress)
             this.progress = null
 
@@ -112,7 +112,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 
         })
 
-        viewModel.networkError.observe(this, Observer<Boolean> {
+        viewModel.networkError.observe(viewLifecycleOwner, Observer<Boolean> {
 
             if (it == true) {
                 UiHelper.hideProgress(this.progress)

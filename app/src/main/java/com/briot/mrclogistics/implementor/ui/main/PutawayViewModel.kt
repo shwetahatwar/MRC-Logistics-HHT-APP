@@ -11,6 +11,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.briot.mrclogistics.implementor.repository.remote.PutawayItems
+import retrofit2.HttpException
 
 class PutawayViewModel : ViewModel() {
 
@@ -21,6 +22,8 @@ class PutawayViewModel : ViewModel() {
     val TAG = "PutawayViewModel"
 
     val networkError: LiveData<Boolean> = MutableLiveData()
+    val itemSubmissionSuccessful: LiveData<Boolean> = MutableLiveData()
+
     val putawayItems: LiveData<Array<PutawayItems?>> = MutableLiveData()
     val invalidPutawayItems: Array<PutawayItems?> = arrayOf(null)
     var responsePutawayLoadingItems: Array<PutawayItems?> = arrayOf(null)
@@ -85,11 +88,37 @@ class PutawayViewModel : ViewModel() {
     }
 
     private fun handlePutawayPutItemsResponse(putPutawayResponse: PutPutawayResponse?) {
-        Log.d(TAG, "Data Putaway Put Response"+ putPutawayResponse)
-        //latest putaway response
+        Log.d(TAG, "Data Putaway Put Response" + putPutawayResponse)
+
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                (itemSubmissionSuccessful as MutableLiveData<Boolean>).value = true
+            }
+            //latest putaway response
+        }
     }
 
     private fun handlePutawayPutItemsError(error: Throwable) {
         Log.d(TAG, error.localizedMessage)
+
+        Log.d(TAG, error.localizedMessage)
+
+        if (UiHelper.isNetworkError(error)) {
+            (networkError as MutableLiveData<Boolean>).value = true
+            errorMessage = "Not able to connect to the server."
+        } else if (error is HttpException) {
+            if (error.code() >= 401) {
+                var msg = error.response()?.errorBody()?.string()
+                if (msg != null && msg.isNotEmpty()) {
+                    errorMessage = msg
+                } else {
+                    errorMessage = error.message()
+                }
+            }
+            (networkError as MutableLiveData<Boolean>).value = true
+        } else {
+            (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = invalidPutawayItems
+            errorMessage = "Oops something went wrong."
+        }
     }
 }

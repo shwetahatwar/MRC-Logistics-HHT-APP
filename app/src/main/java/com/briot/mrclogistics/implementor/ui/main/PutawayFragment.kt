@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -109,6 +110,24 @@ class PutawayFragment : Fragment() {
                 UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
             }
         })
+        viewModel.itemSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
+            if (it == true) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
+
+                var thisObject = this
+                AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
+                    setTitle("Success")
+                    setMessage("Putaway scanned items submitted successfully.")
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
+                        dialog, _ -> dialog.dismiss()
+                       Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.putawayFragment, false)
+                      //  Navigation.findNavController(thisObject.recyclerView).popBackStack()
+                    })
+                    show()
+                }
+            }
+        })
 
         putaway_materialBarcode.setOnEditorActionListener { _, i, keyEvent ->
             var handled = false
@@ -120,6 +139,13 @@ class PutawayFragment : Fragment() {
                 this.progress = null
                 handled = true
             }
+
+            else {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Scanned material is not matching with putaway items!")
+                // @dinesh gajjar: get admin permission flow
+            }
+
+
             handled
         }
         this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
