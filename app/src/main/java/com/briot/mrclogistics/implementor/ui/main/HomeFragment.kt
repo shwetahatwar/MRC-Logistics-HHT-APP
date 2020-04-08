@@ -110,7 +110,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
 
         materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
-        Log.d(TAG, " materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }")
         materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_pickingFragment) }
         vendorMaterialScan.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_vendorMaterialScanFragment) }
         physicalStock.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_physicalStockVerificationFragment) }
