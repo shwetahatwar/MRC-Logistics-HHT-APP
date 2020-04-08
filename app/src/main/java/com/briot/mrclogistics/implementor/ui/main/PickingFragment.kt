@@ -127,6 +127,35 @@ class PickingFragment : Fragment() {
         this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
         viewModel.loadPickingItems()
 
+        // to get material barcode value
+        picking_material_scanButton.setOnClickListener{
+            for (item in viewModel.pickingItems.value!!){
+                // Database Material barcode value
+                val cmpltMaterialBarcode = item!!.materialBarcodeSerial?.split(",")
+                val splittedMaterialBarcode = (cmpltMaterialBarcode?.get(0)?:0)
+
+                // User input Material barcode value
+                val inputCmpltMaterialBarcode = pickingMaterialTextValue.getText().toString()?.split(",")
+                val splittedInputMaterialBarcode = (inputCmpltMaterialBarcode?.get(0)?:0)
+
+                // Log.d(TAG, "splitted db -->" + dbV)
+                // Log.d(TAG, "splitted in -->" + inp1)
+
+                // if (item!!.materialBarcodeSerial == pickingMaterialTextValue.getText().toString()){
+                 if (splittedMaterialBarcode == splittedInputMaterialBarcode){
+                    // viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
+                    // Log.d(TAG, "Items -->" + item!!.rackBarcodeSerial)
+                    // Log.d(TAG, "Items -->" + item!!.binBarcodeSerial)
+                    rackMaterialTextValue.setText(item!!.rackBarcodeSerial)
+                    binMaterialTextValue.setText(item!!.binBarcodeSerial)
+                }
+                else{
+                    Log.d(TAG, "Add toster message for value not match in database")
+                }
+
+            }
+        }
+
         picking_submit_button.setOnClickListener{
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
@@ -206,7 +235,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
 
             if (viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
-                    viewModel.binBarcodeSerial == pickingItems!!.binBarcodeSerial &&
+                    viewModel.binBarcodeSerial == pickingItems!!.binBarcodeSerial ||
                     (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
             }else{
