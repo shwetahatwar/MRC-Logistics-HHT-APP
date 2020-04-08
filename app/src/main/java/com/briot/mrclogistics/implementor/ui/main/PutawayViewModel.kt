@@ -27,9 +27,8 @@ class PutawayViewModel : ViewModel() {
     val putawayItems: LiveData<Array<PutawayItems?>> = MutableLiveData()
     val invalidPutawayItems: Array<PutawayItems?> = arrayOf(null)
     var responsePutawayLoadingItems: Array<PutawayItems?> = arrayOf(null)
-    val invalidputawayloadingItems: Array<DispatchSlipItem?> = arrayOf(null)
     var getResponsePutwayData: Array<PutawayItems?> = arrayOf(null)
-    var errorMessage: String = ""
+    var messageContent: String = ""
 
 
     fun loadPutawayItems() {
@@ -44,10 +43,23 @@ class PutawayViewModel : ViewModel() {
     }
 
     private fun handlePutawayItemsError(error: Throwable) {
+        Log.d(TAG, error.localizedMessage)
         if (UiHelper.isNetworkError(error)) {
+            (networkError as MutableLiveData<Boolean>).value = true
+            messageContent = "Not able to connect to the server."
+        } else if (error is HttpException) {
+            if (error.code() >= 401) {
+                var msg = error.response()?.errorBody()?.string()
+                if (msg != null && msg.isNotEmpty()) {
+                    messageContent = msg
+                } else {
+                    messageContent = error.message()
+                }
+            }
             (networkError as MutableLiveData<Boolean>).value = true
         } else {
             (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = invalidPutawayItems
+            messageContent = "Oops something went wrong."
         }
     }
 
@@ -89,36 +101,31 @@ class PutawayViewModel : ViewModel() {
 
     private fun handlePutawayPutItemsResponse(putPutawayResponse: PutPutawayResponse?) {
         Log.d(TAG, "Data Putaway Put Response" + putPutawayResponse)
-
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (itemSubmissionSuccessful as MutableLiveData<Boolean>).value = true
             }
-            //latest putaway response
         }
     }
 
-    private fun handlePutawayPutItemsError(error: Throwable) {
+    fun handlePutawayPutItemsError(error: Throwable) {
         Log.d(TAG, error.localizedMessage)
-
-        Log.d(TAG, error.localizedMessage)
-
         if (UiHelper.isNetworkError(error)) {
             (networkError as MutableLiveData<Boolean>).value = true
-            errorMessage = "Not able to connect to the server."
+            messageContent = "Not able to connect to the server."
         } else if (error is HttpException) {
             if (error.code() >= 401) {
                 var msg = error.response()?.errorBody()?.string()
                 if (msg != null && msg.isNotEmpty()) {
-                    errorMessage = msg
+                    messageContent = msg
                 } else {
-                    errorMessage = error.message()
+                    messageContent = error.message()
                 }
             }
             (networkError as MutableLiveData<Boolean>).value = true
         } else {
             (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = invalidPutawayItems
-            errorMessage = "Oops something went wrong."
+            messageContent = "Oops something went wrong."
         }
     }
 }

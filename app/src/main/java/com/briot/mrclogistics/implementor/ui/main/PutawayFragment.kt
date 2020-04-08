@@ -2,7 +2,6 @@ package com.briot.mrclogistics.implementor.ui.main
 
 import android.content.ContentValues.TAG
 import android.content.Context
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -18,9 +17,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,8 +33,11 @@ import kotlinx.android.synthetic.main.dispatch_picking_list_fragment.*
 import kotlinx.android.synthetic.main.dispatch_slip_loading_fragment.*
 import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.android.synthetic.main.putaway_fragment.*
+import kotlinx.android.synthetic.main.putaway_row.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PutawayFragment : Fragment() {
 
@@ -72,7 +72,7 @@ class PutawayFragment : Fragment() {
         rackbtn = rootView.findViewById(R.id.bin_scanButton)
         binbtn = rootView.findViewById(R.id.rack_scanButton)
         putawaysubmit = rootView.findViewById(R.id.putaway_items_submit_button)
-       return rootView
+        return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -106,10 +106,15 @@ class PutawayFragment : Fragment() {
             if (it == true) {
                 UiHelper.hideProgress(this.progress)
                 this.progress = null
+                if (viewModel.messageContent != null) {
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.messageContent)
+                } else {
+                    UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
+                }
 
-                UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
             }
         })
+
         viewModel.itemSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
                 UiHelper.hideProgress(this.progress)
@@ -118,11 +123,11 @@ class PutawayFragment : Fragment() {
                 var thisObject = this
                 AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
                     setTitle("Success")
-                    setMessage("Putaway scanned items submitted successfully.")
+                    setMessage("Material putaway successfully.")
                     setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
                         dialog, _ -> dialog.dismiss()
-                       Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.putawayFragment, false)
-                      //  Navigation.findNavController(thisObject.recyclerView).popBackStack()
+                       Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
+                  //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
                     })
                     show()
                 }
@@ -131,33 +136,41 @@ class PutawayFragment : Fragment() {
 
         putaway_materialBarcode.setOnEditorActionListener { _, i, keyEvent ->
             var handled = false
+          //  var value = loading_materialBarcode.text!!.toString()
+            var materialBarcodeSerial = putaway_materialBarcode.text!!.toString()
+
             if (keyEvent == null) {
                 Log.d("putaway: ", "event is null")
-            } else if ((putaway_materialBarcode.text != null && putaway_materialBarcode.text!!.isNotEmpty()) && i == EditorInfo.IME_ACTION_DONE || ((keyEvent.keyCode == KeyEvent.KEYCODE_ENTER || keyEvent.keyCode == KeyEvent.KEYCODE_TAB) && keyEvent.action == KeyEvent.ACTION_DOWN)) {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "event is null")
+            }else if ((putaway_materialBarcode.text != null && putaway_materialBarcode.text!!.isNotEmpty()) && i
+                    == EditorInfo.IME_ACTION_DONE || ((keyEvent.keyCode == KeyEvent.KEYCODE_ENTER || keyEvent.keyCode == KeyEvent.KEYCODE_TAB)
+                            && keyEvent.action == KeyEvent.ACTION_DOWN)) {
                 this.progress = UiHelper.showProgressIndicator(this.activity as AppCompatActivity, "Please wait")
                 UiHelper.hideProgress(this.progress)
                 this.progress = null
                 handled = true
             }
-
-            else {
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Scanned material is not matching with putaway items!")
-                // @dinesh gajjar: get admin permission flow
-            }
-
-
             handled
         }
+
         this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
         // Display dabase data to screen
         viewModel.loadPutawayItems()
         viewModel.loadPutawayRefreshItems()
         // After click on submit button need to call put method to update database
+
+
         putaway_items_submit_button.setOnClickListener {
+            var thisObject = this
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
+<<<<<<< HEAD
             // call adapter class with updated value shw
+=======
+            //recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
+
+>>>>>>> Changes done in picking and putaway success and error message
             recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
             GlobalScope.launch {
                 viewModel.handleSubmitPutaway()
@@ -169,7 +182,7 @@ class PutawayFragment : Fragment() {
 
 open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
                                     private val putawayItems: LiveData<Array<PutawayItems?>>,
-                                    private val viewModel: PutawayViewModel ) :
+                                    private val viewModel: PutawayViewModel) :
         androidx.recyclerview.widget.RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -180,8 +193,13 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
         val putawayItems = putawayItems.value!![position]!!
+<<<<<<< HEAD
 //        Log.d(TAG, "putawayItems -->" + putawayItems.scanStatus)
         holder.itemView.setOnClickListener{
+=======
+        Log.d(TAG, "position" + position)
+        holder.itemView.setOnClickListener {
+>>>>>>> Changes done in picking and putaway success and error message
 
             if (viewModel.putawayItems.toString().toLowerCase().contains("complete")) {
                 return@setOnClickListener
@@ -193,6 +211,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         Log.d(TAG, "getItemCount" + putawayItems.value)
         return putawayItems.value?.size ?: 0
     }
+
     open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         protected val rackBarcodeSerial: TextView
         protected val binBarcodeSerial: TextView

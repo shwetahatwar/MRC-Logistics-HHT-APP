@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 class PickingViewModel : ViewModel() {
 
@@ -23,10 +24,11 @@ class PickingViewModel : ViewModel() {
     val networkError: LiveData<Boolean> = MutableLiveData()
     val pickingItems: LiveData<Array<PickingItems?>> = MutableLiveData()
     val invalidPickingItems: Array<PickingItems?> = arrayOf(null)
+    val itemSubmissionPickingSuccessful: LiveData<Boolean> = MutableLiveData()
 
     var responsePickingLoadingItems: Array<PickingItems?> = arrayOf(null)
 
-    var errorMessage: String = ""
+    var messageContent: String = ""
 
     fun loadPickingItems() {
         (networkError as MutableLiveData<Boolean>).value = false
@@ -36,16 +38,29 @@ class PickingViewModel : ViewModel() {
     }
 
     private fun handlePickingItemsResponse(pickingItems: Array<PickingItems?>) {
+        responsePickingLoadingItems = pickingItems
         (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = pickingItems
 
     }
 
     private fun handlePickingItemsError(error: Throwable) {
-
+        Log.d(TAG, error.localizedMessage)
         if (UiHelper.isNetworkError(error)) {
+            (networkError as MutableLiveData<Boolean>).value = true
+            messageContent = "Not able to connect to the server."
+        } else if (error is HttpException) {
+            if (error.code() >= 401) {
+                var msg = error.response()?.errorBody()?.string()
+                if (msg != null && msg.isNotEmpty()) {
+                    messageContent = msg
+                } else {
+                    messageContent = error.message()
+                }
+            }
             (networkError as MutableLiveData<Boolean>).value = true
         } else {
             (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = invalidPickingItems
+            messageContent = "Oops something went wrong."
         }
     }
 
@@ -64,14 +79,33 @@ class PickingViewModel : ViewModel() {
         RemoteRepository.singleInstance.putPickingItems(pickingRequestObject,
                 this::handlePickingPutItemsResponse, this::handlePickingPutItemsError)
     }
-    private fun handlePickingPutItemsResponse(putPickingResponse: PutPickingResponse?) {
-        Log.d(TAG, "Data updated successfully")
-    }
 
+    private fun handlePickingPutItemsResponse(putPickingResponse: PutPickingResponse?) {
+        Log.d(TAG, "Data Picking Put Response" + putPickingResponse)
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                (itemSubmissionPickingSuccessful as MutableLiveData<Boolean>).value = true
+            }
+        }
+    }
     private fun handlePickingPutItemsError(error: Throwable) {
         Log.d(TAG, error.localizedMessage)
+        if (UiHelper.isNetworkError(error)) {
+            (networkError as MutableLiveData<Boolean>).value = true
+            messageContent = "Not able to connect to the server."
+        } else if (error is HttpException) {
+            if (error.code() >= 401) {
+                var msg = error.response()?.errorBody()?.string()
+                if (msg != null && msg.isNotEmpty()) {
+                    messageContent = msg
+                } else {
+                    messageContent = error.message()
+                }
+            }
+            (networkError as MutableLiveData<Boolean>).value = true
+        } else {
+            (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = invalidPickingItems
+            messageContent = "Oops something went wrong."
+        }
     }
 }
-
-
-

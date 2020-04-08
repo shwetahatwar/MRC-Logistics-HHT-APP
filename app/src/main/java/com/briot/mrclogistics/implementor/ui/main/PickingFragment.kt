@@ -105,18 +105,45 @@ class PickingFragment : Fragment() {
             if (it == true) {
                 UiHelper.hideProgress(this.progress)
                 this.progress = null
+                if (viewModel.messageContent != null) {
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.messageContent)
+                } else {
+                    UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
+                }
 
-                UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
+            }
+        })
+
+        viewModel.itemSubmissionPickingSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
+            if (it == true) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
+
+                var thisObject = this
+                AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
+                    setTitle("Success")
+                    setMessage("Material Picking successfully.")
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
+                        dialog, _ -> dialog.dismiss()
+                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
+                        //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
+                    })
+                    show()
+                }
             }
         })
 
         picking_materialBarcode.setOnEditorActionListener { _, i, keyEvent ->
             var handled = false
+            //  var value = loading_materialBarcode.text!!.toString()
+            var materialBarcodeSerial = picking_materialBarcode.text!!.toString()
+
             if (keyEvent == null) {
                 Log.d("picking: ", "event is null")
-            } else if ((picking_materialBarcode.text != null && picking_materialBarcode.text!!.isNotEmpty())
-                    && i == EditorInfo.IME_ACTION_DONE || ((keyEvent.keyCode == KeyEvent.KEYCODE_ENTER ||
-                            keyEvent.keyCode == KeyEvent.KEYCODE_TAB) && keyEvent.action == KeyEvent.ACTION_DOWN)) {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "event is null")
+            }else if ((picking_materialBarcode.text != null && picking_materialBarcode.text!!.isNotEmpty()) && i
+                    == EditorInfo.IME_ACTION_DONE || ((keyEvent.keyCode == KeyEvent.KEYCODE_ENTER || keyEvent.keyCode == KeyEvent.KEYCODE_TAB)
+                            && keyEvent.action == KeyEvent.ACTION_DOWN)) {
                 this.progress = UiHelper.showProgressIndicator(this.activity as AppCompatActivity, "Please wait")
                 UiHelper.hideProgress(this.progress)
                 this.progress = null
@@ -124,6 +151,7 @@ class PickingFragment : Fragment() {
             }
             handled
         }
+
         this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
         viewModel.loadPickingItems()
 
@@ -160,6 +188,7 @@ class PickingFragment : Fragment() {
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
+            //recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
 
             recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
 
