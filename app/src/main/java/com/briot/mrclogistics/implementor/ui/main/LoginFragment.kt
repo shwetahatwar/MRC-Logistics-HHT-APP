@@ -1,10 +1,11 @@
 package com.briot.mrclogistics.implementor.ui.main
 
 import android.Manifest
+import android.Manifest.permission.READ_PHONE_STATE
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.Context.TELEPHONY_SERVICE
+import android.content.Context.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -50,27 +51,38 @@ class LoginFragment : androidx.fragment.app.Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         username.requestFocus()
-//        Log.d(ContentValues.TAG, "onActivityCreated ")
         var deviceSerialNumber: String = ""
+//        ActivityCompat.requestPermissions(requireActivity(),
+//                arrayOf(Manifest.permission.READ_PHONE_STATE),
+//                0)
+
         try {
             val TelephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        //    requestPermissions("TelephonyManager","")
             if (ActivityCompat.checkSelfPermission(requireContext(),
                             Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                Log.d(ContentValues.TAG, "return ------------>"+PackageManager.PERMISSION_GRANTED)
-                Log.d(ContentValues.TAG, "return ------------>"+ Manifest.permission.READ_PHONE_STATE)
-                return
-            }
-            else {
-                // Log.d(ContentValues.TAG, "Got Device serial number " + Build.SERIAL)
-                try {
-                    deviceSerialNumber = Build.getSerial()
-                }
-                catch (e: Throwable){
-                    Log.d(ContentValues.TAG, "Got Exception in Build.getSerial() " + e)
-                    deviceSerialNumber = Build.SERIAL
+                // Log.d(ContentValues.TAG, "return ------------>"+PackageManager.PERMISSION_GRANTED)
+                // Log.d(ContentValues.TAG, "return ------------>"+ Manifest.permission.READ_PHONE_STATE)
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
+                                Manifest.permission.READ_PHONE_STATE)) {
+                    Log.d(ContentValues.TAG, "in if ----> need permission for access phone information")
+                } else {
+                    ActivityCompat.requestPermissions(requireActivity(),
+                            arrayOf(Manifest.permission.READ_PHONE_STATE),
+                            0)
                 }
             }
+            // else {
+            // Log.d(ContentValues.TAG, "Got Device serial number " + Build.SERIAL)
+            try {
+                deviceSerialNumber = Build.getSerial()
+                // Log.d(ContentValues.TAG, "serial no ---> " + deviceSerialNumber)
+            }
+            catch (e: Throwable){
+                // Log.d(ContentValues.TAG, "Got Exception in Build.getSerial() " + e)
+                deviceSerialNumber = Build.SERIAL
+            }
+            //}
         }
         catch ( exception: Throwable ){
             Log.d(ContentValues.TAG, "Getting exception while getting serial number " + exception)
@@ -81,7 +93,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             this.progress = null
 
             if (it != null) {
-                Log.d(ContentValues.TAG, "it ")
+
                 this.activity?.invalidateOptionsMenu()
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN,"1")
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().id, it.id!!.toString())
@@ -90,10 +102,6 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, deviceSerialNumber)
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().status, it.status!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID,"1")
-
-                //Log.d(ContentValues.TAG, "login" + PrefRepository)
-                //Log.d(ContentValues.TAG, "context" +   context)
-
 
                 this.context?.let { it1 -> PrefRepository.singleInstance.serializePrefs(it1) }
 
