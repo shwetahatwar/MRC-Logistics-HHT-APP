@@ -50,6 +50,8 @@ class LoginFragment : androidx.fragment.app.Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        (this.activity as AppCompatActivity).setTitle("Material Management System")
+
         username.requestFocus()
         var deviceSerialNumber: String = ""
 //        ActivityCompat.requestPermissions(requireActivity(),
