@@ -137,7 +137,6 @@ class PutawayFragment : Fragment() {
                 viewModel.handleSubmitPutaway()
             }
             viewModel.loadPutawayRefreshItems()
-
         };
     }
 }
