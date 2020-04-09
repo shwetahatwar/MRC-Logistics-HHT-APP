@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.briot.mrclogistics.implementor.R
 import com.briot.mrclogistics.implementor.UiHelper
-import com.briot.mrclogistics.implementor.repository.local.PrefConstants 
+import com.briot.mrclogistics.implementor.repository.local.PrefConstants  
 import com.briot.mrclogistics.implementor.repository.remote.PutawayItems
 import com.briot.mrclogistics.implementor.ui.main.SimplePutawayItemAdapter.ViewHolder
 import io.github.pierry.progress.Progress
