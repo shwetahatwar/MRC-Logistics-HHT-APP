@@ -188,8 +188,8 @@ class PutawayFragment : Fragment() {
         }
 
         //this.progress = UiHelper.showProgressIndicator(activity!!, "Loading dispatch slip Items")
-        putaway_materialBarcode.requestFocus()
-    }
+        // putaway_materialBarcode.requestFocus()
+    // }
 }
 
 

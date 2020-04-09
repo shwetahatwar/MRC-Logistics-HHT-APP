@@ -182,7 +182,8 @@ class PickingFragment : Fragment() {
             }
         }
 
-        picking_submit_button.setOnClickListener{
+        picking_submitItemButton.setOnClickListener {
+            var thisObject = this
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
@@ -197,8 +198,6 @@ class PickingFragment : Fragment() {
                     viewModel.handleSubmitPicking()
                 }
             }
-            viewModel.loadPickingItems()
-        };
             picking_materialBarcode.text?.clear()
             picking_binBarcode.text?.clear()
             picking_rackBarcode.text?.clear()
@@ -209,7 +208,6 @@ class PickingFragment : Fragment() {
         picking_materialBarcode.requestFocus()
     }
 }
-
 
 open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
                                     private val pickingItems: LiveData<Array<PickingItems?>>,
