@@ -82,8 +82,6 @@ class PickingFragment : Fragment() {
             viewModel.binBarcodeSerial = this.arguments!!.getString("binBarcodeSerial")
             viewModel.materialBarcodeSerial = this.arguments!!.getString("materialBarcodeSerial")
             viewModel.rackBarcodeSerial = binMaterialTextValue.getText().toString()
-
-
         }
         recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems,viewModel)
         viewModel.pickingItems.observe(viewLifecycleOwner, Observer<Array<PickingItems?>> {
@@ -264,7 +262,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
 
             if (viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
-                    viewModel.binBarcodeSerial == pickingItems!!.binBarcodeSerial ||
+                    viewModel.binBarcodeSerial == pickingItems!!.binBarcodeSerial &&
                     (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
             }else{

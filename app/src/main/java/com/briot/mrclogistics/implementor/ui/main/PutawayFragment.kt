@@ -229,15 +229,49 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
 
             val scannedMaterialBarcodeValue = viewModel.materialBarcodeSerial
             val scannedSplitedValue = scannedMaterialBarcodeValue?.split(",")
-
+            val materialScanValueToCompare = (scannedSplitedValue?.get(0) ?: "NA")
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?: "NA")
-            if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
-                    viewModel.binBarcodeSerial == item!!.binBarcodeSerial ||
-                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")){
-                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-            }else{
-                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+
+            Log.d(TAG, "materialScanValueToCompare -->"+materialScanValueToCompare)
+            Log.d(TAG, "materialScanValueToCominput ->"+ (barcodeValue?.get(0) ?: "NA"))
+            if (materialScanValueToCompare !=""){
+                if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
+                        viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
+                        materialScanValueToCompare == (barcodeValue?.get(0) ?: "NA")){
+                    linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+                }
+                else{
+                    linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+                }
             }
+            if (materialScanValueToCompare == ""){
+                if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
+                        viewModel.binBarcodeSerial == item!!.binBarcodeSerial){
+                    linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+                }
+                else{
+                    linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+                }
+            }
+
+
+
+
+
+//
+//            if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
+//                    viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
+//                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")){
+//                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+//            }
+//            if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
+//                    viewModel.binBarcodeSerial == item!!.binBarcodeSerial
+//                    ){
+//                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+//            }
+//            else{
+//                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
+//            }
         }
     }
 }
