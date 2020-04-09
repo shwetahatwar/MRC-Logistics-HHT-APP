@@ -254,24 +254,28 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
                 }
             }
 
-
-
-
-
 //
-//            if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
-//                    viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
-//                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")){
-//                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-//            }
-//            if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
-//                    viewModel.binBarcodeSerial == item!!.binBarcodeSerial
-//                    ){
-//                linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-//            }
-//            else{
-//                linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
-//            }
+//                if ((viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
+//                        viewModel.binBarcodeSerial == item!!.binBarcodeSerial)) {
+//                    Log.d(TAG, "materialScanValueToCompare -->"+materialScanValueToCompare)
+//                    Log.d(TAG, "input ----------------------->"+(barcodeValue?.get(0) ?: "NA"))
+//
+//                    if ((materialScanValueToCompare != "") && (materialScanValueToCompare == (barcodeValue?.get(0) ?: "NA"))){
+//                        linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+//                        Log.d(TAG, "first if --> ")
+//                    }
+//                    if (materialScanValueToCompare == "" ){
+//                        linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
+//                        Log.d(TAG, "2 if --> ")
+//
+//                    }
+//                }
+
+
+
+
+
+
         }
     }
 }
