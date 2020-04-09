@@ -107,18 +107,32 @@ class VendorMaterialScanFragment : Fragment() {
         vendor_items_submit_button.setOnClickListener {
             viewModel.materialBarcode = vendorMaterialTextValue.getText().toString()
 
-            val logedInUsername = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username,"")
+            val logedInUsername = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username, "")
+            // Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
             viewModel.logedInUsername = logedInUsername
+            // viewModel.getUsers()
+            // Log.d(ContentValues.TAG, "api get response....." + v)
 
-            GlobalScope.launch {
-                viewModel.handleSubmitVendor()
+
+            if (vendorMaterialTextValue == null) {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
+                viewModel.messageContent = "Please scan the material"
+            } else {
+                GlobalScope.launch {
+                    viewModel.handleSubmitVendor()
+                }
             }
-        };
-       // recyclerView.adapter = SimpleVendorItemAdapter(recyclerView, viewModel.vendorItems, viewModel)
+            vendor_materialBarcode.text?.clear()
+            vendor_materialBarcode.requestFocus()
+        }
+
+        //this.progress = UiHelper.showProgressIndicator(activity!!, "Loading dispatch slip Items")
+        vendor_materialBarcode.requestFocus()
     }
 }
+
 open class SimpleVendorItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
-                                    private val vendorItems: LiveData<Array<VendorMaterialInward?>>,
+                                   private val vendorItems: LiveData<Array<VendorMaterialInward?>>,
                                    private val viewModel: VendorMaterialScanViewModel) :
         androidx.recyclerview.widget.RecyclerView.Adapter<ViewHolder>() {
 
@@ -137,11 +151,14 @@ open class SimpleVendorItemAdapter(private val recyclerView: androidx.recyclervi
         Log.d(ContentValues.TAG, "getItemCount" + vendorItems.value)
         return vendorItems.value?.size ?: 0
     }
+
     open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         protected val materialBarcode: TextView
+
         init {
             materialBarcode = itemView.findViewById(R.id.vendor_materialBarcode)
         }
+
         fun bind() {
             val item = vendorItems.value!![adapterPosition]!!
             materialBarcode.text = item.materialBarcode

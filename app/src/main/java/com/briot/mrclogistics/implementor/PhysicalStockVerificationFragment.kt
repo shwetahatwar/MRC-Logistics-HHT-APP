@@ -49,6 +49,7 @@ class PhysicalStockVerificationFragment : Fragment() {
     companion object {
         fun newInstance() = PhysicalStockVerificationFragment()
     }
+
     lateinit var auditScanMaterialTextValue: EditText
     lateinit var auditsubmitButton: Button
     private lateinit var viewModel: PhysicalStockVerificationViewModel
@@ -103,9 +104,9 @@ class PhysicalStockVerificationFragment : Fragment() {
                 var thisObject = this
                 AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
                     setTitle("Success")
-                    setMessage("Material putaway successfully.")
-                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
-                        dialog, _ -> dialog.dismiss()
+                    setMessage("Material updated successfully.")
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", { dialog, _ ->
+                        dialog.dismiss()
                         Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
                         //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
                     })
@@ -116,50 +117,60 @@ class PhysicalStockVerificationFragment : Fragment() {
 
         audit_submitItemsButton.setOnClickListener {
             viewModel.materialBarcode = auditScanMaterialTextValue.getText().toString()
-           // PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID, it.userNameId!!.toString())
+            // PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID, it.userNameId!!.toString())
 
-            val logedInUsername = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username,"")
+            val logedInUsername = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username, "")
             // Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
             viewModel.logedInUsername = logedInUsername
 
-            if(auditScanMaterialTextValue==null){
+            if (auditScanMaterialTextValue == null) {
                 UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
-                viewModel.messageContent="Please scan the material"
-            }else {
+                viewModel.messageContent = "Please scan the material"
+            } else {
                 GlobalScope.launch {
                     viewModel.handleSubmitAudit()
                 }
             }
-        };
-      //  recyclerView.adapter = SimpleAuditItemAdapter(recyclerView, viewModel.auditItems, viewModel)
-    }
-}
-open class SimpleAuditItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
-                                  private val auditItems: LiveData<Array<AuditItem?>>,
-                                  private val viewModel: PhysicalStockVerificationViewModel) :
-        androidx.recyclerview.widget.RecyclerView.Adapter<SimpleAuditItemAdapter.ViewHolder>() {
-    override fun onBindViewHolder(holder: SimpleAuditItemAdapter.ViewHolder, position: Int) {
-        holder.bind()
-        val auditItems = auditItems.value!![position]!!
-    }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.physical_stock_verification_fragment, parent, false)
-        return ViewHolder(itemView)
-    }
+            audit_materialBarcode.text?.clear()
+            audit_materialBarcode.requestFocus()
+        }
 
-    override fun getItemCount(): Int {
-        Log.d(ContentValues.TAG, "getItemCount" + auditItems.value)
-        return auditItems.value?.size ?: 0
-    }
-    open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
-        protected val materialBarcode: TextView
-        init {
-            materialBarcode = itemView.findViewById(R.id.audit_materialBarcode)
-        }
-        fun bind() {
-            val item = auditItems.value!![adapterPosition]!!
-            materialBarcode.text = item.materialBarcode
-        }
+        //this.progress = UiHelper.showProgressIndicator(activity!!, "Loading dispatch slip Items")
+        audit_materialBarcode.requestFocus()
     }
 }
+
+
+    open class SimpleAuditItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
+                                      private val auditItems: LiveData<Array<AuditItem?>>,
+                                      private val viewModel: PhysicalStockVerificationViewModel) :
+            androidx.recyclerview.widget.RecyclerView.Adapter<SimpleAuditItemAdapter.ViewHolder>() {
+        override fun onBindViewHolder(holder: SimpleAuditItemAdapter.ViewHolder, position: Int) {
+            holder.bind()
+            val auditItems = auditItems.value!![position]!!
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val itemView = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.physical_stock_verification_fragment, parent, false)
+            return ViewHolder(itemView)
+        }
+
+        override fun getItemCount(): Int {
+            Log.d(ContentValues.TAG, "getItemCount" + auditItems.value)
+            return auditItems.value?.size ?: 0
+        }
+
+        open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+            protected val materialBarcode: TextView
+
+            init {
+                materialBarcode = itemView.findViewById(R.id.audit_materialBarcode)
+            }
+
+            fun bind() {
+                val item = auditItems.value!![adapterPosition]!!
+                materialBarcode.text = item.materialBarcode
+            }
+        }
+    }

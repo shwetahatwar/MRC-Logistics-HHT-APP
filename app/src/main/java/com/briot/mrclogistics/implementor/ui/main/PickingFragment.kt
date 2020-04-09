@@ -120,7 +120,7 @@ class PickingFragment : Fragment() {
                 var thisObject = this
                 AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
                     setTitle("Success")
-                    setMessage("Material Picking successfully.")
+                    setMessage("Material updated successfully.")
                     setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
                         dialog, _ -> dialog.dismiss()
                         Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
@@ -189,14 +189,27 @@ class PickingFragment : Fragment() {
             //recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
 
             recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
-
-            GlobalScope.launch {
-                viewModel.handleSubmitPicking()
+            if (pickingMaterialTextValue == null) {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
+                viewModel.messageContent = "Please scan the material"
+            } else {
+                GlobalScope.launch {
+                    viewModel.handleSubmitPicking()
+                }
             }
             viewModel.loadPickingItems()
         };
+            picking_materialBarcode.text?.clear()
+            picking_binBarcode.text?.clear()
+            picking_rackBarcode.text?.clear()
+            picking_materialBarcode.requestFocus()
+        }
+
+        //this.progress = UiHelper.showProgressIndicator(activity!!, "Loading dispatch slip Items")
+        picking_materialBarcode.requestFocus()
     }
 }
+
 
 open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
                                     private val pickingItems: LiveData<Array<PickingItems?>>,

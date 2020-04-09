@@ -122,7 +122,7 @@ class PutawayFragment : Fragment() {
                 var thisObject = this
                 AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
                     setTitle("Success")
-                    setMessage("Material putaway successfully.")
+                    setMessage("Material updated successfully.")
                     setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
                         dialog, _ -> dialog.dismiss()
                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
@@ -172,8 +172,26 @@ class PutawayFragment : Fragment() {
             }
             viewModel.loadPutawayRefreshItems()
         };
+
+            if (putawayMaterialTextValue == null) {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
+                viewModel.messageContent = "Please scan the material"
+            } else {
+                GlobalScope.launch {
+                    viewModel.handleSubmitPutaway()
+                }
+            }
+            putaway_materialBarcode.text?.clear()
+            bin_materialBarcode.text?.clear()
+            rack_materialBarcode.text?.clear()
+            putaway_materialBarcode.requestFocus()
+        }
+
+        //this.progress = UiHelper.showProgressIndicator(activity!!, "Loading dispatch slip Items")
+        putaway_materialBarcode.requestFocus()
     }
 }
+
 
 open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
                                     private val putawayItems: LiveData<Array<PutawayItems?>>,
