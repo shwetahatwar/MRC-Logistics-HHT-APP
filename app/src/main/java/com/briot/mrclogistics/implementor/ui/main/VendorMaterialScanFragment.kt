@@ -11,13 +11,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.briot.mrclogistics.implementor.R
+import com.briot.mrclogistics.implementor.UiHelper
 import com.briot.mrclogistics.implementor.repository.local.PrefConstants
 import com.briot.mrclogistics.implementor.repository.local.PrefRepository
 import com.briot.mrclogistics.implementor.repository.remote.VendorMaterialInward
@@ -26,6 +30,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import com.briot.mrclogistics.implementor.ui.main.SimpleVendorItemAdapter.ViewHolder
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.picking_row.*
 
@@ -65,6 +70,40 @@ class VendorMaterialScanFragment : Fragment() {
             viewModel.materialBarcode = this.arguments!!.getString("materialBarcode")
             viewModel.materialBarcode = vendorMaterialTextValue.getText().toString()
         }
+
+
+        viewModel.networkError.observe(viewLifecycleOwner, Observer<Boolean> {
+            if (it == true) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
+                if (viewModel.messageContent != null) {
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.messageContent)
+                } else {
+                    UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
+                }
+
+            }
+        })
+
+        viewModel.itemVendorSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
+            if (it == true) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
+
+                var thisObject = this
+                AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
+                    setTitle("Success")
+                    setMessage("Vendor Material post successfully.")
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
+                        dialog, _ -> dialog.dismiss()
+                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.vendorMaterialScan, false)
+                        //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
+                    })
+                    show()
+                }
+            }
+        })
+
         vendor_items_submit_button.setOnClickListener {
             viewModel.materialBarcode = vendorMaterialTextValue.getText().toString()
 
@@ -75,7 +114,7 @@ class VendorMaterialScanFragment : Fragment() {
                 viewModel.handleSubmitVendor()
             }
         };
-        recyclerView.adapter = SimpleVendorItemAdapter(recyclerView, viewModel.vendorItems, viewModel)
+       // recyclerView.adapter = SimpleVendorItemAdapter(recyclerView, viewModel.vendorItems, viewModel)
     }
 }
 open class SimpleVendorItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,

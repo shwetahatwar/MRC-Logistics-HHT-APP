@@ -95,11 +95,15 @@ class PickingViewModel : ViewModel() {
             messageContent = "Not able to connect to the server."
         } else if (error is HttpException) {
             if (error.code() >= 401) {
-                var msg = error.response()?.errorBody()?.string()
-                if (msg != null && msg.isNotEmpty()) {
-                    messageContent = msg
-                } else {
-                    messageContent = error.message()
+                if (error.code() == 500) {
+                    messageContent = "Invalid barcode scanned"
+                }else {
+                    var msg = error.response()?.errorBody()?.string()
+                    if (msg != null && msg.isNotEmpty()) {
+                        messageContent = msg
+                    } else {
+                        messageContent = error.message()
+                    }
                 }
             }
             (networkError as MutableLiveData<Boolean>).value = true

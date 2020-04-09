@@ -1,5 +1,6 @@
 package com.briot.mrclogistics.implementor.ui.main
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 class VendorMaterialScanViewModel : ViewModel() {
     var materialBarcode: String? = ""
@@ -20,11 +22,21 @@ class VendorMaterialScanViewModel : ViewModel() {
     val TAG = "VendorMaterialScanViewModel"
 
     val networkError: LiveData<Boolean> = MutableLiveData()
+    val itemVendorSubmissionSuccessful: LiveData<Boolean> = MutableLiveData()
+
     val vendorItems: LiveData<Array<VendorMaterialInward?>> = MutableLiveData()
     val invalidVendorItems: Array<VendorMaterialInward?> = arrayOf(null)
     val invalidvendorPutItems: LiveData<Array<PostVendorResponse?>> = MutableLiveData()
     val users: LiveData<Array<User?>> = MutableLiveData()
     var userResponseData: Array<User?> = arrayOf(null)
+    var messageContent: String = ""
+
+    // var username: String?=""
+
+//    fun getUserID(responseData: Array<>, logedInUsername: String?){
+//        Log.d(ContentValues.TAG, "from function userResponseData ---- " + responseData)
+//        Log.d(ContentValues.TAG, "from function logedInUsername ---- " + logedInUsername)
+//    }
 
     fun handleSubmitVendor() {
         var VendorMaterialInward = VendorMaterialInward()
@@ -52,20 +64,41 @@ class VendorMaterialScanViewModel : ViewModel() {
 
     private fun handleVendorItemsResponse(postVendorItemResponse: VendorMaterialInward?) {
         Log.d(ContentValues.TAG, " response ----- " + postVendorItemResponse)
-    }
-
-    private fun handleVendorItemsError(error: Throwable) {
-        Log.d(ContentValues.TAG, " error ----- " + error)
-        if (UiHelper.isNetworkError(error)) {
-            (networkError as MutableLiveData<Boolean>).value = true
-        } else {
-            (this.vendorItems as MutableLiveData<Array<VendorMaterialInward?>>).value = invalidVendorItems
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                (itemVendorSubmissionSuccessful as MutableLiveData<Boolean>).value = true
+            }
         }
     }
 
+    private fun handleVendorItemsError(error: Throwable) {
+        Log.d(ContentValues.TAG, error.localizedMessage)
+        if (UiHelper.isNetworkError(error)) {
+            (networkError as MutableLiveData<Boolean>).value = true
+            messageContent = "Not able to connect to the server."
+        } else if (error is HttpException) {
+            if (error.code() >= 401) {
+                if (error.code() == 500) {
+                    messageContent = "Invalid barcode scanned"
+                }else {
+                    var msg = error.response()?.errorBody()?.string()
+                    if (msg != null && msg.isNotEmpty()) {
+                        messageContent = msg
+                    } else {
+                        messageContent = error.message()
+                    }
+                }
+            }
+            (networkError as MutableLiveData<Boolean>).value = true
+        } else {
+            (this.vendorItems as MutableLiveData<Array<VendorMaterialInward?>>).value = invalidVendorItems
+            messageContent = "Oops something went wrong."
+        }
+
+    }
+
     fun getUsers(){
-        RemoteRepository.singleInstance.getUsers(
-                this::handleUserResponse, this::handleVendorItemsError)
+        RemoteRepository.singleInstance.getUsers(this::handleUserResponse, this::handleVendorItemsError)
     }
 
     private fun handleUserResponse(users: Array<User?>) {

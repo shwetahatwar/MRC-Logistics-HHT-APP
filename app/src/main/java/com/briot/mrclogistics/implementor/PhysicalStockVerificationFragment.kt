@@ -82,6 +82,38 @@ class PhysicalStockVerificationFragment : Fragment() {
 
         }
 
+        viewModel.networkError.observe(viewLifecycleOwner, Observer<Boolean> {
+            if (it == true) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
+                if (viewModel.messageContent != null) {
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.messageContent)
+                } else {
+                    UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
+                }
+
+            }
+        })
+
+        viewModel.itemAuditSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
+            if (it == true) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
+
+                var thisObject = this
+                AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
+                    setTitle("Success")
+                    setMessage("Material putaway successfully.")
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
+                        dialog, _ -> dialog.dismiss()
+                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
+                        //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
+                    })
+                    show()
+                }
+            }
+        })
+
         audit_submitItemsButton.setOnClickListener {
             viewModel.materialBarcode = auditScanMaterialTextValue.getText().toString()
            // PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID, it.userNameId!!.toString())
@@ -90,12 +122,16 @@ class PhysicalStockVerificationFragment : Fragment() {
             // Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
             viewModel.logedInUsername = logedInUsername
 
-
-            GlobalScope.launch {
-                viewModel.handleSubmitAudit()
+            if(auditScanMaterialTextValue==null){
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
+                viewModel.messageContent="Please scan the material"
+            }else {
+                GlobalScope.launch {
+                    viewModel.handleSubmitAudit()
+                }
             }
         };
-        recyclerView.adapter = SimpleAuditItemAdapter(recyclerView, viewModel.auditItems, viewModel)
+      //  recyclerView.adapter = SimpleAuditItemAdapter(recyclerView, viewModel.auditItems, viewModel)
     }
 }
 open class SimpleAuditItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
