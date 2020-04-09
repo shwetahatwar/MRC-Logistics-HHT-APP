@@ -14,10 +14,6 @@ class PrefRepository {
         prefs[key] = value;
     }
 
-//    fun getValueOrDefault(): HashMap<String, String> {
-//        return prefs;
-//    }
-
     fun getValueOrDefault(key: String, defaultValue: String) : String {
         return prefs[key] ?: defaultValue;
     }
@@ -51,17 +47,6 @@ class PrefConstants {
     public val deviceId = "deviceId"
     public val password = "password"
     public val status = "status"
-//    public val deviceId = "deviceId"
-//    public val USER_TOKEN = "USERTOKEN"
-//    public val USER_NAME = "USER_NAME"
-//    public val USER_ID = "USER_ID"
-//    public val ROLE_NAME = "ROLE_NAME"
-//    public val ROLE_ID = "ROLE_ID"
-//    public val EMPLOYEE_ID = "EMPLOYEE_ID"
-//    public val EMPLOYEE_NAME = "EMPLOYEE_NAME"
-//    public val EMPLOYEE_EMAIL = "EMPLOYEE_EMAIL"
-//    public val EMPLOYEE_PHONE = "EMPLOYEE_PHONE"
-//    public val EMPLOYEE_STATUS = "EMPLOYEE_STATUS"
 
     public val MAX_STALE = 60 * 60 * 3 * 1 // 3 hours
     public val MAX_AGE = 60 * 60 * 2 // 2 hours

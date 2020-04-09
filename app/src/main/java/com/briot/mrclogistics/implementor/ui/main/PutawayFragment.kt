@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.briot.mrclogistics.implementor.R
 import com.briot.mrclogistics.implementor.UiHelper
 import com.briot.mrclogistics.implementor.repository.local.PrefConstants
-import com.briot.mrclogistics.implementor.repository.remote.DispatchSlipItem
 import com.briot.mrclogistics.implementor.repository.remote.PutawayItems
 import com.briot.mrclogistics.implementor.ui.main.SimplePutawayItemAdapter.ViewHolder
 import io.github.pierry.progress.Progress
@@ -165,12 +164,8 @@ class PutawayFragment : Fragment() {
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
-<<<<<<< HEAD
-            // call adapter class with updated value shw
-=======
-            //recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
 
->>>>>>> Changes done in picking and putaway success and error message
+            //recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
             recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
             GlobalScope.launch {
                 viewModel.handleSubmitPutaway()
@@ -193,13 +188,8 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
         val putawayItems = putawayItems.value!![position]!!
-<<<<<<< HEAD
 //        Log.d(TAG, "putawayItems -->" + putawayItems.scanStatus)
         holder.itemView.setOnClickListener{
-=======
-        Log.d(TAG, "position" + position)
-        holder.itemView.setOnClickListener {
->>>>>>> Changes done in picking and putaway success and error message
 
             if (viewModel.putawayItems.toString().toLowerCase().contains("complete")) {
                 return@setOnClickListener
