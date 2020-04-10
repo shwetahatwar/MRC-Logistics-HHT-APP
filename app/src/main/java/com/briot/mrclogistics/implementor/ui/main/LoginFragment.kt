@@ -132,6 +132,11 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             Log.d(ContentValues.TAG, "setOnClickListener ")
             // @dineshgajjar - remove following coments later on
             this.progress = UiHelper.showProgressIndicator(this.activity as AppCompatActivity, "Please wait")
+
+//          Toaster message if user not enter credentials
+//            if (username.text.toString() == "" ||  password.text.toString() == ""){
+//                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please enter Login Credential")
+//            }
             viewModel.loginUser(username.text.toString(), password.text.toString(),deviceSerialNumber)
 
             username.text?.clear()

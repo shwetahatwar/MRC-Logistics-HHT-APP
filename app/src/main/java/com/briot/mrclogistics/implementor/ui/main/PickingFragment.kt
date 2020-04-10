@@ -121,11 +121,10 @@ class PickingFragment : Fragment() {
                 AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
                     setTitle("Success")
                     setMessage("Material updated successfully.")
-                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
-                        dialog, _ -> dialog.dismiss()
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok") { dialog, _ -> dialog.dismiss()
                         Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
                         //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
-                    })
+                    }
                     show()
                 }
             }
@@ -153,8 +152,9 @@ class PickingFragment : Fragment() {
         this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
         viewModel.loadPickingItems()
 
-        // to get material barcode value
+        // On click on Material Barcode scan button, to get material barcode value
         picking_material_scanButton.setOnClickListener{
+            var matchFlag: Boolean = false
             for (item in viewModel.pickingItems.value!!){
                 // Database Material barcode value
                 val cmpltMaterialBarcode = item!!.materialBarcodeSerial?.split(",")
@@ -164,21 +164,44 @@ class PickingFragment : Fragment() {
                 val inputCmpltMaterialBarcode = pickingMaterialTextValue.getText().toString()?.split(",")
                 val splittedInputMaterialBarcode = (inputCmpltMaterialBarcode?.get(0)?:0)
 
-                // Log.d(TAG, "splitted db -->" + dbV)
-                // Log.d(TAG, "splitted in -->" + inp1)
-
+                if (splittedInputMaterialBarcode == ""){
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                            "Please enter Material Barcode value")
+                }
                 // if (item!!.materialBarcodeSerial == pickingMaterialTextValue.getText().toString()){
                  if (splittedMaterialBarcode == splittedInputMaterialBarcode){
-                    // viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
-                    // Log.d(TAG, "Items -->" + item!!.rackBarcodeSerial)
-                    // Log.d(TAG, "Items -->" + item!!.binBarcodeSerial)
-                    rackMaterialTextValue.setText(item!!.rackBarcodeSerial)
-                    binMaterialTextValue.setText(item!!.binBarcodeSerial)
-                }
-                else{
-                    Log.d(TAG, "Add toster message for value not match in database")
-                }
+                     matchFlag = true
+                     rackMaterialTextValue.setText(item!!.rackBarcodeSerial)
+                     binMaterialTextValue.setText(item!!.binBarcodeSerial)
+                     picking_binBarcode.requestFocus()
+                 }
+            }
+            if (matchFlag == false){
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Entered Material Barcode Serial does not matched, check entered value")
+            }
+        }
 
+        // On click on BIN Barcode scan button
+        picking_bin_scanButton.setOnClickListener {
+            // User input BIN barcode value
+            val inputBinBarcode = binMaterialTextValue.getText().toString()
+            if (inputBinBarcode == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please enter BIN Barcode value")
+                picking_binBarcode.requestFocus()
+            }else{
+            picking_rackBarcode.requestFocus()}
+        }
+
+        // On click on RACK Barcode scan button
+        picking_rack_scanButton.setOnClickListener {
+            // User input BIN barcode value
+            val inputRACKBarcode = rackMaterialTextValue.getText().toString()
+            if (inputRACKBarcode == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please enter RACK Barcode value")
+                picking_rackBarcode.requestFocus()
             }
         }
 
@@ -197,6 +220,7 @@ class PickingFragment : Fragment() {
                 GlobalScope.launch {
                     viewModel.handleSubmitPicking()
                 }
+                viewModel.loadPickingItems()
             }
             picking_materialBarcode.text?.clear()
             picking_binBarcode.text?.clear()
@@ -225,7 +249,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
         holder.bind()
 
         val pickingItems = pickingItems.value!![position]!!
-        Log.d(TAG, "position" + position)
+        // Log.d(TAG, "position" + position)
         holder.itemView.setOnClickListener{
 
             if (viewModel.pickingItems.toString().toLowerCase().contains("complete")) {
@@ -249,7 +273,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
 
 
         init {
-            Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
+            // Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
             rackBarcodeSerial = itemView.findViewById(R.id.rack_barcode)
             binBarcodeSerial = itemView.findViewById(R.id.bin_barcode)
             materialBarcodeSerial = itemView.findViewById(R.id.material_barcode)
@@ -259,7 +283,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
 
         fun bind() {
             val pickingItems = pickingItems.value!![adapterPosition]!!
-            Log.d(TAG, "..............." + pickingItems.toString())
+            // Log.d(TAG, "..............." + pickingItems.toString())
 
             rackBarcodeSerial.text = pickingItems.rackBarcodeSerial
             binBarcodeSerial.text = pickingItems.binBarcodeSerial

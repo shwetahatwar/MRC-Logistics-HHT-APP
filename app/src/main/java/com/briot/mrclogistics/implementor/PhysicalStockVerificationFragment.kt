@@ -41,6 +41,7 @@ import kotlinx.android.synthetic.main.physical_stock_verification_fragment.*
 import kotlinx.android.synthetic.main.picking_fragment.*
 import kotlinx.android.synthetic.main.picking_fragment.picking_materialBarcode
 import kotlinx.android.synthetic.main.user_profile_fragment.view.*
+import kotlinx.android.synthetic.main.vendor_material_scan_fragment.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -114,6 +115,16 @@ class PhysicalStockVerificationFragment : Fragment() {
                 }
             }
         })
+
+        audit_material_scanButton.setOnClickListener {
+            // User input MATERIAL barcode value
+            val inputAudit = auditScanMaterialTextValue.getText().toString()
+            if (inputAudit == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please verify STOCK value")
+                audit_materialBarcode.requestFocus()
+            }
+        }
 
         audit_submitItemsButton.setOnClickListener {
             viewModel.materialBarcode = auditScanMaterialTextValue.getText().toString()

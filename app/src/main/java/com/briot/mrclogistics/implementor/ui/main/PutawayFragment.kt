@@ -31,6 +31,7 @@ import io.github.pierry.progress.Progress
 import kotlinx.android.synthetic.main.dispatch_picking_list_fragment.*
 import kotlinx.android.synthetic.main.dispatch_slip_loading_fragment.*
 import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.android.synthetic.main.picking_fragment.*
 import kotlinx.android.synthetic.main.putaway_fragment.*
 import kotlinx.android.synthetic.main.putaway_row.*
 import kotlinx.coroutines.Dispatchers
@@ -110,7 +111,6 @@ class PutawayFragment : Fragment() {
                 } else {
                     UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
                 }
-
             }
         })
 
@@ -123,15 +123,49 @@ class PutawayFragment : Fragment() {
                 AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
                     setTitle("Success")
                     setMessage("Material updated successfully.")
-                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
-                        dialog, _ -> dialog.dismiss()
-                       Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
-                  //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
-                    })
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok") { dialog, _ -> dialog.dismiss()
+                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
+                        //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
+                    }
                     show()
                 }
             }
         })
+
+        // On click on BIN Barcode scan button
+        putaway_scanButton.setOnClickListener {
+            // User input MATERIAL barcode value
+            val inputMaterialBarcode = putawayMaterialTextValue.getText().toString()
+            if (inputMaterialBarcode == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please enter MATERIAL Barcode value")
+                putaway_materialBarcode.requestFocus()
+            }else{
+                bin_materialBarcode.requestFocus()}
+        }
+
+
+        rack_scanButton.setOnClickListener {
+            // User input MATERIAL barcode value
+            val inputRackBarcode = rackMaterialTextValue.getText().toString()
+            if (inputRackBarcode == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please enter RACK Barcode value")
+                rack_materialBarcode.requestFocus()
+            }
+        }
+
+        bin_scanButton.setOnClickListener {
+            // User input MATERIAL barcode value
+            val inputBinBarcode = binMaterialTextValue.getText().toString()
+            if (inputBinBarcode == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please enter BIN Barcode value")
+                bin_materialBarcode.requestFocus()
+            }else{
+                rack_materialBarcode.requestFocus()}
+        }
+
 
         putaway_materialBarcode.setOnEditorActionListener { _, i, keyEvent ->
             var handled = false
@@ -173,14 +207,14 @@ class PutawayFragment : Fragment() {
             viewModel.loadPutawayRefreshItems()
         };
 
-            if (putawayMaterialTextValue == null) {
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
-                viewModel.messageContent = "Please scan the material"
-            } else {
-                GlobalScope.launch {
-                    viewModel.handleSubmitPutaway()
-                }
-            }
+//            if (putawayMaterialTextValue == null) {
+//                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
+//                viewModel.messageContent = "Please scan the material"
+//            } else {
+//                GlobalScope.launch {
+//                    viewModel.handleSubmitPutaway()
+//                }
+//            }
             putaway_materialBarcode.text?.clear()
             bin_materialBarcode.text?.clear()
             rack_materialBarcode.text?.clear()
@@ -235,7 +269,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
 
         fun bind() {
 
-            Log.d(TAG, "position -> " + putawayItems.value!![adapterPosition]!!)
+            //Log.d(TAG, "position -> " + putawayItems.value!![adapterPosition]!!)
 
             val item = putawayItems.value!![adapterPosition]!!
 //            Log.d(TAG, "position -> " + item.scanStatus)

@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.picking_row.*
+import kotlinx.android.synthetic.main.putaway_fragment.*
 
 
 class VendorMaterialScanFragment : Fragment() {
@@ -103,6 +104,17 @@ class VendorMaterialScanFragment : Fragment() {
                 }
             }
         })
+
+        vendor_scanButton.setOnClickListener {
+            // User input MATERIAL barcode value
+            val inputVendorBarcode = vendorMaterialTextValue.getText().toString()
+            if (inputVendorBarcode == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please enter VENDOR MATERIAL value")
+                vendor_materialBarcode.requestFocus()
+            }
+        }
+
 
         vendor_items_submit_button.setOnClickListener {
             viewModel.materialBarcode = vendorMaterialTextValue.getText().toString()
