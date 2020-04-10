@@ -100,7 +100,7 @@ class PutawayViewModel : ViewModel() {
     }
 
     private fun handlePutawayPutItemsResponse(putPutawayResponse: PutPutawayResponse?) {
-        Log.d(TAG, "Data Putaway Put Response" + putPutawayResponse)
+        Log.d(TAG, "Data Putaway Put Response -->" + putPutawayResponse)
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (itemSubmissionSuccessful as MutableLiveData<Boolean>).value = true

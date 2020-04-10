@@ -115,7 +115,9 @@ class PutawayFragment : Fragment() {
         })
 
         viewModel.itemSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
+            Log.d(TAG, "inside suceesfull mas-->")
             if (it == true) {
+                Log.d(TAG, "inside if-->")
                 UiHelper.hideProgress(this.progress)
                 this.progress = null
 
@@ -205,6 +207,10 @@ class PutawayFragment : Fragment() {
                 viewModel.handleSubmitPutaway()
             }
             viewModel.loadPutawayRefreshItems()
+            putaway_materialBarcode.text?.clear()
+            bin_materialBarcode.text?.clear()
+            rack_materialBarcode.text?.clear()
+            putaway_materialBarcode.requestFocus()
         };
 
 //            if (putawayMaterialTextValue == null) {
@@ -215,15 +221,7 @@ class PutawayFragment : Fragment() {
 //                    viewModel.handleSubmitPutaway()
 //                }
 //            }
-            putaway_materialBarcode.text?.clear()
-            bin_materialBarcode.text?.clear()
-            rack_materialBarcode.text?.clear()
-            putaway_materialBarcode.requestFocus()
         }
-
-        //this.progress = UiHelper.showProgressIndicator(activity!!, "Loading dispatch slip Items")
-        // putaway_materialBarcode.requestFocus()
-    // }
 }
 
 
@@ -284,8 +282,8 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
             val materialScanValueToCompare = (scannedSplitedValue?.get(0) ?: "NA")
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?: "NA")
 
-            Log.d(TAG, "materialScanValueToCompare -->"+materialScanValueToCompare)
-            Log.d(TAG, "materialScanValueToCominput ->"+ (barcodeValue?.get(0) ?: "NA"))
+//            Log.d(TAG, "materialScanValueToCompare -->"+materialScanValueToCompare)
+//            Log.d(TAG, "materialScanValueToCominput ->"+ (barcodeValue?.get(0) ?: "NA"))
             if (materialScanValueToCompare !=""){
                 if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
                         viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&

@@ -106,11 +106,11 @@ class PhysicalStockVerificationFragment : Fragment() {
                 AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
                     setTitle("Success")
                     setMessage("Material updated successfully.")
-                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", { dialog, _ ->
+                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok") { dialog, _ ->
                         dialog.dismiss()
                         Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
                         //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
-                    })
+                    }
                     show()
                 }
             }

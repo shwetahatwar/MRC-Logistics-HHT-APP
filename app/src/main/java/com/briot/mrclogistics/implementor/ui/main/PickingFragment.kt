@@ -103,7 +103,9 @@ class PickingFragment : Fragment() {
             if (it == true) {
                 UiHelper.hideProgress(this.progress)
                 this.progress = null
+                // Log.d(TAG,"-----in if---"+viewModel.messageContent)
                 if (viewModel.messageContent != null) {
+                    // Log.d(TAG,"-----in if 2---"+viewModel.messageContent)
                     UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.messageContent)
                 } else {
                     UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
@@ -122,7 +124,7 @@ class PickingFragment : Fragment() {
                     setTitle("Success")
                     setMessage("Material updated successfully.")
                     setButton(AlertDialog.BUTTON_NEUTRAL, "Ok") { dialog, _ -> dialog.dismiss()
-                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
+                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPicking, false)
                         //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
                     }
                     show()
