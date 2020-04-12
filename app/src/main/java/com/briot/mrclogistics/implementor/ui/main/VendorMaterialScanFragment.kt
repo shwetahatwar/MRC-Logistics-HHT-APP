@@ -160,7 +160,7 @@ open class SimpleVendorItemAdapter(private val recyclerView: androidx.recyclervi
     }
 
     override fun getItemCount(): Int {
-        Log.d(ContentValues.TAG, "getItemCount" + vendorItems.value)
+        //Log.d(ContentValues.TAG, "getItemCount" + vendorItems.value)
         return vendorItems.value?.size ?: 0
     }
 

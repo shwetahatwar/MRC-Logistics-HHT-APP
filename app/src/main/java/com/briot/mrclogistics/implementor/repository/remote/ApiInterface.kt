@@ -51,7 +51,12 @@ class PutawayItems {
     var rackBarcodeSerial: String? = null
     var binBarcodeSerial: String? = null
     var materialBarcodeSerial: String? = null
-    var scanStatus: String? = null
+}
+
+class PutawayItemsScanned{
+    var rackBarcodeSerial: String? = null
+    var binBarcodeSerial: String? = null
+    var materialBarcodeSerial: String? = null
 }
 
 class VendorMaterialInward{
@@ -113,6 +118,9 @@ interface ApiInterface {
 
     @GET("putaways")
     fun getPutaway(): Observable<Array<PutawayItems?>>
+
+    @GET("putaways/scanned")
+    fun getPutawayScannedItems(): Observable<Array<PutawayItemsScanned?>>
 
 //    @PUT("putaways/{id}")
 //    fun putPutawayItems(@Path("id") id: Int, @Body requestbody: PutawayItems): Observable<PutPutawayResponse?>

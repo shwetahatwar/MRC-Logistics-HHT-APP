@@ -39,9 +39,14 @@ class RemoteRepository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(handleResponse, handleError)
+    }
 
-        Log.d(TAG,"handle response in remote" + handleResponse)
-
+    fun getPutawayScannedItems( handleResponse: KFunction1<Array<PutawayItemsScanned?>, Unit>, handleError: (Throwable) -> Unit) {
+        RetrofitHelper.retrofit.create(ApiInterface::class.java)
+                .getPutawayScannedItems()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(handleResponse, handleError)
     }
 
     fun getPutawayCount( handleResponse: (PutawayDashboardData?) -> Unit, handleError: (Throwable) -> Unit) {

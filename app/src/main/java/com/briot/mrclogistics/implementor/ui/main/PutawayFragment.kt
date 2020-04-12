@@ -115,9 +115,7 @@ class PutawayFragment : Fragment() {
         })
 
         viewModel.itemSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
-            Log.d(TAG, "inside suceesfull mas-->")
             if (it == true) {
-                Log.d(TAG, "inside if-->")
                 UiHelper.hideProgress(this.progress)
                 this.progress = null
 
@@ -190,27 +188,61 @@ class PutawayFragment : Fragment() {
 
         this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
         // Display dabase data to screen
+
         viewModel.loadPutawayItems()
-        viewModel.loadPutawayRefreshItems()
+        viewModel.loadPutawayScannedItems()
+
+        // Log.d(TAG, "----size -->"+ viewModel.putawayScannedItems.value!!.size)
+
+//        viewModel.loadPutawayRefreshItems()
         // After click on submit button need to call put method to update database
 
 
         putaway_items_submit_button.setOnClickListener {
             var thisObject = this
+            var foundFlag: Boolean = false
+            viewModel.loadPutawayScannedItems()
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
 
-            //recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
-            recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
-            GlobalScope.launch {
-                viewModel.handleSubmitPutaway()
+            Log.d(TAG, "----before submit size-->"+viewModel.putawayScannedItems.value!!.size)
+
+            for (item in viewModel.putawayScannedItems.value!!) {
+//                Log.d(TAG, "----rackMaterialTextValue-->"+rackMaterialTextValue.getText().toString())
+                if (rackMaterialTextValue.getText().toString() != "") {
+                    if (binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
+                         rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial &&
+                            putawayMaterialTextValue.getText().toString() == item!!.materialBarcodeSerial) {
+                            foundFlag = true
+                            UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                        }
+                    }
+                if (putawayMaterialTextValue.getText().toString() == ""){
+                    if (binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
+                            rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial) {
+                        foundFlag = true
+                        UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                    }
+                }
             }
-            viewModel.loadPutawayRefreshItems()
-            putaway_materialBarcode.text?.clear()
-            bin_materialBarcode.text?.clear()
-            rack_materialBarcode.text?.clear()
-            putaway_materialBarcode.requestFocus()
+
+            if (foundFlag == false) {
+                recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
+                GlobalScope.launch {
+                    viewModel.handleSubmitPutaway()
+                }
+                viewModel.loadPutawayRefreshItems()
+            }
+
+            viewModel.loadPutawayScannedItems()
+            Log.d(TAG,"after submit call -->"+viewModel.putawayScannedItems.value!!.size)
+
+            // viewModel.loadPutawayRefreshItems()
+//            putaway_materialBarcode.text?.clear()
+//            bin_materialBarcode.text?.clear()
+//            rack_materialBarcode.text?.clear()
+//            putaway_materialBarcode.requestFocus()
         };
 
 //            if (putawayMaterialTextValue == null) {
@@ -248,7 +280,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "getItemCount" + putawayItems.value)
+        // Log.d(TAG, "getItemCount" + putawayItems.value)
         return putawayItems.value?.size ?: 0
     }
 
@@ -320,12 +352,6 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
 //
 //                    }
 //                }
-
-
-
-
-
-
         }
     }
 }

@@ -168,7 +168,7 @@ class PhysicalStockVerificationFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            Log.d(ContentValues.TAG, "getItemCount" + auditItems.value)
+            // Log.d(ContentValues.TAG, "getItemCount" + auditItems.value)
             return auditItems.value?.size ?: 0
         }
 

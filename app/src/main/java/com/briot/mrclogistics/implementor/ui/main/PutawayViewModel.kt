@@ -25,6 +25,7 @@ class PutawayViewModel : ViewModel() {
     val itemSubmissionSuccessful: LiveData<Boolean> = MutableLiveData()
 
     val putawayItems: LiveData<Array<PutawayItems?>> = MutableLiveData()
+    val putawayScannedItems: LiveData<Array<PutawayItemsScanned?>> = MutableLiveData()
     val invalidPutawayItems: Array<PutawayItems?> = arrayOf(null)
     var responsePutawayLoadingItems: Array<PutawayItems?> = arrayOf(null)
     var getResponsePutwayData: Array<PutawayItems?> = arrayOf(null)
@@ -36,14 +37,34 @@ class PutawayViewModel : ViewModel() {
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = emptyArray()
         RemoteRepository.singleInstance.getPutaway(this::handlePutawayItemsResponse, this::handlePutawayItemsError)
     }
+    fun loadPutawayScannedItems() {
+        Log.d(TAG,"submit call loadPutwayScanned --->")
+        (networkError as MutableLiveData<Boolean>).value = false
+        // (this.putawayScannedItems as MutableLiveData<Array<PutawayItemsScanned?>>).value = emptyArray()
+        RemoteRepository.singleInstance.getPutawayScannedItems(this::handlePutawayScannedItemResponse,
+                this::handlePutawayItemsError)
+    }
+
+    fun refreshPutawayScannedItems() {
+        Log.d(TAG,"submit call refresh --->")
+        (networkError as MutableLiveData<Boolean>).value = false
+        // (this.putawayScannedItems as MutableLiveData<Array<PutawayItemsScanned?>>).value = emptyArray()
+        RemoteRepository.singleInstance.getPutawayScannedItems(this::handlePutawayScannedItemResponse,
+                this::handlePutawayItemsError)
+    }
 
     private fun handlePutawayItemsResponse(putawayItems: Array<PutawayItems?>) {
-
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = putawayItems
     }
 
+    private fun handlePutawayScannedItemResponse(putawayScannedItems: Array<PutawayItemsScanned?>) {
+        // Log.d(TAG, "response in api --> "+putawayScannedItems)
+        Log.d(TAG, "response in api --> "+putawayScannedItems!!.size)
+        (this.putawayScannedItems as MutableLiveData<Array<PutawayItemsScanned?>>).value = putawayScannedItems
+    }
+
     private fun handlePutawayItemsError(error: Throwable) {
-        Log.d(TAG, error.localizedMessage)
+        Log.d(TAG, "eror----->"+error.localizedMessage)
         if (UiHelper.isNetworkError(error)) {
             (networkError as MutableLiveData<Boolean>).value = true
             messageContent = "Not able to connect to the server."
@@ -100,7 +121,7 @@ class PutawayViewModel : ViewModel() {
     }
 
     private fun handlePutawayPutItemsResponse(putPutawayResponse: PutPutawayResponse?) {
-        Log.d(TAG, "Data Putaway Put Response -->" + putPutawayResponse)
+        //Log.d(TAG, "Data Putaway Put Response -->" + putPutawayResponse)
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (itemSubmissionSuccessful as MutableLiveData<Boolean>).value = true
