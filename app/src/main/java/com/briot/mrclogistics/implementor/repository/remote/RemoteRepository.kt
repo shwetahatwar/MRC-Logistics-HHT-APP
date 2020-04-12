@@ -49,6 +49,15 @@ class RemoteRepository {
                 .subscribe(handleResponse, handleError)
     }
 
+    fun getPickingScannedItems( handleResponse: KFunction1<Array<PickingItemsScanned?>, Unit>, handleError: (Throwable) -> Unit) {
+        RetrofitHelper.retrofit.create(ApiInterface::class.java)
+                .getPickingScannedItems()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(handleResponse, handleError)
+    }
+
+
     fun getPutawayCount( handleResponse: (PutawayDashboardData?) -> Unit, handleError: (Throwable) -> Unit) {
         RetrofitHelper.retrofit.create(ApiInterface::class.java)
                 .getPutawayCount()

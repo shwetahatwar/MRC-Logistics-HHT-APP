@@ -193,7 +193,6 @@ class PutawayFragment : Fragment() {
         viewModel.loadPutawayScannedItems()
 
         // Log.d(TAG, "----size -->"+ viewModel.putawayScannedItems.value!!.size)
-
 //        viewModel.loadPutawayRefreshItems()
         // After click on submit button need to call put method to update database
 
@@ -206,11 +205,11 @@ class PutawayFragment : Fragment() {
             viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
 
-            Log.d(TAG, "----before submit size-->"+viewModel.putawayScannedItems.value!!.size)
+            // Log.d(TAG, "----before submit size-->"+viewModel.putawayScannedItems.value!!.size)
 
             for (item in viewModel.putawayScannedItems.value!!) {
 //                Log.d(TAG, "----rackMaterialTextValue-->"+rackMaterialTextValue.getText().toString())
-                if (rackMaterialTextValue.getText().toString() != "") {
+                if (putawayMaterialTextValue.getText().toString() != "") {
                     if (binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
                          rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial &&
                             putawayMaterialTextValue.getText().toString() == item!!.materialBarcodeSerial) {
@@ -218,13 +217,13 @@ class PutawayFragment : Fragment() {
                             UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
                         }
                     }
-                if (putawayMaterialTextValue.getText().toString() == ""){
-                    if (binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
-                            rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial) {
-                        foundFlag = true
-                        UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
-                    }
-                }
+//                if (putawayMaterialTextValue.getText().toString() == ""){
+//                    if (binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
+//                            rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial) {
+//                        foundFlag = true
+//                        UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+//                    }
+//                }
             }
 
             if (foundFlag == false) {
@@ -233,26 +232,15 @@ class PutawayFragment : Fragment() {
                     viewModel.handleSubmitPutaway()
                 }
                 viewModel.loadPutawayRefreshItems()
+                // viewModel.loadPutawayRefreshItems()
+                putaway_materialBarcode.text?.clear()
+                bin_materialBarcode.text?.clear()
+                rack_materialBarcode.text?.clear()
+                putaway_materialBarcode.requestFocus()
             }
-
             viewModel.loadPutawayScannedItems()
-            Log.d(TAG,"after submit call -->"+viewModel.putawayScannedItems.value!!.size)
-
-            // viewModel.loadPutawayRefreshItems()
-//            putaway_materialBarcode.text?.clear()
-//            bin_materialBarcode.text?.clear()
-//            rack_materialBarcode.text?.clear()
-//            putaway_materialBarcode.requestFocus()
-        };
-
-//            if (putawayMaterialTextValue == null) {
-//                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
-//                viewModel.messageContent = "Please scan the material"
-//            } else {
-//                GlobalScope.launch {
-//                    viewModel.handleSubmitPutaway()
-//                }
-//            }
+            // Log.d(TAG,"after submit call -->"+viewModel.putawayScannedItems.value!!.size)
+            };
         }
 }
 

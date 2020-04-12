@@ -79,6 +79,12 @@ class PickingItems {
     var materialBarcodeSerial: String? = null
 }
 
+class PickingItemsScanned {
+    var rackBarcodeSerial: String? = null
+    var binBarcodeSerial: String? = null
+    var materialBarcodeSerial: String? = null
+}
+
 class PutPickingResponse {
     var message: String? = null
 }
@@ -121,6 +127,9 @@ interface ApiInterface {
 
     @GET("putaways/scanned")
     fun getPutawayScannedItems(): Observable<Array<PutawayItemsScanned?>>
+
+    @GET("pickings/picked")
+    fun getPickingScannedItems(): Observable<Array<PickingItemsScanned?>>
 
 //    @PUT("putaways/{id}")
 //    fun putPutawayItems(@Path("id") id: Int, @Body requestbody: PutawayItems): Observable<PutPutawayResponse?>

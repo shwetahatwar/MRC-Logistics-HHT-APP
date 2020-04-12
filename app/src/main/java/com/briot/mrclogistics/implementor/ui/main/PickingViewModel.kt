@@ -25,7 +25,7 @@ class PickingViewModel : ViewModel() {
     val pickingItems: LiveData<Array<PickingItems?>> = MutableLiveData()
     val invalidPickingItems: Array<PickingItems?> = arrayOf(null)
     val itemSubmissionPickingSuccessful: LiveData<Boolean> = MutableLiveData()
-
+    val pickingScannedItems: LiveData<Array<PickingItemsScanned?>> = MutableLiveData()
     var responsePickingLoadingItems: Array<PickingItems?> = arrayOf(null)
 
     var messageContent: String = ""
@@ -33,10 +33,21 @@ class PickingViewModel : ViewModel() {
     fun loadPickingItems() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = emptyArray()
-
         RemoteRepository.singleInstance.getPickingItems(this::handlePickingItemsResponse, this::handlePickingItemsError)
     }
 
+    fun loadPickingScannedItems() {
+        Log.d(TAG,"submit call loadPutwayScanned --->")
+        (networkError as MutableLiveData<Boolean>).value = false
+        // (this.putawayScannedItems as MutableLiveData<Array<PutawayItemsScanned?>>).value = emptyArray()
+        RemoteRepository.singleInstance.getPickingScannedItems(this::handlePickingScannedItemResponse,
+                this::handlePickingItemsError)
+    }
+     fun handlePickingScannedItemResponse(pickingScannedItems: Array<PickingItemsScanned?>) {
+         // Log.d(TAG, "picking API res -->"+pickingScannedItems)
+        (this.pickingScannedItems as MutableLiveData<Array<PickingItemsScanned?>>).value = pickingScannedItems
+
+    }
     private fun handlePickingItemsResponse(pickingItems: Array<PickingItems?>) {
         responsePickingLoadingItems = pickingItems
         (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = pickingItems

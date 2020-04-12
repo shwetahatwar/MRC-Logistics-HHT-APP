@@ -153,6 +153,7 @@ class PickingFragment : Fragment() {
 
         this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
         viewModel.loadPickingItems()
+        viewModel.loadPickingScannedItems()
 
         // On click on Material Barcode scan button, to get material barcode value
         picking_material_scanButton.setOnClickListener{
@@ -209,25 +210,38 @@ class PickingFragment : Fragment() {
 
         picking_submitItemButton.setOnClickListener {
             var thisObject = this
+            var foundFlag: Boolean = false
             viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
             viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
             viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
-            //recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
 
-            recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
-            if (pickingMaterialTextValue == null) {
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
-                viewModel.messageContent = "Please scan the material"
-            } else {
-                GlobalScope.launch {
-                    viewModel.handleSubmitPicking()
-                }
-                viewModel.loadPickingItems()
+            // Log.d(TAG, "item value fragment -->"+viewModel.pickingScannedItems.value!!)
+            for (item in viewModel.pickingScannedItems.value!!) {
+                    if (pickingMaterialTextValue.getText().toString() == item!!.materialBarcodeSerial &&
+                            binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
+                                rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial){
+                                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                                foundFlag = true
+                        }
+                    }
+
+            if (foundFlag == false) {
+                recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
+                if (pickingMaterialTextValue == null) {
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
+                        viewModel.messageContent = "Please scan the material"
+                    } else {
+                        GlobalScope.launch {
+                            viewModel.handleSubmitPicking()
+                        }
+                        viewModel.loadPickingScannedItems()
+                        viewModel.loadPickingItems()
+                    }
+                picking_materialBarcode.text?.clear()
+                picking_binBarcode.text?.clear()
+                picking_rackBarcode.text?.clear()
+                picking_materialBarcode.requestFocus()
             }
-            picking_materialBarcode.text?.clear()
-            picking_binBarcode.text?.clear()
-            picking_rackBarcode.text?.clear()
-            picking_materialBarcode.requestFocus()
         }
 
         //this.progress = UiHelper.showProgressIndicator(activity!!, "Loading dispatch slip Items")
