@@ -49,22 +49,48 @@
                     android:textAlignment="textEnd" />
             </LinearLayout>
 
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/userPasswordText"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="Password"-->
+<!--                    android:textColor="@color/colorTextEntry"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/userPassword"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:text="TextView"-->
+<!--                    android:textAlignment="textEnd" />-->
+<!--            </LinearLayout>-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/userFullNameId"
+                    android:id="@+id/deviceId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="User id"
+                    android:text="Device Id"
                     android:textColor="@color/colorTextEntry"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/userFullNameValue"
+                    android:id="@+id/userDeviceValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -81,42 +107,16 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/userRoleId"
+                    android:id="@+id/userId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Role"
+                    android:text="User Id"
                     android:textColor="@color/colorTextEntry"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/userRoleValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:text="TextView"
-                    android:textAlignment="textEnd" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/userEmailId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Employee Id"
-                    android:textColor="@color/colorTextEntry"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/userEmailValue"
+                    android:id="@+id/userIdValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
