@@ -30,16 +30,17 @@
                 <ImageView
                     android:id="@+id/info_image"
                     android:src="@mipmap/ic_audit"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:drawablePadding="10dp"
+                    android:layout_marginTop="25dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                  />
                 <ImageView
                     android:id="@+id/arrow"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="45dp"
                     android:src="@drawable/ic_navigate_next_black_24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -51,9 +52,10 @@
                 <TextView
                     android:id="@+id/info_text"
                     android:layout_marginTop="15dp"
-                    android:layout_marginLeft="65dp"
+                    android:layout_marginLeft="75dp"
                     android:layout_toRightOf="@+id/info_image"
                     android:layout_alignParentTop="true"
+                    android:textAlignment="center"
                     android:text="Material Putaway"
                     android:textColor="@color/reportButtonTitle"
                     android:textSize="16sp"
@@ -66,27 +68,32 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:textAlignment="center">
 
                     <TextView
                         android:id="@+id/total"
                         android:layout_marginTop="45dp"
-                        android:layout_marginLeft="65dp"
+                        android:layout_marginLeft="75dp"
                         android:layout_alignParentTop="true"
-                        android:text="Total:"
+                        android:text="Total"
                         android:textSize="15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <TextView
                         android:id="@+id/totalText"
-                        android:layout_marginTop="45dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:layout_marginLeft="38dp"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginRight="50dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:textStyle="bold" />
+                        android:text=""
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold"
+                        tools:ignore="RtlCompat" />
 
                 </LinearLayout>
 
@@ -97,23 +104,26 @@
 
                     <TextView
                         android:id="@+id/putaway"
-                        android:layout_marginTop="62dp"
-                        android:layout_marginLeft="65dp"
-                        android:layout_toRightOf="@+id/info_image"
-                        android:layout_alignParentTop="true"
-                        android:text="Putaway:"
-                        android:textSize="15dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="75dp"
+                        android:layout_marginTop="64dp"
+                        android:layout_toRightOf="@+id/info_image"
+                        android:text="Putaway"
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/putawayText"
-                        android:layout_marginTop="62dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="64dp"
+                        android:layout_marginRight="50dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
+                        android:text=""
+                        android:textAlignment="textEnd"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -123,26 +133,29 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/pending"
-                    android:layout_marginTop="77dp"
-                    android:layout_marginLeft="65dp"
-                    android:layout_toRightOf="@+id/info_image"
-                    android:layout_alignParentTop="true"
-                    android:text="Pending:"
-                    android:textSize="15sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/pending"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="75dp"
+                        android:layout_marginTop="84dp"
+                        android:layout_toRightOf="@+id/info_image"
+                        android:text="Pending"
+                        android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/pendingText"
-                    android:layout_marginTop="77dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/pendingText"
+                        android:layout_width="138dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="84dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -158,19 +171,23 @@
                 android:clickable="true"
                 android:focusable="true">
 
+
+
                 <ImageView
                     android:id="@+id/pickingImage"
                     android:src="@mipmap/ic_picking"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:drawablePadding="10dp"
+                    android:layout_marginTop="25dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     />
+
                 <ImageView
                     android:id="@+id/pickingArrow"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="45dp"
                     android:src="@drawable/ic_navigate_next_black_24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -181,7 +198,7 @@
                 <TextView
                     android:id="@+id/pickingLable"
                     android:layout_marginTop="15dp"
-                    android:layout_marginLeft="65dp"
+                    android:layout_marginLeft="75dp"
                     android:layout_toRightOf="@+id/info_image"
                     android:layout_alignParentTop="true"
                     android:text="Material Picking"
@@ -200,21 +217,24 @@
                     <TextView
                         android:id="@+id/totalPicking"
                         android:layout_marginTop="45dp"
-                        android:layout_marginLeft="65dp"
+                        android:layout_marginLeft="75dp"
                         android:layout_alignParentTop="true"
-                        android:text="Total:"
+                        android:text="Total"
                         android:textSize="15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <TextView
                         android:id="@+id/totalPickingValue"
-                        android:layout_marginTop="45dp"
-                        android:layout_width="wrap_content"
+                        android:layout_width="108dp"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:layout_marginLeft="38dp"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginRight="50dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
+                        android:text=""
+                        android:textAlignment="textEnd"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -226,23 +246,26 @@
 
                     <TextView
                         android:id="@+id/pickingLable1"
-                        android:layout_marginTop="62dp"
-                        android:layout_marginLeft="65dp"
-                        android:layout_toRightOf="@+id/info_image"
-                        android:layout_alignParentTop="true"
-                        android:text="Picked:"
-                        android:textSize="15dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="75dp"
+                        android:layout_marginTop="64dp"
+                        android:layout_toRightOf="@+id/info_image"
+                        android:text="Picked"
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/pickingValue"
-                        android:layout_marginTop="62dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:layout_marginLeft="27dp"
+                        android:layout_marginTop="64dp"
+                        android:layout_marginRight="50dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
+                        android:text=""
+                        android:textAlignment="textEnd"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -254,23 +277,26 @@
 
                     <TextView
                         android:id="@+id/pickingPending"
-                        android:layout_marginTop="77dp"
-                        android:layout_marginLeft="65dp"
-                        android:layout_toRightOf="@+id/info_image"
-                        android:layout_alignParentTop="true"
-                        android:text="Pending:"
-                        android:textSize="15sp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="75dp"
+                        android:layout_marginTop="84dp"
+                        android:layout_toRightOf="@+id/info_image"
+                        android:text="Pending"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/pickingPendingValue"
-                        android:layout_marginTop="77dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:layout_marginLeft="19dp"
+                        android:layout_marginTop="84dp"
+                        android:layout_marginRight="50dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
+                        android:text=""
+                        android:textAlignment="textEnd"
                         android:textStyle="bold" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -284,44 +310,45 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_width="350dp"
-                android:layout_height="120dp"
+                android:layout_height="80dp"
                 app:cardBackgroundColor="@color/auditAssetButtonBackground"
                 app:cardCornerRadius="4dp">
 
-
                 <ImageView
                     android:id="@+id/physicalStockImage"
-                    android:src="@mipmap/jobcard_details"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="7dp"
                     android:drawablePadding="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    />
+                    android:src="@mipmap/jobcard_details" />
+
                 <ImageView
-                    android:id="@+id/physicalStockArrow"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/ic_navigate_next_black_24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:layout_marginTop="25dp"
                     android:layout_weight="1"
-                    />
+                    android:foregroundGravity="center_vertical|center|center_horizontal"
+                    android:src="@drawable/ic_navigate_next_black_24dp" />
+
 
                 <TextView
                     android:id="@+id/physicalStockLable"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="65dp"
-                    android:layout_toRightOf="@+id/info_image"
+                    android:layout_width="225dp"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:layout_marginLeft="75dp"
+                    android:layout_marginTop="29dp"
+                    android:layout_toRightOf="@+id/info_image"
                     android:text="Physical Stock Verification"
+                    android:textAlignment="textStart"
                     android:textColor="@color/reportButtonTitle"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -358,43 +385,44 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_width="350dp"
-                android:layout_height="120dp"
+                android:layout_height="80dp"
                 app:cardBackgroundColor="@color/auditAssetButtonBackground"
                 app:cardCornerRadius="4dp">
 
 
                 <ImageView
                     android:id="@+id/vendorMaterialScanImage"
-                    android:src="@mipmap/ic_material_details"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="7dp"
                     android:drawablePadding="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    />
+                    android:src="@mipmap/ic_material_details" />
                 <ImageView
                     android:id="@+id/vendorMaterialScanArrow"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/ic_navigate_next_black_24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:layout_marginTop="25dp"
                     android:layout_weight="1"
-                    />
+                    android:foregroundGravity="center_vertical"
+                    android:src="@drawable/ic_navigate_next_black_24dp" />
 
                 <TextView
                     android:id="@+id/vendorMaterialScanLable"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="65dp"
-                    android:layout_toRightOf="@+id/info_image"
+                    android:layout_width="208dp"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:layout_marginLeft="75dp"
+                    android:layout_marginTop="29dp"
+                    android:layout_toRightOf="@+id/info_image"
                     android:text="Vendor Material Scan"
+                    android:textAlignment="textStart"
                     android:textColor="@color/reportButtonTitle"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textStyle="bold" />
 
             </androidx.cardview.widget.CardView>
 
@@ -405,7 +433,7 @@
                 android:paddingTop="20dp"
                 android:text="app version 1.0.0"
                 android:textAlignment="center"
-                android:textColor="@color/assetDetailsButtonTitle" />
+                android:textColor="@color/reportButtonTitle" />
 
         </LinearLayout>
     </ScrollView>
