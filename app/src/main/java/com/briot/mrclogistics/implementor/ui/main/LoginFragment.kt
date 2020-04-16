@@ -7,6 +7,7 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -51,7 +52,8 @@ class LoginFragment : androidx.fragment.app.Fragment() {
         (this.activity as AppCompatActivity).setTitle("Material Management System")
 
         username.requestFocus()
-        var deviceSerialNumber: String = ""
+        val androidId: String = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID)
+        var deviceSerialNumber: String = androidId
 //        ActivityCompat.requestPermissions(requireActivity(),
 //                arrayOf(Manifest.permission.READ_PHONE_STATE),
 //                0)
