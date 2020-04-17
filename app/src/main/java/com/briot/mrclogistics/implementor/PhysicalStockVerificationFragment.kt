@@ -98,23 +98,15 @@ class PhysicalStockVerificationFragment : Fragment() {
         })
 
         viewModel.itemAuditSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
-            if (it == true) {
-                UiHelper.hideProgress(this.progress)
-                this.progress = null
+                if (it == true) {
+                    UiHelper.hideProgress(this.progress)
+                    this.progress = null
 
-                var thisObject = this
-                AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
-                    setTitle("Success")
-                    setMessage("Material updated successfully.")
-                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok") { dialog, _ ->
-                        dialog.dismiss()
-                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
-                        //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
-                    }
-                    show()
+                    var thisObject = this
+                    UiHelper.showSuccessToast(this.activity as AppCompatActivity,
+                            "Scan Successful")
                 }
-            }
-        })
+            })
 
         audit_material_scanButton.setOnClickListener {
             // User input MATERIAL barcode value
@@ -134,10 +126,12 @@ class PhysicalStockVerificationFragment : Fragment() {
             // Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
             viewModel.logedInUsername = logedInUsername
 
-            if (auditScanMaterialTextValue == null) {
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
-                viewModel.messageContent = "Please scan the material"
-            } else {
+            val inputauditBarcode = auditScanMaterialTextValue.getText().toString()
+            if (inputauditBarcode == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please enter material barcode value")
+                audit_materialBarcode.requestFocus()
+            }else {
                 GlobalScope.launch {
                     viewModel.handleSubmitAudit()
                 }

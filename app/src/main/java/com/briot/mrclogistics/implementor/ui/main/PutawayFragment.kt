@@ -115,22 +115,15 @@ class PutawayFragment : Fragment() {
         })
 
         viewModel.itemSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
-            if (it == true) {
-                UiHelper.hideProgress(this.progress)
-                this.progress = null
+                if (it == true) {
+                    UiHelper.hideProgress(this.progress)
+                    this.progress = null
 
-                var thisObject = this
-                AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
-                    setTitle("Success")
-                    setMessage("Material updated successfully.")
-                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok") { dialog, _ -> dialog.dismiss()
-                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPutaway, false)
-                        //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
-                    }
-                    show()
+                    var thisObject = this
+                    UiHelper.showSuccessToast(this.activity as AppCompatActivity,
+                            "Scan Successful")
                 }
-            }
-        })
+            })
 
         // On click on BIN Barcode scan button
         putaway_scanButton.setOnClickListener {

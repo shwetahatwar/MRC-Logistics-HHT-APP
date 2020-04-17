@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -27,7 +28,9 @@ import com.briot.mrclogistics.implementor.repository.local.PrefConstants
 import com.briot.mrclogistics.implementor.repository.local.PrefRepository
 import com.briot.mrclogistics.implementor.repository.remote.SignInResponse
 import io.github.pierry.progress.Progress
+import kotlinx.android.synthetic.main.dispatch_picking_list_fragment.*
 import kotlinx.android.synthetic.main.login_fragment.*
+import kotlinx.android.synthetic.main.user_profile_fragment.*
 
 
 class LoginFragment : androidx.fragment.app.Fragment() {
@@ -37,12 +40,17 @@ class LoginFragment : androidx.fragment.app.Fragment() {
     }
     private lateinit var viewModel: LoginViewModel
     private var progress: Progress? = null
+    lateinit var deviceId: TextView
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.login_fragment, container, false)
+        val rootView=inflater.inflate(R.layout.login_fragment, container, false)
+        deviceId = rootView.findViewById(R.id.deviceIdValue);
+
         Log.d(ContentValues.TAG, "onCreateView ")
 
+    return rootView
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -54,6 +62,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
         username.requestFocus()
         val androidId: String = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID)
         var deviceSerialNumber: String = androidId
+
 //        ActivityCompat.requestPermissions(requireActivity(),
 //                arrayOf(Manifest.permission.READ_PHONE_STATE),
 //                0)
@@ -78,7 +87,9 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             // Log.d(ContentValues.TAG, "Got Device serial number " + Build.SERIAL)
             try {
                 deviceSerialNumber = Build.getSerial()
-                // Log.d(ContentValues.TAG, "serial no ---> " + deviceSerialNumber)
+                deviceId.setText(""+deviceSerialNumber);
+
+                Log.d(ContentValues.TAG, "serial no ---> " + deviceSerialNumber)
             }
             catch (e: Throwable){
                 // Log.d(ContentValues.TAG, "Got Exception in Build.getSerial() " + e)
@@ -140,10 +151,10 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 //                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please enter Login Credential")
 //            }
             viewModel.loginUser(username.text.toString(), password.text.toString(),deviceSerialNumber)
-
             username.text?.clear()
             username.requestFocus()
             password.text?.clear()
+
             
         }
     }

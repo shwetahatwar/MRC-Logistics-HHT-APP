@@ -34,6 +34,10 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.picking_row.*
 import kotlinx.android.synthetic.main.putaway_fragment.*
+import android.widget.Toast
+//import android.R
+import android.graphics.Color
+import androidx.lifecycle.ViewModel
 
 
 class VendorMaterialScanFragment : Fragment() {
@@ -92,16 +96,8 @@ class VendorMaterialScanFragment : Fragment() {
                 this.progress = null
 
                 var thisObject = this
-                AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
-                    setTitle("Success")
-                    setMessage("Vendor Material post successfully.")
-                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok", {
-                        dialog, _ -> dialog.dismiss()
-                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.vendorMaterialScan, false)
-                        //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
-                    })
-                    show()
-                }
+                UiHelper.showSuccessToast(this.activity as AppCompatActivity,
+                        "Scan Successful")
             }
         })
 
@@ -122,14 +118,17 @@ class VendorMaterialScanFragment : Fragment() {
             val logedInUsername = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username, "")
             // Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
             viewModel.logedInUsername = logedInUsername
-            // viewModel.getUsers()
-            // Log.d(ContentValues.TAG, "api get response....." + v)
 
 
-            if (vendorMaterialTextValue == null) {
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
-                viewModel.messageContent = "Please scan the material"
-            } else {
+// Log.d(ContentValues.TAG, "get value ----" + logedInUsername)
+            viewModel.logedInUsername = logedInUsername
+
+            val inputVendorBarcode = vendorMaterialTextValue.getText().toString()
+            if (inputVendorBarcode == "") {
+                UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                        "Please enter VENDOR MATERIAL value")
+                vendor_materialBarcode.requestFocus()
+            }else {
                 GlobalScope.launch {
                     viewModel.handleSubmitVendor()
                 }

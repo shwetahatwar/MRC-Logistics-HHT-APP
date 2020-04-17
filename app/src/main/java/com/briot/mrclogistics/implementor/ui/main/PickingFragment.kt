@@ -115,22 +115,15 @@ class PickingFragment : Fragment() {
         })
 
         viewModel.itemSubmissionPickingSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
-            if (it == true) {
-                UiHelper.hideProgress(this.progress)
-                this.progress = null
+                if (it == true) {
+                    UiHelper.hideProgress(this.progress)
+                    this.progress = null
 
-                var thisObject = this
-                AlertDialog.Builder(this.activity as AppCompatActivity, R.style.MyDialogTheme).create().apply {
-                    setTitle("Success")
-                    setMessage("Material updated successfully.")
-                    setButton(AlertDialog.BUTTON_NEUTRAL, "Ok") { dialog, _ -> dialog.dismiss()
-                        Navigation.findNavController(thisObject.recyclerView).popBackStack(R.id.materialPicking, false)
-                        //      Navigation.findNavController(thisObject.recyclerView).popBackStack()
-                    }
-                    show()
+                    var thisObject = this
+                    UiHelper.showSuccessToast(this.activity as AppCompatActivity,
+                            "Scan Successful")
                 }
-            }
-        })
+            })
 
         picking_materialBarcode.setOnEditorActionListener { _, i, keyEvent ->
             var handled = false
@@ -227,10 +220,15 @@ class PickingFragment : Fragment() {
 
             if (foundFlag == false) {
                 recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
-                if (pickingMaterialTextValue == null) {
-                    UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please scan the material!")
-                        viewModel.messageContent = "Please scan the material"
-                    } else {
+                val inputmaterialBarcode = picking_materialBarcode.getText().toString()
+//                val inputbinBarcode = picking_materialBarcode.getText().toString()
+//                val inputrackBarcode = picking_materialBarcode.getText().toString()
+
+                if (inputmaterialBarcode == "") {
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity,
+                            "Please scan material barcode value")
+                    picking_materialBarcode.requestFocus()
+                }else {
                         GlobalScope.launch {
                             viewModel.handleSubmitPicking()
                         }

@@ -74,7 +74,7 @@ class PhysicalStockVerificationViewModel : ViewModel() {
         } else if (error is HttpException) {
             if (error.code() >= 401) {
                 if (error.code() == 500) {
-                    messageContent = "Invalid barcode scanned"
+                    messageContent = "This material barcode scanned already"
                 }else {
                     var msg = error.response()?.errorBody()?.string()
                     if (msg != null && msg.isNotEmpty()) {

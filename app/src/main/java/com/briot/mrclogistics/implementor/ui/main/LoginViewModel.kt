@@ -20,7 +20,6 @@ class LoginViewModel : ViewModel() {
 
     val signInResponse: LiveData<SignInResponse> = MutableLiveData<SignInResponse>()
     var errorMessage: String = ""
-
     val networkError: LiveData<Boolean> = MutableLiveData<Boolean>()
 //    val invalidUser: PopulatedUser = PopulatedUser()
 
