@@ -8,7 +8,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -16,35 +18,35 @@
             android:layout_marginTop="10pt"
             android:orientation="vertical">
 
-<!--            <androidx.appcompat.widget.AppCompatTextView-->
-<!--                android:id="@+id/appCompatTextView3"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="2dp"-->
-<!--                android:fontFamily="@font/lato_bold"-->
-<!--                android:text="Material Dispatch"-->
-<!--                android:textAlignment="center"-->
-<!--                android:textColor="@color/assetDetailsButtonTitle"-->
-<!--                android:textSize="18sp"-->
-<!--                android:textStyle="bold" />-->
+            <!--            <androidx.appcompat.widget.AppCompatTextView-->
+            <!--                android:id="@+id/appCompatTextView3"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="2dp"-->
+            <!--                android:fontFamily="@font/lato_bold"-->
+            <!--                android:text="Material Dispatch"-->
+            <!--                android:textAlignment="center"-->
+            <!--                android:textColor="@color/assetDetailsButtonTitle"-->
+            <!--                android:textSize="18sp"-->
+            <!--                android:textStyle="bold" />-->
 
-<!--            <androidx.appcompat.widget.AppCompatTextView-->
-<!--                android:id="@+id/appCompatTextView5"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="2dp"-->
-<!--                android:fontFamily="@font/lato_bold"-->
-<!--                android:text="Solution"-->
-<!--                android:textAlignment="center"-->
-<!--                android:textColor="@color/assetDetailsButtonTitle"-->
-<!--                android:textSize="18sp"-->
-<!--                android:textStyle="bold" />-->
+            <!--            <androidx.appcompat.widget.AppCompatTextView-->
+            <!--                android:id="@+id/appCompatTextView5"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="2dp"-->
+            <!--                android:fontFamily="@font/lato_bold"-->
+            <!--                android:text="Solution"-->
+            <!--                android:textAlignment="center"-->
+            <!--                android:textColor="@color/assetDetailsButtonTitle"-->
+            <!--                android:textSize="18sp"-->
+            <!--                android:textStyle="bold" />-->
 
             <ImageView
                 android:id="@+id/mrclogistics"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 android:visibility="visible"
                 app:srcCompat="@drawable/mrc1" />
@@ -102,7 +104,7 @@
                 android:id="@+id/appCompatTextView6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/lato_bold"
                 android:text="Powered By"
                 android:textAlignment="center"
@@ -114,38 +116,34 @@
                 android:id="@+id/logoimg_1"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
                 app:srcCompat="@drawable/logo" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/deviceIdtext"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="150dp"
-                android:layout_marginTop="260dp"
-                android:layout_marginBottom="5dp"
-                android:textAlignment="center"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/lato_bold"
                 android:text="Device Id"
-                android:textSize="15dp" />
-
+                android:textAlignment="center"
+                android:textColor="#F70A0A0A"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/deviceIdValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="150dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="50dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:textAlignment="center"
+                android:fontFamily="@font/lato_bold"
+                android:layout_marginLeft="164dp"
                 android:text=""
-                android:textStyle="bold" />
+                android:textAlignment="center"
+                android:textSize="14sp" />
 
         </LinearLayout>
     </ScrollView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
