@@ -87,14 +87,13 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             // Log.d(ContentValues.TAG, "Got Device serial number " + Build.SERIAL)
             try {
                 deviceSerialNumber = Build.getSerial()
-                deviceId.setText(""+deviceSerialNumber);
-
                 Log.d(ContentValues.TAG, "serial no ---> " + deviceSerialNumber)
             }
             catch (e: Throwable){
                 // Log.d(ContentValues.TAG, "Got Exception in Build.getSerial() " + e)
                 deviceSerialNumber = Build.SERIAL
             }
+            deviceId.setText("Device Id: "+deviceSerialNumber);
             //}
         }
         catch ( exception: Throwable ){

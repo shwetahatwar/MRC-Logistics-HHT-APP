@@ -119,28 +119,40 @@
                 android:layout_marginTop="5dp"
                 app:srcCompat="@drawable/logo" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/deviceIdtext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/lato_bold"
-                android:text="Device Id"
-                android:textAlignment="center"
-                android:textColor="#F70A0A0A"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+<!--            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:id="@+id/deviceIdtext"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:fontFamily="@font/lato_bold"-->
+<!--                android:text="Device Id"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="#F70A0A0A"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold" />-->
 
             <TextView
-                android:id="@+id/deviceIdValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/lato_bold"
-                android:layout_marginLeft="164dp"
-                android:text=""
-                android:textAlignment="center"
-                android:textSize="14sp" />
+            android:id="@+id/deviceIdValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/lato_bold"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="#F70A0A0A"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+            <!--                android:id="@+id/deviceIdValue"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:fontFamily="@font/lato_bold"-->
+            <!--                android:layout_marginLeft="164dp"-->
+            <!--                android:text=""-->
+            <!--                android:textAlignment="center"-->
+            <!--                android:textSize="14sp" />-->
+
 
         </LinearLayout>
     </ScrollView>
