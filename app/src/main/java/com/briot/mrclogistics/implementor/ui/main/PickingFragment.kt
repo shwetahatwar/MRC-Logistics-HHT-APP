@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -72,7 +73,8 @@ class PickingFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(PickingViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(PickingViewModel::class.java)
+        //viewModel = ViewModelProviders.of(this).get(PickingViewModel::class.java)
         // TODO: Use the ViewModel
 
         (this.activity as AppCompatActivity).setTitle("Picking")
@@ -83,6 +85,10 @@ class PickingFragment : Fragment() {
             viewModel.materialBarcodeSerial = this.arguments!!.getString("materialBarcodeSerial")
             viewModel.rackBarcodeSerial = binMaterialTextValue.getText().toString()
         }
+        this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
+        viewModel.loadPickingItems()
+        viewModel.loadPickingScannedItems()
+
         recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems,viewModel)
         viewModel.pickingItems.observe(viewLifecycleOwner, Observer<Array<PickingItems?>> {
             if (it != null) {
@@ -95,7 +101,6 @@ class PickingFragment : Fragment() {
                     pickingItems.adapter?.notifyDataSetChanged()
                 }
             }
-
             oldPickingItems = viewModel.pickingItems.value
         })
 
@@ -103,27 +108,24 @@ class PickingFragment : Fragment() {
             if (it == true) {
                 UiHelper.hideProgress(this.progress)
                 this.progress = null
-                // Log.d(TAG,"-----in if---"+viewModel.messageContent)
                 if (viewModel.messageContent != null) {
-                    // Log.d(TAG,"-----in if 2---"+viewModel.messageContent)
                     UiHelper.showErrorToast(this.activity as AppCompatActivity, viewModel.messageContent)
                 } else {
                     UiHelper.showNoInternetSnackbarMessage(this.activity as AppCompatActivity)
                 }
-
             }
         })
 
         viewModel.itemSubmissionPickingSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
-                if (it == true) {
-                    UiHelper.hideProgress(this.progress)
-                    this.progress = null
-
-                    var thisObject = this
-                    UiHelper.showSuccessToast(this.activity as AppCompatActivity,
-                            "Scan Successful")
-                }
-            })
+            if (it == true) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
+                var thisObject = this
+                recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems,viewModel)
+                UiHelper.showSuccessToast(this.activity as AppCompatActivity,
+                        "Scan Successful")
+            }
+        })
 
         picking_materialBarcode.setOnEditorActionListener { _, i, keyEvent ->
             var handled = false
@@ -143,10 +145,6 @@ class PickingFragment : Fragment() {
             }
             handled
         }
-
-        this.progress = UiHelper.showProgressIndicator(activity!!, "Picking Items")
-        viewModel.loadPickingItems()
-        viewModel.loadPickingScannedItems()
 
         // On click on Material Barcode scan button, to get material barcode value
         picking_material_scanButton.setOnClickListener{
@@ -170,6 +168,7 @@ class PickingFragment : Fragment() {
                      rackMaterialTextValue.setText(item!!.rackBarcodeSerial)
                      binMaterialTextValue.setText(item!!.binBarcodeSerial)
                      picking_binBarcode.requestFocus()
+                     //picking_materialBarcode.requestFocus()
                  }
             }
             if (matchFlag == false){
@@ -187,7 +186,9 @@ class PickingFragment : Fragment() {
                         "Please enter BIN Barcode value")
                 picking_binBarcode.requestFocus()
             }else{
-            picking_rackBarcode.requestFocus()}
+            picking_rackBarcode.requestFocus()
+                //picking_materialBarcode.requestFocus()
+            }
         }
 
         // On click on RACK Barcode scan button
@@ -198,32 +199,38 @@ class PickingFragment : Fragment() {
                 UiHelper.showErrorToast(this.activity as AppCompatActivity,
                         "Please enter RACK Barcode value")
                 picking_rackBarcode.requestFocus()
+                //picking_materialBarcode.requestFocus()
             }
         }
 
         picking_submitItemButton.setOnClickListener {
             var thisObject = this
             var foundFlag: Boolean = false
-            viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
-            viewModel.materialBarcodeSerial = pickingMaterialTextValue.getText().toString()
-            viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
+            val inputBin = binMaterialTextValue.getText().toString()
+            val inputMaterial = pickingMaterialTextValue.getText().toString()
+            val inputRack = rackMaterialTextValue.getText().toString()
 
-            // Log.d(TAG, "item value fragment -->"+viewModel.pickingScannedItems.value!!)
-            for (item in viewModel.pickingScannedItems.value!!) {
-                    if (pickingMaterialTextValue.getText().toString() == item!!.materialBarcodeSerial &&
-                            binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
-                                rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial){
-                                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
-                                foundFlag = true
-                        }
-                    }
+            if (inputBin == viewModel.binBarcodeSerial && inputMaterial == viewModel.materialBarcodeSerial &&
+                    inputRack == viewModel.rackBarcodeSerial){
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                foundFlag = true
+            }
+
+            viewModel.binBarcodeSerial = inputBin
+            viewModel.materialBarcodeSerial = inputMaterial
+            viewModel.rackBarcodeSerial = inputRack
+
+            val found = viewModel.pickingScannedItems.value!!.filter { it!!.materialBarcodeSerial == pickingMaterialTextValue.getText().toString() &&
+            it.binBarcodeSerial == binMaterialTextValue.getText().toString() &&
+                    it.rackBarcodeSerial == rackMaterialTextValue.getText().toString()}
+
+            if (found.isNotEmpty()){
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                foundFlag = true
+            }
 
             if (foundFlag == false) {
-                recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
                 val inputmaterialBarcode = picking_materialBarcode.getText().toString()
-//                val inputbinBarcode = picking_materialBarcode.getText().toString()
-//                val inputrackBarcode = picking_materialBarcode.getText().toString()
-
                 if (inputmaterialBarcode == "") {
                     UiHelper.showErrorToast(this.activity as AppCompatActivity,
                             "Please scan material barcode value")
@@ -241,8 +248,6 @@ class PickingFragment : Fragment() {
                 picking_materialBarcode.requestFocus()
             }
         }
-
-        //this.progress = UiHelper.showProgressIndicator(activity!!, "Loading dispatch slip Items")
         picking_materialBarcode.requestFocus()
     }
 }
@@ -270,7 +275,6 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
                 return@setOnClickListener
             }
         }
-
     }
 
     override fun getItemCount(): Int {

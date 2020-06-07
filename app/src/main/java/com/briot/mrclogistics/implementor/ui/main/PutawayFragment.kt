@@ -87,6 +87,9 @@ class PutawayFragment : Fragment() {
             viewModel.rackBarcodeSerial = binMaterialTextValue.getText().toString()
 
         }
+        this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
+        viewModel.loadPutawayItems()
+        viewModel.loadPutawayScannedItems()
         recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
         viewModel.putawayItems.observe(viewLifecycleOwner, Observer<Array<PutawayItems?>> {
             if (it != null) {
@@ -115,10 +118,11 @@ class PutawayFragment : Fragment() {
         })
 
         viewModel.itemSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
-                if (it == true) {
+            println("---it--->"+it)
+            // recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
+            if (it == true) {
                     UiHelper.hideProgress(this.progress)
                     this.progress = null
-
                     var thisObject = this
                     UiHelper.showSuccessToast(this.activity as AppCompatActivity,
                             "Scan Successful")
@@ -179,48 +183,36 @@ class PutawayFragment : Fragment() {
             handled
         }
 
-        this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
-        // Display dabase data to screen
-
-        viewModel.loadPutawayItems()
-        viewModel.loadPutawayScannedItems()
-
-        // Log.d(TAG, "----size -->"+ viewModel.putawayScannedItems.value!!.size)
-//        viewModel.loadPutawayRefreshItems()
-        // After click on submit button need to call put method to update database
-
-
         putaway_items_submit_button.setOnClickListener {
             var thisObject = this
             var foundFlag: Boolean = false
-            viewModel.loadPutawayScannedItems()
-            viewModel.binBarcodeSerial = binMaterialTextValue.getText().toString()
-            viewModel.materialBarcodeSerial = putawayMaterialTextValue.getText().toString()
-            viewModel.rackBarcodeSerial = rackMaterialTextValue.getText().toString()
+            val inputBin = binMaterialTextValue.getText().toString()
+            val inputMaterial = putawayMaterialTextValue.getText().toString()
+            val inputRack = rackMaterialTextValue.getText().toString()
 
-            // Log.d(TAG, "----before submit size-->"+viewModel.putawayScannedItems.value!!.size)
+            if (inputBin == viewModel.binBarcodeSerial && inputMaterial == viewModel.materialBarcodeSerial &&
+                    inputRack == viewModel.rackBarcodeSerial){
+                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                foundFlag = true
+            }
 
-            for (item in viewModel.putawayScannedItems.value!!) {
-//                Log.d(TAG, "----rackMaterialTextValue-->"+rackMaterialTextValue.getText().toString())
-                if (putawayMaterialTextValue.getText().toString() != "") {
-                    if (binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
-                         rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial &&
-                            putawayMaterialTextValue.getText().toString() == item!!.materialBarcodeSerial) {
-                            foundFlag = true
-                            UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
-                        }
-                    }
-//                if (putawayMaterialTextValue.getText().toString() == ""){
-//                    if (binMaterialTextValue.getText().toString() == item!!.binBarcodeSerial &&
-//                            rackMaterialTextValue.getText().toString() == item!!.rackBarcodeSerial) {
-//                        foundFlag = true
-//                        UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
-//                    }
-//                }
+            viewModel.binBarcodeSerial = inputBin
+            viewModel.materialBarcodeSerial = inputMaterial
+            viewModel.rackBarcodeSerial = inputRack
+
+            if (putawayMaterialTextValue.getText().toString() != "") {
+                val found = viewModel.putawayScannedItems.value!!.filter {
+                    it!!.materialBarcodeSerial == putawayMaterialTextValue.getText().toString() &&
+                            it.binBarcodeSerial == binMaterialTextValue.getText().toString() &&
+                            it.rackBarcodeSerial == rackMaterialTextValue.getText().toString()
+                }
+                if (found.isNotEmpty()) {
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                    foundFlag = true
+                }
             }
 
             if (foundFlag == false) {
-                recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
                 GlobalScope.launch {
                     viewModel.handleSubmitPutaway()
                 }
@@ -231,7 +223,7 @@ class PutawayFragment : Fragment() {
                 rack_materialBarcode.text?.clear()
                 putaway_materialBarcode.requestFocus()
             }
-            viewModel.loadPutawayScannedItems()
+//            viewModel.loadPutawayScannedItems()
             // Log.d(TAG,"after submit call -->"+viewModel.putawayScannedItems.value!!.size)
             };
         }

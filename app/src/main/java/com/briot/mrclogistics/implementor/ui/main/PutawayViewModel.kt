@@ -109,6 +109,9 @@ class PutawayViewModel : ViewModel() {
         putawayRequestObject.materialBarcodeSerial = materialBarcodeSerial
         putawayRequestObject.rackBarcodeSerial = rackBarcodeSerial
 
+        println("binBarcodeSerial -->"+binBarcodeSerial)
+        println("materialBarcodeSerial -->"+materialBarcodeSerial)
+        println("rackBarcodeSerial -->"+rackBarcodeSerial)
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (networkError as MutableLiveData<Boolean>).value = false
