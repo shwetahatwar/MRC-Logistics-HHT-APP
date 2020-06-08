@@ -32,6 +32,29 @@ class PutawayViewModel : ViewModel() {
     var messageContent: String = ""
 
 
+    fun loadPutawayItemsNext() {
+        // (networkError as MutableLiveData<Boolean>).value = false
+        // (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = emptyArray()
+        RemoteRepository.singleInstance.getPutaway(this::handlePickingItemsResponseNext, this::handlePickingItemsErrorNext)
+    }
+
+    private fun handlePickingItemsResponseNext(putawayItems: Array<PutawayItems?>) {
+        var thisobj = this
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                (thisobj.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = putawayItems
+//                (networkError as MutableLiveData<Boolean>).value = false
+            }
+            handleSubmitPutaway()
+        }
+    }
+
+    private fun handlePickingItemsErrorNext(error: Throwable) {
+        Log.d(TAG, error.localizedMessage)
+    }
+
+
+
     fun loadPutawayItems() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = emptyArray()

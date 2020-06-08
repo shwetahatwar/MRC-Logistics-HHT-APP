@@ -213,19 +213,14 @@ class PutawayFragment : Fragment() {
 
             if (foundFlag == false) {
                 GlobalScope.launch {
-                    viewModel.handleSubmitPutaway()
+                    viewModel.loadPutawayItemsNext()
+//                    viewModel.handleSubmitPutaway()
                 }
-//                viewModel.loadPutawayRefreshItems()
-                // viewModel.loadPutawayRefreshItems()
-//                putaway_materialBarcode.text?.clear()
-//                bin_materialBarcode.text?.clear()
-//                rack_materialBarcode.text?.clear()
+                putaway_materialBarcode.text?.clear()
+                bin_materialBarcode.text?.clear()
+                rack_materialBarcode.text?.clear()
             }
             putaway_materialBarcode.requestFocus()
-            // viewModel.loadPutawayRefreshItems()
-//            viewModel.loadPutawayItems()
-//            viewModel.loadPutawayScannedItems()
-            // Log.d(TAG,"after submit call -->"+viewModel.putawayScannedItems.value!!.size)
             };
         }
 }
@@ -241,7 +236,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
-        val putawayItems = putawayItems.value!![position]!!
+        val putawayItems = viewModel.putawayItems.value!![position]!!
         holder.itemView.setOnClickListener{
 
             if (viewModel.putawayItems.toString().toLowerCase().contains("complete")) {
@@ -251,7 +246,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
     }
 
     override fun getItemCount(): Int {
-        return putawayItems.value?.size ?: 0
+        return viewModel.putawayItems.value?.size ?: 0
     }
 
     open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
@@ -268,7 +263,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         }
 
         fun bind() {
-            val item = putawayItems.value!![adapterPosition]!!
+            val item = viewModel.putawayItems.value!![adapterPosition]!!
             rackBarcodeSerial.text = item.rackBarcodeSerial
             binBarcodeSerial.text = item.binBarcodeSerial
             val barcodeComplete = item.materialBarcodeSerial

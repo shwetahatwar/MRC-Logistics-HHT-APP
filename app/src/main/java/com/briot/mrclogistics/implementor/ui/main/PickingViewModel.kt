@@ -30,6 +30,27 @@ class PickingViewModel : ViewModel() {
 
     var messageContent: String = ""
 
+    fun loadPickingItemsNext() {
+        // (networkError as MutableLiveData<Boolean>).value = false
+        // (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = emptyArray()
+        RemoteRepository.singleInstance.getPickingItems(this::handlePickingItemsResponseNext, this::handlePickingItemsErrorNext)
+    }
+
+    private fun handlePickingItemsResponseNext(pickingItems: Array<PickingItems?>) {
+        var thisobj = this
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                (thisobj.pickingItems as MutableLiveData<Array<PickingItems?>>).value = pickingItems
+//                (networkError as MutableLiveData<Boolean>).value = false
+            }
+            handleSubmitPicking()
+        }
+    }
+
+    private fun handlePickingItemsErrorNext(error: Throwable) {
+        Log.d(TAG, error.localizedMessage)
+    }
+
     fun loadPickingItems() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = emptyArray()
@@ -40,7 +61,7 @@ class PickingViewModel : ViewModel() {
         Log.d(TAG,"submit call loadPutwayScanned --->")
         (networkError as MutableLiveData<Boolean>).value = false
         // (this.putawayScannedItems as MutableLiveData<Array<PutawayItemsScanned?>>).value = emptyArray()
-        RemoteRepository.singleInstance.getPickingScannedItems(this::handlePickingScannedItemResponse,
+            RemoteRepository.singleInstance.getPickingScannedItems(this::handlePickingScannedItemResponse,
                 this::handlePickingItemsError)
     }
      fun handlePickingScannedItemResponse(pickingScannedItems: Array<PickingItemsScanned?>) {
@@ -95,6 +116,7 @@ class PickingViewModel : ViewModel() {
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (itemSubmissionPickingSuccessful as MutableLiveData<Boolean>).value = true
+                loadPickingScannedItems()
             }
         }
     }

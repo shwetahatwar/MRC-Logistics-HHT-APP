@@ -89,7 +89,7 @@ class PickingFragment : Fragment() {
         viewModel.loadPickingItems()
         viewModel.loadPickingScannedItems()
 
-        recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems,viewModel)
+        recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems, viewModel)
         viewModel.pickingItems.observe(viewLifecycleOwner, Observer<Array<PickingItems?>> {
             if (it != null) {
                 UiHelper.hideProgress(this.progress)
@@ -98,7 +98,15 @@ class PickingFragment : Fragment() {
                 if (viewModel.pickingItems.value.orEmpty().isNotEmpty() && viewModel.pickingItems.value?.first() == null) {
                     UiHelper.showSomethingWentWrongSnackbarMessage(this.activity as AppCompatActivity)
                 } else if (it != oldPickingItems) {
+//                    (recyclerView.adapter as SimplePickingItemAdapter).
+ //                   if (it!!.size > 0) {
+//                        (recyclerView.adapter as SimplePickingItemAdapter).add(it)
+//                        for (item in it!!.iterator()) {
+//                        }
+//                    }
+                    // println("above notify")
                     pickingItems.adapter?.notifyDataSetChanged()
+                    // (pickingItems.adapter as PendingItemsAdapter).add(item)
                 }
             }
             oldPickingItems = viewModel.pickingItems.value
@@ -236,25 +244,19 @@ class PickingFragment : Fragment() {
                     UiHelper.showErrorToast(this.activity as AppCompatActivity,
                             "Please scan material barcode value")
                     picking_materialBarcode.requestFocus()
-                }else {
+                } else {
                         GlobalScope.launch {
-                            viewModel.handleSubmitPicking()
+                            viewModel.loadPickingItemsNext()
+                            // viewModel.handleSubmitPicking()
                         }
-//                        viewModel.loadPickingScannedItems()
-//                        viewModel.loadPickingItems()
                     }
-//                picking_materialBarcode.text?.clear()
-//                picking_binBarcode.text?.clear()
-//                picking_rackBarcode.text?.clear()
+                picking_materialBarcode.text?.clear()
+                picking_binBarcode.text?.clear()
+                picking_rackBarcode.text?.clear()
                 picking_materialBarcode.requestFocus()
             }
         }
-//        viewModel.loadPickingScannedItems()
-//        viewModel.loadPickingItems()
         picking_materialBarcode.requestFocus()
-        // viewModel.loadPickingScannedItems()
-        // viewModel.loadPickingItems()
-//        recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems,viewModel)
     }
 }
 
@@ -273,7 +275,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
 
-        val pickingItems = pickingItems.value!![position]!!
+        val pickingItems = viewModel.pickingItems.value!![position]!!
         // Log.d(TAG, "position" + position)
         holder.itemView.setOnClickListener{
 
@@ -284,7 +286,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
     }
 
     override fun getItemCount(): Int {
-        return pickingItems.value?.size ?: 0
+        return viewModel.pickingItems.value?.size ?: 0
     }
 
     open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
@@ -302,7 +304,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
         }
 
         fun bind() {
-            val pickingItems = pickingItems.value!![adapterPosition]!!
+            val pickingItems = viewModel.pickingItems.value!![adapterPosition]!!
             // Log.d(TAG, "..............." + pickingItems.toString())
 
             rackBarcodeSerial.text = pickingItems.rackBarcodeSerial
@@ -316,9 +318,8 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
 
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
 
-            if ((viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
+            if (viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
                     viewModel.binBarcodeSerial == pickingItems!!.binBarcodeSerial &&
-                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")) ||
                     (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")
                     ){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
