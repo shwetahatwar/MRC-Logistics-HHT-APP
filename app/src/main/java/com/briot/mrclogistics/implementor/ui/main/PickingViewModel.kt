@@ -44,20 +44,13 @@ class PickingViewModel : ViewModel() {
                 this::handlePickingItemsError)
     }
      fun handlePickingScannedItemResponse(pickingScannedItems: Array<PickingItemsScanned?>) {
-          //Log.d(TAG, "picking API res -->"+pickingScannedItems)
-         for(items in pickingScannedItems){
-             //Log.d(TAG, "picking API res -->"+ items!!.materialBarcodeSerial)
-             //Log.d(TAG, "picking API res -->"+ items!!.binBarcodeSerial)
-             //Log.d(TAG, "picking API res -->"+ items!!.rackBarcodeSerial)
-
-         }
         (this.pickingScannedItems as MutableLiveData<Array<PickingItemsScanned?>>).value = pickingScannedItems
 
     }
+
     private fun handlePickingItemsResponse(pickingItems: Array<PickingItems?>) {
         responsePickingLoadingItems = pickingItems
         (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = pickingItems
-
     }
 
     private fun handlePickingItemsError(error: Throwable) {

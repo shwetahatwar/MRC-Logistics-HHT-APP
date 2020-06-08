@@ -34,10 +34,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.android.synthetic.main.picking_fragment.*
 import kotlinx.android.synthetic.main.putaway_fragment.*
 import kotlinx.android.synthetic.main.putaway_row.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class PutawayFragment : Fragment() {
 
@@ -85,8 +82,8 @@ class PutawayFragment : Fragment() {
             viewModel.binBarcodeSerial = this.arguments!!.getString("binBarcodeSerial")
             viewModel.materialBarcodeSerial = this.arguments!!.getString("materialBarcodeSerial")
             viewModel.rackBarcodeSerial = binMaterialTextValue.getText().toString()
-
         }
+
         this.progress = UiHelper.showProgressIndicator(activity!!, "Putaway Items")
         viewModel.loadPutawayItems()
         viewModel.loadPutawayScannedItems()
@@ -118,7 +115,7 @@ class PutawayFragment : Fragment() {
         })
 
         viewModel.itemSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
-            println("---it--->"+it)
+            // println("---it--->"+it)
             // recyclerView.adapter = SimplePutawayItemAdapter(recyclerView, viewModel.putawayItems, viewModel)
             if (it == true) {
                     UiHelper.hideProgress(this.progress)
@@ -126,6 +123,7 @@ class PutawayFragment : Fragment() {
                     var thisObject = this
                     UiHelper.showSuccessToast(this.activity as AppCompatActivity,
                             "Scan Successful")
+//                     viewModel.loadPutawayRefreshItems()
                 }
             })
 
@@ -190,12 +188,13 @@ class PutawayFragment : Fragment() {
             val inputMaterial = putawayMaterialTextValue.getText().toString()
             val inputRack = rackMaterialTextValue.getText().toString()
 
-            if (inputBin == viewModel.binBarcodeSerial && inputMaterial == viewModel.materialBarcodeSerial &&
+            if (inputBin != "" && inputMaterial != "" && inputRack != ""){
+                if (inputBin == viewModel.binBarcodeSerial && inputMaterial == viewModel.materialBarcodeSerial &&
                     inputRack == viewModel.rackBarcodeSerial){
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
-                foundFlag = true
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                    foundFlag = true
+                }
             }
-
             viewModel.binBarcodeSerial = inputBin
             viewModel.materialBarcodeSerial = inputMaterial
             viewModel.rackBarcodeSerial = inputRack
@@ -216,20 +215,20 @@ class PutawayFragment : Fragment() {
                 GlobalScope.launch {
                     viewModel.handleSubmitPutaway()
                 }
-                viewModel.loadPutawayRefreshItems()
+//                viewModel.loadPutawayRefreshItems()
                 // viewModel.loadPutawayRefreshItems()
-                putaway_materialBarcode.text?.clear()
-                bin_materialBarcode.text?.clear()
-                rack_materialBarcode.text?.clear()
-                putaway_materialBarcode.requestFocus()
+//                putaway_materialBarcode.text?.clear()
+//                bin_materialBarcode.text?.clear()
+//                rack_materialBarcode.text?.clear()
             }
+            putaway_materialBarcode.requestFocus()
+            // viewModel.loadPutawayRefreshItems()
+//            viewModel.loadPutawayItems()
 //            viewModel.loadPutawayScannedItems()
             // Log.d(TAG,"after submit call -->"+viewModel.putawayScannedItems.value!!.size)
             };
         }
 }
-
-
 open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerview.widget.RecyclerView,
                                     private val putawayItems: LiveData<Array<PutawayItems?>>,
                                     private val viewModel: PutawayViewModel) :
@@ -243,7 +242,6 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
         val putawayItems = putawayItems.value!![position]!!
-//        Log.d(TAG, "putawayItems -->" + putawayItems.scanStatus)
         holder.itemView.setOnClickListener{
 
             if (viewModel.putawayItems.toString().toLowerCase().contains("complete")) {
@@ -253,7 +251,6 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
     }
 
     override fun getItemCount(): Int {
-        // Log.d(TAG, "getItemCount" + putawayItems.value)
         return putawayItems.value?.size ?: 0
     }
 
@@ -271,12 +268,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
         }
 
         fun bind() {
-
-            //Log.d(TAG, "position -> " + putawayItems.value!![adapterPosition]!!)
-
             val item = putawayItems.value!![adapterPosition]!!
-//            Log.d(TAG, "position -> " + item.scanStatus)
-            // if (item.scanStatus != 1.toString())
             rackBarcodeSerial.text = item.rackBarcodeSerial
             binBarcodeSerial.text = item.binBarcodeSerial
             val barcodeComplete = item.materialBarcodeSerial
@@ -287,8 +279,6 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
             val materialScanValueToCompare = (scannedSplitedValue?.get(0) ?: "NA")
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?: "NA")
 
-//            Log.d(TAG, "materialScanValueToCompare -->"+materialScanValueToCompare)
-//            Log.d(TAG, "materialScanValueToCominput ->"+ (barcodeValue?.get(0) ?: "NA"))
             if (materialScanValueToCompare !=""){
                 if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
                         viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
@@ -308,23 +298,6 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
                     linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
                 }
             }
-
-//
-//                if ((viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
-//                        viewModel.binBarcodeSerial == item!!.binBarcodeSerial)) {
-//                    Log.d(TAG, "materialScanValueToCompare -->"+materialScanValueToCompare)
-//                    Log.d(TAG, "input ----------------------->"+(barcodeValue?.get(0) ?: "NA"))
-//
-//                    if ((materialScanValueToCompare != "") && (materialScanValueToCompare == (barcodeValue?.get(0) ?: "NA"))){
-//                        linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-//                        Log.d(TAG, "first if --> ")
-//                    }
-//                    if (materialScanValueToCompare == "" ){
-//                        linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
-//                        Log.d(TAG, "2 if --> ")
-//
-//                    }
-//                }
         }
     }
 }

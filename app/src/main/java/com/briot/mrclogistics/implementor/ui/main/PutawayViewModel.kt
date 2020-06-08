@@ -109,15 +109,14 @@ class PutawayViewModel : ViewModel() {
         putawayRequestObject.materialBarcodeSerial = materialBarcodeSerial
         putawayRequestObject.rackBarcodeSerial = rackBarcodeSerial
 
-        println("binBarcodeSerial -->"+binBarcodeSerial)
-        println("materialBarcodeSerial -->"+materialBarcodeSerial)
-        println("rackBarcodeSerial -->"+rackBarcodeSerial)
+//        println("binBarcodeSerial -->"+binBarcodeSerial)
+//        println("materialBarcodeSerial -->"+materialBarcodeSerial)
+//        println("rackBarcodeSerial -->"+rackBarcodeSerial)
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (networkError as MutableLiveData<Boolean>).value = false
             }
         }
-
         // put call for putaway
         RemoteRepository.singleInstance.putPutawayItems(putawayRequestObject,
                 this::handlePutawayPutItemsResponse, this::handlePutawayPutItemsError)
@@ -130,6 +129,7 @@ class PutawayViewModel : ViewModel() {
                 (itemSubmissionSuccessful as MutableLiveData<Boolean>).value = true
             }
         }
+//        loadPutawayItems()
     }
 
     fun handlePutawayPutItemsError(error: Throwable) {

@@ -210,12 +210,13 @@ class PickingFragment : Fragment() {
             val inputMaterial = pickingMaterialTextValue.getText().toString()
             val inputRack = rackMaterialTextValue.getText().toString()
 
-            if (inputBin == viewModel.binBarcodeSerial && inputMaterial == viewModel.materialBarcodeSerial &&
-                    inputRack == viewModel.rackBarcodeSerial){
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
-                foundFlag = true
+            if (inputBin != "" && inputMaterial != "" && inputRack != "") {
+                if (inputBin == viewModel.binBarcodeSerial && inputMaterial == viewModel.materialBarcodeSerial &&
+                        inputRack == viewModel.rackBarcodeSerial) {
+                    UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                    foundFlag = true
+                }
             }
-
             viewModel.binBarcodeSerial = inputBin
             viewModel.materialBarcodeSerial = inputMaterial
             viewModel.rackBarcodeSerial = inputRack
@@ -239,16 +240,21 @@ class PickingFragment : Fragment() {
                         GlobalScope.launch {
                             viewModel.handleSubmitPicking()
                         }
-                        viewModel.loadPickingScannedItems()
-                        viewModel.loadPickingItems()
+//                        viewModel.loadPickingScannedItems()
+//                        viewModel.loadPickingItems()
                     }
-                picking_materialBarcode.text?.clear()
-                picking_binBarcode.text?.clear()
-                picking_rackBarcode.text?.clear()
+//                picking_materialBarcode.text?.clear()
+//                picking_binBarcode.text?.clear()
+//                picking_rackBarcode.text?.clear()
                 picking_materialBarcode.requestFocus()
             }
         }
+//        viewModel.loadPickingScannedItems()
+//        viewModel.loadPickingItems()
         picking_materialBarcode.requestFocus()
+        // viewModel.loadPickingScannedItems()
+        // viewModel.loadPickingItems()
+//        recyclerView.adapter = SimplePickingItemAdapter(recyclerView, viewModel.pickingItems,viewModel)
     }
 }
 
@@ -281,14 +287,11 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
         return pickingItems.value?.size ?: 0
     }
 
-
     open inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         protected val rackBarcodeSerial: TextView
         protected val binBarcodeSerial: TextView
         protected val materialBarcodeSerial: TextView
         protected val linearLayout: LinearLayout
-
-
 
         init {
             // Log.d(TAG, "..............rack_barcode" + R.id.rack_barcode)
@@ -296,7 +299,6 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
             binBarcodeSerial = itemView.findViewById(R.id.bin_barcode)
             materialBarcodeSerial = itemView.findViewById(R.id.material_barcode)
             linearLayout = itemView.findViewById(R.id.dispatch_slip_layout)
-
         }
 
         fun bind() {
@@ -314,9 +316,11 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
 
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
 
-            if (viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
+            if ((viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
                     viewModel.binBarcodeSerial == pickingItems!!.binBarcodeSerial &&
-                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")){
+                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")) ||
+                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")
+                    ){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
             }else{
                 linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
