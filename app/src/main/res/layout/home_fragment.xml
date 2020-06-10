@@ -303,10 +303,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-
-
-
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/physicalStock"
                 android:layout_gravity="center"
@@ -427,6 +423,26 @@
                     android:textStyle="bold" />
 
             </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="Powered By"
+                android:textAlignment="center"
+                android:textColor="#F70A0A0A"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/logoimg_1"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                app:srcCompat="@drawable/logo" />
+
 
             <TextView
                 android:id="@+id/versiontext"
