@@ -277,7 +277,7 @@ open class SimplePutawayItemAdapter(private val recyclerView: androidx.recyclerv
             if (materialScanValueToCompare !=""){
                 if (viewModel.rackBarcodeSerial == item!!.rackBarcodeSerial  &&
                         viewModel.binBarcodeSerial == item!!.binBarcodeSerial &&
-                        materialScanValueToCompare == (barcodeValue?.get(0) ?: "NA")){
+                        barcodeComplete == scannedMaterialBarcodeValue){
                     linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
                 }
                 else{

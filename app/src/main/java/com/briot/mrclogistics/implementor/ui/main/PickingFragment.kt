@@ -320,8 +320,7 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
 
             if (viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
                     viewModel.binBarcodeSerial == pickingItems!!.binBarcodeSerial &&
-                    (scannedSplitedValue?.get(0) ?: "NA") == (barcodeValue?.get(0) ?: "NA")
-                    ){
+                    barcodeComplete == scannedMaterialBarcodeValue){
                 linearLayout.setBackgroundColor(PrefConstants().lightGreenColor)
             }else{
                 linearLayout.setBackgroundColor(PrefConstants().lightGrayColor)
