@@ -142,7 +142,7 @@ class PickingFragment : Fragment() {
 
             if (keyEvent == null) {
                 Log.d("picking: ", "event is null")
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "event is null")
+                //UiHelper.showErrorToast(this.activity as AppCompatActivity, "event is null")
             }else if ((picking_materialBarcode.text != null && picking_materialBarcode.text!!.isNotEmpty()) && i
                     == EditorInfo.IME_ACTION_DONE || ((keyEvent.keyCode == KeyEvent.KEYCODE_ENTER || keyEvent.keyCode == KeyEvent.KEYCODE_TAB)
                             && keyEvent.action == KeyEvent.ACTION_DOWN)) {
@@ -159,19 +159,26 @@ class PickingFragment : Fragment() {
             var matchFlag: Boolean = false
             for (item in viewModel.pickingItems.value!!){
                 // Database Material barcode value
-                val cmpltMaterialBarcode = item!!.materialBarcodeSerial?.split(",")
-                val splittedMaterialBarcode = (cmpltMaterialBarcode?.get(0)?:0)
+                val cmpltMaterialBarcode = item!!.materialBarcodeSerial
+                // val splittedMaterialBarcode = (cmpltMaterialBarcode?.get(0)?:0)
 
                 // User input Material barcode value
-                val inputCmpltMaterialBarcode = pickingMaterialTextValue.getText().toString()?.split(",")
-                val splittedInputMaterialBarcode = (inputCmpltMaterialBarcode?.get(0)?:0)
+                val inputCmpltMaterialBarcode = pickingMaterialTextValue.getText().toString()
+                // val splittedInputMaterialBarcode = (inputCmpltMaterialBarcode?.get(0)?:0)
 
-                if (splittedInputMaterialBarcode == ""){
+                if (inputCmpltMaterialBarcode == ""){
                     UiHelper.showErrorToast(this.activity as AppCompatActivity,
                             "Please enter Material Barcode value")
                 }
-                // if (item!!.materialBarcodeSerial == pickingMaterialTextValue.getText().toString()){
-                 if (splittedMaterialBarcode == splittedInputMaterialBarcode){
+                // if (item!!.materialBarcodeSerial == pickingMaterialTextValue.getText()
+                //
+                //
+                //
+                //
+                // .toString()){
+                println("cmpltMaterialBarcode-->"+ cmpltMaterialBarcode)
+                println("inputCmpltMaterialBarcode-->"+ inputCmpltMaterialBarcode)
+                if (cmpltMaterialBarcode == inputCmpltMaterialBarcode){
                      matchFlag = true
                      rackMaterialTextValue.setText(item!!.rackBarcodeSerial)
                      binMaterialTextValue.setText(item!!.binBarcodeSerial)
@@ -182,6 +189,9 @@ class PickingFragment : Fragment() {
             if (matchFlag == false){
                 UiHelper.showErrorToast(this.activity as AppCompatActivity,
                         "Entered Material Barcode Serial does not matched, check entered value")
+                picking_materialBarcode.text?.clear()
+                picking_binBarcode.text?.clear()
+                picking_rackBarcode.text?.clear()
             }
         }
 

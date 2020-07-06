@@ -169,7 +169,7 @@ class PutawayFragment : Fragment() {
 
             if (keyEvent == null) {
                 Log.d("putaway: ", "event is null")
-                UiHelper.showErrorToast(this.activity as AppCompatActivity, "event is null")
+                //UiHelper.showErrorToast(this.activity as AppCompatActivity, "event is null")
             }else if ((putaway_materialBarcode.text != null && putaway_materialBarcode.text!!.isNotEmpty()) && i
                     == EditorInfo.IME_ACTION_DONE || ((keyEvent.keyCode == KeyEvent.KEYCODE_ENTER || keyEvent.keyCode == KeyEvent.KEYCODE_TAB)
                             && keyEvent.action == KeyEvent.ACTION_DOWN)) {
@@ -207,6 +207,9 @@ class PutawayFragment : Fragment() {
                 }
                 if (found.isNotEmpty()) {
                     UiHelper.showErrorToast(this.activity as AppCompatActivity, "Already Scanned item!!")
+                    putaway_materialBarcode.text?.clear()
+                    bin_materialBarcode.text?.clear()
+                    rack_materialBarcode.text?.clear()
                     foundFlag = true
                 }
             }
