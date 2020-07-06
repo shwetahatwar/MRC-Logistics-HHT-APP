@@ -37,12 +37,12 @@ class UserProfileFragment : Fragment() {
         val userName = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username, "")
         val deviceId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().deviceId, "")
        // val password = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().password, "")
-        val userId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_ID, "")
+        val id = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().id, "")
 
         userNameValue.text = userName
        // userPassword.text = password
         userDeviceValue.text = deviceId
-        userIdValue.text = userId
+        userIdValue.text = id
         this.activity?.invalidateOptionsMenu()
     }
 

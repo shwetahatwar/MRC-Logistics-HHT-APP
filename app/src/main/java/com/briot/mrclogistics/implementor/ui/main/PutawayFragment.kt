@@ -76,6 +76,7 @@ class PutawayFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PutawayViewModel::class.java)
         (this.activity as AppCompatActivity).setTitle("Putaway")
+        putaway_materialBarcode.requestFocus()
 
         if (this.arguments != null) {
             viewModel.rackBarcodeSerial = this.arguments!!.getString("rackBarcodeSerial")
@@ -164,6 +165,7 @@ class PutawayFragment : Fragment() {
 
         putaway_materialBarcode.setOnEditorActionListener { _, i, keyEvent ->
             var handled = false
+            putaway_materialBarcode.requestFocus()
           //  var value = loading_materialBarcode.text!!.toString()
             var materialBarcodeSerial = putaway_materialBarcode.text!!.toString()
 
