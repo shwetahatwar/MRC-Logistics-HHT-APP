@@ -107,10 +107,10 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             if (it != null) {
                 this.activity?.invalidateOptionsMenu()
                 // Commenting username, pass, usertoken lines because user wants to login everytime
-                PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN,"1")
+                // PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN,"1")
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().id, it.id!!.toString())
-                PrefRepository.singleInstance.setKeyValue(PrefConstants().username, it.username!!.toString())
-                PrefRepository.singleInstance.setKeyValue(PrefConstants().password, it.password!!)
+                // PrefRepository.singleInstance.setKeyValue(PrefConstants().username, it.username!!.toString())
+                // PrefRepository.singleInstance.setKeyValue(PrefConstants().password, it.password!!)
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, deviceSerialNumber)
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().status, it.status!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID,"1")

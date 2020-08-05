@@ -23,6 +23,7 @@ class PrefRepository {
         val editor = sharedPref.edit();
 
         prefs.keys.asIterable().forEach {
+//            editor.putString(it, prefs[it] ?: "")
             editor.putString(it, prefs[it] ?: "")
         }
 
