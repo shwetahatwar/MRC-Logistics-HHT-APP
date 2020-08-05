@@ -33,7 +33,6 @@ class UserProfileFragment : Fragment() {
 
         (this.activity as AppCompatActivity).setTitle("User Profile")
 
-
         val userName = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().username, "")
         val deviceId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().deviceId, "")
        // val password = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().password, "")
@@ -44,7 +43,7 @@ class UserProfileFragment : Fragment() {
         userDeviceValue.text = deviceId
         userIdValue.text = id
         this.activity?.invalidateOptionsMenu()
-    }
+       }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)

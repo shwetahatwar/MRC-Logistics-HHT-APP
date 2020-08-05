@@ -105,8 +105,8 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             this.progress = null
 
             if (it != null) {
-
                 this.activity?.invalidateOptionsMenu()
+                // Commenting username, pass, usertoken lines because user wants to login everytime
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN,"1")
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().id, it.id!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().username, it.username!!.toString())
@@ -116,8 +116,8 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID,"1")
 
                 this.context?.let { it1 -> PrefRepository.singleInstance.serializePrefs(it1) }
-
                 Navigation.findNavController(login).navigate(R.id.action_loginFragment_to_homeFragment)
+
             } else {
                 UiHelper.showErrorToast(this.activity as AppCompatActivity, "An error has occurred, please try again.");
             }
@@ -149,12 +149,11 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 //            if (username.text.toString() == "" ||  password.text.toString() == ""){
 //                UiHelper.showErrorToast(this.activity as AppCompatActivity, "Please enter Login Credential")
 //            }
-            viewModel.loginUser(username.text.toString(), password.text.toString(),deviceSerialNumber)
+            viewModel.loginUser(username.text.toString(), password.text.toString(), deviceSerialNumber)
             username.text?.clear()
             username.requestFocus()
             password.text?.clear()
 
-            
         }
     }
 

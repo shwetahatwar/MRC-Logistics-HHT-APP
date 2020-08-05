@@ -144,9 +144,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             oldPickingsDashboardData = viewModel.pickingsDashboardData.value
         })
 
-
-
-
         //-------------------------------------
         materialPutaway.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_putawayFragment) }
         materialPicking.setOnClickListener { Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_pickingFragment) }

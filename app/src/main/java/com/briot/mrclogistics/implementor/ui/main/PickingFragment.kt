@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.briot.mrclogistics.implementor.MainActivity
 import com.briot.mrclogistics.implementor.MainApplication
 
 import com.briot.mrclogistics.implementor.R
@@ -72,6 +73,7 @@ class PickingFragment : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PickingViewModel::class.java)
         //viewModel = ViewModelProviders.of(this).get(PickingViewModel::class.java)

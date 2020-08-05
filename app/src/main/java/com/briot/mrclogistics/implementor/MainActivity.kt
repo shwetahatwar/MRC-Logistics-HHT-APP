@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -66,6 +67,8 @@ class MainApplication : Application() {
         // example: SharedPreferences etc...
         val context: Context = MainApplication.applicationContext()
     }
+
+
 }
 
 
@@ -180,8 +183,6 @@ class RetrofitHelper {
 
                 okHttpClient.interceptors().add(logging);
             }
-
-
             return okHttpClient.build()
         }
 
@@ -199,6 +200,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        handler = Handler()
+        r = Runnable { // TODO Auto-generated method stub
+            //Toast.makeText(this@MainActivity, "user is inactive from last 5 minutes", Toast.LENGTH_SHORT).show()
+            logout()
+        }
+        startHandler()
     }
 
     override fun onSupportNavigateUp()
@@ -217,7 +225,6 @@ class MainActivity : AppCompatActivity() {
 
         return super.onPrepareOptionsMenu(menu)
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
@@ -268,6 +275,25 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    var handler: Handler? = null
+    var r: Runnable? = null
+
+    override fun onUserInteraction() {
+        // TODO Auto-generated method stub
+        super.onUserInteraction()
+        stopHandler() //stop first and then start
+        startHandler()
+    }
+
+    fun stopHandler() {
+        handler!!.removeCallbacks(r)
+    }
+
+    fun startHandler() {
+        handler!!.postDelayed(r, 1 * 60 * 1000.toLong()) //for 5 minutes
+    }
+
 }
 
 class UiHelper {
@@ -276,7 +302,7 @@ class UiHelper {
 
         fun showAlert(activity: AppCompatActivity, message: String, cancellable: Boolean = false) {
             AlertDialog.Builder(activity, R.style.MyDialogTheme).create().apply {
-            setTitle("Alert")
+                setTitle("Alert")
                 setMessage(message)
                 setCancelable(cancellable)
                 setButton(AlertDialog.BUTTON_NEUTRAL, "OK", { dialog, _ -> dialog.dismiss() })
@@ -341,7 +367,7 @@ class UiHelper {
 
         fun showAlert(activity: AppCompatActivity, message: String) {
             AlertDialog.Builder(activity, R.style.MyDialogTheme).create().apply {
-            setTitle("Alert")
+                setTitle("Alert")
                 setMessage(message)
                 setButton(AlertDialog.BUTTON_NEUTRAL, "OK", { dialog, _ -> dialog.dismiss() })
                 show()
@@ -366,6 +392,5 @@ class UiHelper {
         }
 
     }
-
 
 }

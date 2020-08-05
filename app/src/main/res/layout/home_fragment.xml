@@ -124,7 +124,8 @@
                         android:gravity="center_vertical"
                         android:text=""
                         android:textAlignment="textEnd"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="RtlCompat" />
                 </LinearLayout>
 
 
@@ -155,7 +156,8 @@
                         android:gravity="center_vertical"
                         android:text=""
                         android:textAlignment="textEnd"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="RtlCompat" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -235,7 +237,8 @@
                         android:gravity="center_vertical"
                         android:text=""
                         android:textAlignment="textEnd"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="RtlCompat" />
 
                 </LinearLayout>
 
@@ -266,7 +269,8 @@
                         android:gravity="center_vertical"
                         android:text=""
                         android:textAlignment="textEnd"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="RtlCompat" />
                 </LinearLayout>
 
 
@@ -299,7 +303,8 @@
                         android:gravity="center_vertical"
                         android:text=""
                         android:textAlignment="textEnd"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="RtlCompat" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
