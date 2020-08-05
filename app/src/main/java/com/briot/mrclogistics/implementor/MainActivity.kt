@@ -197,58 +197,34 @@ class RetrofitHelper {
 
 class MainActivity : AppCompatActivity() {
 
-    var handler: Handler? = null
-    var r: Runnable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
         handler = Handler()
         r = Runnable { // TODO Auto-generated method stub
-            //Toast.makeText(this@MainActivity, "user is inactive from last 5 minutes", Toast.LENGTH_SHORT).show()
+            // After timeout auto logout from application
             logout()
         }
         startHandler()
     }
-    override fun onPause() {
-        super.onPause()
-        startHandler()
-//        MyServices.startService(this,"Running")
-    }
-    override fun onRestart() {
-        super.onRestart()
-        var savedToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
-        if (savedToken.isEmpty()) {
-            logoutBackGround()
-        }
-        stopHandler() //stop first and then start
-        startHandler()
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        logout()
-    }
-    override fun onResume() {
-        super.onResume()
-        var savedToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
-        if (savedToken.isEmpty()) {
-            logoutBackGround()
-        }
-        stopHandler() //stop first and then start
-        startHandler()
-    }
+
     override fun onSupportNavigateUp()
             = findNavController(findViewById(R.id.nav_host_fragment)).navigateUp()
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
         return true;
     }
+
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-//        var savedToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
-//        if (savedToken.isEmpty()) {
-//            return false
-//        }
+        var savedToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().deviceId, "")
+        if (savedToken.isEmpty()) {
+            return false
+        }
         return super.onPrepareOptionsMenu(menu)
     }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.nav_logout -> {
@@ -259,42 +235,22 @@ class MainActivity : AppCompatActivity() {
                 showUserProfile()
                 true
             }
-            else -> {
-                logout()
-                super.onOptionsItemSelected(item)
-            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
+
     private fun showUserProfile() {
         var view:View = findViewById(R.id.nav_host_fragment)
         if (view != null) {
             try {
                 findNavController(view).navigate(R.id.action_homeFragment_to_userProfileFragment)
             } catch (e: Exception) {
+
             }
         }
     }
-    private fun logoutBackGround() {
-        invalidateOptionsMenu()
-        PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN, "")
-        PrefRepository.singleInstance.setKeyValue(PrefConstants().username, "")
-        PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, "")
-        PrefRepository.singleInstance.setKeyValue(PrefConstants().id, "")
-        PrefRepository.singleInstance.setKeyValue(PrefConstants().password, "")
-        PrefRepository.singleInstance.setKeyValue(PrefConstants().status, "")
-        PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID, "")
-        this.applicationContext.let { PrefRepository.singleInstance.serializePrefs(it) }
-        val userToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
-        val navController = findNavController(findViewById(R.id.nav_host_fragment))
-        if (userToken.isEmpty()) {
-            navController.popBackStack(R.id.mainFragment, false)
-        }
-    }
+
     private fun logout() {
-        var savedToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
-        if (savedToken.isEmpty()) {
-            return
-        }
         invalidateOptionsMenu()
         PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN, "")
         PrefRepository.singleInstance.setKeyValue(PrefConstants().username, "")
@@ -303,31 +259,53 @@ class MainActivity : AppCompatActivity() {
         PrefRepository.singleInstance.setKeyValue(PrefConstants().password, "")
         PrefRepository.singleInstance.setKeyValue(PrefConstants().status, "")
         PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID, "")
+
         this.applicationContext.let { PrefRepository.singleInstance.serializePrefs(it) }
+
         val userToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
         val navController = findNavController(findViewById(R.id.nav_host_fragment))
         if (userToken.isEmpty()) {
             navController.popBackStack(R.id.mainFragment, false)
         }
     }
+
+    var handler: Handler? = null
+    var r: Runnable? = null
+
     override fun onUserInteraction() {
         // TODO Auto-generated method stub
         super.onUserInteraction()
         stopHandler() //stop first and then start
         startHandler()
     }
+
     fun stopHandler() {
         handler!!.removeCallbacks(r)
     }
+
     fun startHandler() {
         handler!!.postDelayed(r, 1 * 60 * 1000.toLong()) //for 5 minutes
-        var savedToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
-        if (savedToken.isEmpty()) {
-            logout()
-        }
     }
-}
 
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        logout()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        logout()
+    }
+
+}
 
 class UiHelper {
     companion object {
