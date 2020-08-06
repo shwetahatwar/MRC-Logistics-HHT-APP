@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
 
         handler = Handler()
         r = Runnable { // TODO Auto-generated method stub
-            // After timeout auto logout from application
+            //Toast.makeText(this@MainActivity, "user is inactive from last 5 minutes", Toast.LENGTH_SHORT).show()
             logout()
         }
         startHandler()
@@ -222,6 +222,7 @@ class MainActivity : AppCompatActivity() {
         if (savedToken.isEmpty()) {
             return false
         }
+
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -251,6 +252,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logout() {
+//        var savedToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
+//        if (savedToken.isEmpty()) {
+//            return
+//        }
+
         invalidateOptionsMenu()
         PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN, "")
         PrefRepository.singleInstance.setKeyValue(PrefConstants().username, "")
@@ -267,6 +273,7 @@ class MainActivity : AppCompatActivity() {
         if (userToken.isEmpty()) {
             navController.popBackStack(R.id.mainFragment, false)
         }
+
     }
 
     var handler: Handler? = null
@@ -293,11 +300,39 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
+        stopHandler()
+        startHandler()
     }
 
     override fun onResume() {
         super.onResume()
-        logout()
+        var savedToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().deviceId, "")
+        if (savedToken.isEmpty()) {
+            logoutBackGround()
+        }
+        stopHandler() //stop first and then start
+        startHandler()
+    }
+
+    private fun logoutBackGround() {
+        invalidateOptionsMenu()
+        PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN, "")
+        PrefRepository.singleInstance.setKeyValue(PrefConstants().username, "")
+        PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, "")
+        PrefRepository.singleInstance.setKeyValue(PrefConstants().id, "")
+        PrefRepository.singleInstance.setKeyValue(PrefConstants().password, "")
+        PrefRepository.singleInstance.setKeyValue(PrefConstants().status, "")
+        PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID, "")
+        this.applicationContext.let { PrefRepository.singleInstance.serializePrefs(it) }
+        val userToken: String = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_TOKEN, "")
+        val navController = findNavController(findViewById(R.id.nav_host_fragment))
+        if (userToken.isEmpty()) {
+            navController.popBackStack(R.id.mainFragment, false)
+        }
+    }
+    override fun onPause() {
+        super.onPause()
+        startHandler()
     }
 
     override fun onDestroy() {
