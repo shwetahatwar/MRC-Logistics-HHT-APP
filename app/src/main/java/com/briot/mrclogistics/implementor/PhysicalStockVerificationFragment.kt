@@ -98,15 +98,15 @@ class PhysicalStockVerificationFragment : Fragment() {
         })
 
         viewModel.itemAuditSubmissionSuccessful.observe(viewLifecycleOwner, Observer<Boolean> {
-                if (it == true) {
-                    UiHelper.hideProgress(this.progress)
-                    this.progress = null
+            if (it == true) {
+                UiHelper.hideProgress(this.progress)
+                this.progress = null
 
-                    var thisObject = this
-                    UiHelper.showSuccessToast(this.activity as AppCompatActivity,
-                            "Scan Successful")
-                }
-            })
+                var thisObject = this
+                UiHelper.showSuccessToast(this.activity as AppCompatActivity,
+                        "Scan Successful")
+            }
+        })
 
         audit_material_scanButton.setOnClickListener {
             // User input MATERIAL barcode value
@@ -134,6 +134,9 @@ class PhysicalStockVerificationFragment : Fragment() {
             }else {
                 GlobalScope.launch {
                     viewModel.handleSubmitAudit()
+                    if(viewModel.checkLogin == false){
+                        Navigation.findNavController(it).navigate(R.id.loginFragment)
+                    }
                 }
             }
             audit_materialBarcode.text?.clear()

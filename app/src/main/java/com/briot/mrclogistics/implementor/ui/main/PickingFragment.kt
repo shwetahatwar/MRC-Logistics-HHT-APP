@@ -259,6 +259,9 @@ class PickingFragment : Fragment() {
                 } else {
                         GlobalScope.launch {
                             viewModel.loadPickingItemsNext()
+                            if(viewModel.checkLogin == false){
+                                Navigation.findNavController(it).navigate(R.id.loginFragment)
+                            }
                             // viewModel.handleSubmitPicking()
                         }
                     }

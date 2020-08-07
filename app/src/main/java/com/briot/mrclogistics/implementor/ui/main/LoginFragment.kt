@@ -63,16 +63,10 @@ class LoginFragment : androidx.fragment.app.Fragment() {
         val androidId: String = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID)
         var deviceSerialNumber: String = androidId
 
-//        ActivityCompat.requestPermissions(requireActivity(),
-//                arrayOf(Manifest.permission.READ_PHONE_STATE),
-//                0)
-
         try {
             val TelephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             if (ActivityCompat.checkSelfPermission(requireContext(),
                             Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                // Log.d(ContentValues.TAG, "return ------------>"+PackageManager.PERMISSION_GRANTED)
-                // Log.d(ContentValues.TAG, "return ------------>"+ Manifest.permission.READ_PHONE_STATE)
 
                 if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
                                 Manifest.permission.READ_PHONE_STATE)) {
@@ -83,8 +77,6 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                             0)
                 }
             }
-            // else {
-            // Log.d(ContentValues.TAG, "Got Device serial number " + Build.SERIAL)
             try {
                 deviceSerialNumber = Build.getSerial()
                 Log.d(ContentValues.TAG, "serial no ---> " + deviceSerialNumber)
@@ -94,7 +86,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 deviceSerialNumber = Build.SERIAL
             }
             deviceId.setText("Device Id: "+deviceSerialNumber);
-            //}
+
         }
         catch ( exception: Throwable ){
             Log.d(ContentValues.TAG, "Getting exception while getting serial number " + exception)
@@ -110,7 +102,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 // PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_TOKEN,"1")
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().id, it.id!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().username, it.username!!.toString())
-                // PrefRepository.singleInstance.setKeyValue(PrefConstants().password, it.password!!)
+                 PrefRepository.singleInstance.setKeyValue(PrefConstants().password, it.password!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().deviceId, deviceSerialNumber)
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().status, it.status!!.toString())
                 PrefRepository.singleInstance.setKeyValue(PrefConstants().USER_ID,"1")

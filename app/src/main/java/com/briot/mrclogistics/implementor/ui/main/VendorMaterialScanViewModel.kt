@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.briot.mrclogistics.implementor.LoginClass
 import com.briot.mrclogistics.implementor.UiHelper
 import com.briot.mrclogistics.implementor.repository.remote.*
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ class VendorMaterialScanViewModel : ViewModel() {
     val users: LiveData<Array<User?>> = MutableLiveData()
     var userResponseData: Array<User?> = arrayOf(null)
     var messageContent: String = ""
+    var checkLogin: Boolean = false
 
     // var username: String?=""
 
@@ -56,10 +58,12 @@ class VendorMaterialScanViewModel : ViewModel() {
                 (networkError as MutableLiveData<Boolean>).value = false
             }
         }
-        RemoteRepository.singleInstance.postMaterialInwards(VendorMaterialInward,
-                this::handleVendorItemsResponse, this::handleVendorItemsError)
-        Log.d(ContentValues.TAG, " after post ------")
 
+        checkLogin = LoginClass.newLogin.checkLogin()
+        if(checkLogin == true){
+            RemoteRepository.singleInstance.postMaterialInwards(VendorMaterialInward,
+                    this::handleVendorItemsResponse, this::handleVendorItemsError)
+        }
     }
 
     private fun handleVendorItemsResponse(postVendorItemResponse: VendorMaterialInward?) {

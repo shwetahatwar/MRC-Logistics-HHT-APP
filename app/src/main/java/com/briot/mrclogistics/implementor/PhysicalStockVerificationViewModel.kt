@@ -1,20 +1,29 @@
 package com.briot.mrclogistics.implementor
 
-import android.annotation.SuppressLint
+import android.R.attr.fragment
 import android.content.ContentValues
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.briot.mrclogistics.implementor.repository.local.PrefConstants
 import com.briot.mrclogistics.implementor.repository.local.PrefRepository
-import com.briot.mrclogistics.implementor.repository.remote.*
+import com.briot.mrclogistics.implementor.repository.remote.AuditItem
+import com.briot.mrclogistics.implementor.repository.remote.AuditItemResponse
+import com.briot.mrclogistics.implementor.repository.remote.RemoteRepository
+import com.briot.mrclogistics.implementor.repository.remote.User
+import com.briot.mrclogistics.implementor.ui.main.LoginFragment
+import com.briot.mrclogistics.implementor.ui.main.LoginViewModel
+import com.briot.mrclogistics.implementor.ui.main.PhysicalStockVerificationFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+
 
 class PhysicalStockVerificationViewModel : ViewModel() {
     var materialBarcode: String? = ""
@@ -30,13 +39,11 @@ class PhysicalStockVerificationViewModel : ViewModel() {
     val users: LiveData<Array<User?>> = MutableLiveData()
     var userResponseData: Array<User?> = arrayOf(null)
     var messageContent: String = ""
-
+    var checkLogin: Boolean = false
 
     fun handleSubmitAudit() {
         var auditItems = AuditItem()
         auditItems.materialBarcode = materialBarcode
-        //auditItems.userId=userId
-        // auditItems.userId = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().USER_ID, "0").toInt()
         for (item in userResponseData) {
             if (item!!.username == logedInUsername) {
                 Log.d(ContentValues.TAG, "item ----id " + item!!.id)
@@ -50,16 +57,14 @@ class PhysicalStockVerificationViewModel : ViewModel() {
             }
         }
 
-        RemoteRepository.singleInstance.postAuditsItems(auditItems, this::handleAuditItemsResponse, this::handleAuditItemsError)
+        checkLogin = LoginClass.newLogin.checkLogin()
+        if(checkLogin == true){
+            RemoteRepository.singleInstance.postAuditsItems(auditItems, this::handleAuditItemsResponse, this::handleAuditItemsError)
+        }
     }
-//            RemoteRepository.singleInstance.postAuditsItems(AuditItem,this::handleAuditItemsResponse, this::handleAuditItemsError)
-//        }
-    private fun handleAuditItemsResponse(auditItemResponse: AuditItemResponse?) {
-        // (this.vendorItems as MutableLiveData<Array<VendorMaterialInward?>>).value = vendorItems
-        // Log.d(TAG,"Data Putaway Put Response"+ postVendorResponse)
-        Log.d(ContentValues.TAG, " response ----- " + auditItemResponse)
 
-        GlobalScope.launch {
+    private fun handleAuditItemsResponse(auditItemResponse: AuditItemResponse?) {
+         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 (itemAuditSubmissionSuccessful as MutableLiveData<Boolean>).value = true
             }
@@ -88,17 +93,14 @@ class PhysicalStockVerificationViewModel : ViewModel() {
         } else {
             (this.auditItems as MutableLiveData<Array<AuditItem?>>).value = invalidAuditItems
             messageContent = "Oops something went wrong."
-
         }
     }
 
     fun getUsers() {
-        RemoteRepository.singleInstance.getUsers(
-                this::handleUserResponse, this::handleAuditItemsError)
+        RemoteRepository.singleInstance.getUsers(this::handleUserResponse, this::handleAuditItemsError)
     }
 
     private fun handleUserResponse(users: Array<User?>) {
-
         userResponseData = users
         (this.users as MutableLiveData<Array<User?>>).value = users
     }

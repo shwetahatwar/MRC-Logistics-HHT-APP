@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.briot.mrclogistics.implementor.LoginClass
 import com.briot.mrclogistics.implementor.UiHelper
 import com.briot.mrclogistics.implementor.repository.remote.*
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ class PutawayViewModel : ViewModel() {
     var responsePutawayLoadingItems: Array<PutawayItems?> = arrayOf(null)
     var getResponsePutwayData: Array<PutawayItems?> = arrayOf(null)
     var messageContent: String = ""
+    var checkLogin: Boolean = false
 
 
     fun loadPutawayItemsNext() {
@@ -140,9 +142,13 @@ class PutawayViewModel : ViewModel() {
                 (networkError as MutableLiveData<Boolean>).value = false
             }
         }
+        checkLogin = LoginClass.newLogin.checkLogin()
+        if(checkLogin == true){
+            RemoteRepository.singleInstance.putPutawayItems(putawayRequestObject,
+                    this::handlePutawayPutItemsResponse, this::handlePutawayPutItemsError)
+        }
         // put call for putaway
-        RemoteRepository.singleInstance.putPutawayItems(putawayRequestObject,
-                this::handlePutawayPutItemsResponse, this::handlePutawayPutItemsError)
+
     }
 
     private fun handlePutawayPutItemsResponse(putPutawayResponse: PutPutawayResponse?) {

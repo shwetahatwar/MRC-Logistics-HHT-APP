@@ -219,6 +219,9 @@ class PutawayFragment : Fragment() {
             if (foundFlag == false) {
                 GlobalScope.launch {
                     viewModel.loadPutawayItemsNext()
+                    if(viewModel.checkLogin == false){
+                        Navigation.findNavController(it).navigate(R.id.loginFragment)
+                    }
 //                    viewModel.handleSubmitPutaway()
                 }
                 putaway_materialBarcode.text?.clear()

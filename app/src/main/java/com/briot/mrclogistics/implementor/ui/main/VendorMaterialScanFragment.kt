@@ -131,6 +131,9 @@ class VendorMaterialScanFragment : Fragment() {
             }else {
                 GlobalScope.launch {
                     viewModel.handleSubmitVendor()
+                    if(viewModel.checkLogin == false){
+                        Navigation.findNavController(it).navigate(R.id.loginFragment)
+                    }
                 }
             }
             vendor_materialBarcode.text?.clear()
