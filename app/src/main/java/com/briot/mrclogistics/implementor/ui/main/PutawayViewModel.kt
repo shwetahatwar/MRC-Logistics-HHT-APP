@@ -31,7 +31,7 @@ class PutawayViewModel : ViewModel() {
     var responsePutawayLoadingItems: Array<PutawayItems?> = arrayOf(null)
     var getResponsePutwayData: Array<PutawayItems?> = arrayOf(null)
     var messageContent: String = ""
-    var checkLogin: Boolean = false
+    var checkLogin: Boolean = true
 
 
     fun loadPutawayItemsNext() {
@@ -65,7 +65,8 @@ class PutawayViewModel : ViewModel() {
     fun loadPutawayScannedItems() {
         Log.d(TAG,"submit call loadPutwayScanned --->")
         (networkError as MutableLiveData<Boolean>).value = false
-        // (this.putawayScannedItems as MutableLiveData<Array<PutawayItemsScanned?>>).value = emptyArray()
+        // (this.putawayScannedItems as MutableLiveData<Array<PutawayItemsScanned?>>).val
+        // ue = emptyArray()
         RemoteRepository.singleInstance.getPutawayScannedItems(this::handlePutawayScannedItemResponse,
                 this::handlePutawayItemsError)
     }
@@ -142,11 +143,11 @@ class PutawayViewModel : ViewModel() {
                 (networkError as MutableLiveData<Boolean>).value = false
             }
         }
-        checkLogin = LoginClass.newLogin.checkLogin()
-        if(checkLogin == true){
+      //  checkLogin = LoginClass.newLogin.checkLogin()
+       // if(checkLogin == true){
             RemoteRepository.singleInstance.putPutawayItems(putawayRequestObject,
                     this::handlePutawayPutItemsResponse, this::handlePutawayPutItemsError)
-        }
+      //  }
         // put call for putaway
 
     }

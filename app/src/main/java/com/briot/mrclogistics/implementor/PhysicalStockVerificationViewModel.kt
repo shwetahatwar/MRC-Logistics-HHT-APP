@@ -56,7 +56,7 @@ class PhysicalStockVerificationViewModel : ViewModel() {
                 (networkError as MutableLiveData<Boolean>).value = false
             }
         }
-
+        //PrefRepository.singleInstance.setKeyValue(PrefConstants().id, "")
         checkLogin = LoginClass.newLogin.checkLogin()
         if(checkLogin == true){
             RemoteRepository.singleInstance.postAuditsItems(auditItems, this::handleAuditItemsResponse, this::handleAuditItemsError)

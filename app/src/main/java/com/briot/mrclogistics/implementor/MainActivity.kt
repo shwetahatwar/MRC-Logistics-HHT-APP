@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startHandler() {
-        handler!!.postDelayed(r, 1 * 60 * 1000.toLong()) //for 5 minutes
+        handler!!.postDelayed(r, 5 * 60 * 1000.toLong()) //for 5 minutes
     }
 
     override fun onStart() {

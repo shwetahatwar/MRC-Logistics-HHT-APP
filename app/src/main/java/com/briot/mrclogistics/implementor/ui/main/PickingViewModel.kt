@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.briot.mrclogistics.implementor.LoginClass
 import com.briot.mrclogistics.implementor.UiHelper
+import com.briot.mrclogistics.implementor.repository.local.PrefConstants
+import com.briot.mrclogistics.implementor.repository.local.PrefRepository
 import com.briot.mrclogistics.implementor.repository.remote.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -30,7 +32,7 @@ class PickingViewModel : ViewModel() {
     var responsePickingLoadingItems: Array<PickingItems?> = arrayOf(null)
 
     var messageContent: String = ""
-    var checkLogin: Boolean = false
+    var checkLogin: Boolean = true
 
     fun loadPickingItemsNext() {
         // (networkError as MutableLiveData<Boolean>).value = false
@@ -108,12 +110,12 @@ class PickingViewModel : ViewModel() {
                 (networkError as MutableLiveData<Boolean>).value = false
             }
         }
-
-        checkLogin = LoginClass.newLogin.checkLogin()
-        if(checkLogin == true){
+        //PrefRepository.singleInstance.setKeyValue(PrefConstants().id, "")
+//        checkLogin = LoginClass.newLogin.checkLogin()
+//        if(checkLogin == true){
             RemoteRepository.singleInstance.putPickingItems(pickingRequestObject,
-                    this::handlePickingPutItemsResponse, this::handlePickingPutItemsError)
-        }
+                   this::handlePickingPutItemsResponse, this::handlePickingPutItemsError)
+//        }
     }
 
     private fun handlePickingPutItemsResponse(putPickingResponse: PutPickingResponse?) {

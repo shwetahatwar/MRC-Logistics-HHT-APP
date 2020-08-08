@@ -163,24 +163,23 @@ class PickingFragment : Fragment() {
                 // Database Material barcode value
                 val cmpltMaterialBarcode = item!!.materialBarcodeSerial
                 // val splittedMaterialBarcode = (cmpltMaterialBarcode?.get(0)?:0)
-
+                //println("materialBarcodeSerial input-->"+ item!!.materialBarcodeSerial)
                 // User input Material barcode value
                 val inputCmpltMaterialBarcode = pickingMaterialTextValue.getText().toString()
                 // val splittedInputMaterialBarcode = (inputCmpltMaterialBarcode?.get(0)?:0)
-
+                //println("pickingMaterialTextValue----------->"+ pickingMaterialTextValue.getText().toString())
                 if (inputCmpltMaterialBarcode == ""){
                     UiHelper.showErrorToast(this.activity as AppCompatActivity,
                             "Please enter Material Barcode value")
                 }
-                // if (item!!.materialBarcodeSerial == pickingMaterialTextValue.getText()
-                //
-                //
-                //
-                //
-                // .toString()){
-                println("cmpltMaterialBarcode-->"+ cmpltMaterialBarcode)
-                println("inputCmpltMaterialBarcode-->"+ inputCmpltMaterialBarcode)
-                if (cmpltMaterialBarcode == inputCmpltMaterialBarcode){
+
+                //println("cmpltMaterialBarcode-->"+ cmpltMaterialBarcode)
+                //println("cmpltMaterialBarcode input-->"+ inputCmpltMaterialBarcode)
+
+                //println("Condition->"+cmpltMaterialBarcode?.trim() == inputCmpltMaterialBarcode?.trim())
+                if (cmpltMaterialBarcode?.trim() == inputCmpltMaterialBarcode?.trim()){
+                    //println("if cmpltMaterialBarcode input-->"+ cmpltMaterialBarcode)
+                    //println("if inputCmpltMaterialBarcode.toString() input-->"+ inputCmpltMaterialBarcode)
                      matchFlag = true
                      rackMaterialTextValue.setText(item!!.rackBarcodeSerial)
                      binMaterialTextValue.setText(item!!.binBarcodeSerial)
@@ -259,9 +258,9 @@ class PickingFragment : Fragment() {
                 } else {
                         GlobalScope.launch {
                             viewModel.loadPickingItemsNext()
-                            if(viewModel.checkLogin == false){
-                                Navigation.findNavController(it).navigate(R.id.loginFragment)
-                            }
+//                            if(viewModel.checkLogin == false){
+//                                Navigation.findNavController(it).navigate(R.id.loginFragment)
+//                            }
                             // viewModel.handleSubmitPicking()
                         }
                     }
@@ -326,11 +325,12 @@ open class SimplePickingItemAdapter(private val recyclerView: androidx.recyclerv
             binBarcodeSerial.text = pickingItems.binBarcodeSerial
 
             val barcodeComplete = pickingItems.materialBarcodeSerial
+            // println("pickingItems.materialBarcodeSerial input-->"+ pickingItems.materialBarcodeSerial)
             val barcodeValue = barcodeComplete?.split(",");
 
             val scannedMaterialBarcodeValue = viewModel.materialBarcodeSerial
             val scannedSplitedValue = scannedMaterialBarcodeValue?.split(",")
-
+            // println("viewModel.materialBarcodeSerial input-->"+ viewModel.materialBarcodeSerial)
             materialBarcodeSerial.text = (barcodeValue?.get(0) ?:"NA")
 
             if (viewModel.rackBarcodeSerial == pickingItems!!.rackBarcodeSerial  &&
