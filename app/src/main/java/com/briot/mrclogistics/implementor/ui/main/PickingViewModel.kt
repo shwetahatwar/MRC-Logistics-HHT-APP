@@ -37,7 +37,9 @@ class PickingViewModel : ViewModel() {
     fun loadPickingItemsNext() {
         // (networkError as MutableLiveData<Boolean>).value = false
         // (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = emptyArray()
-        RemoteRepository.singleInstance.getPickingItems(this::handlePickingItemsResponseNext, this::handlePickingItemsErrorNext)
+        val id = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().id, "");
+        val userId = id.toInt();
+        RemoteRepository.singleInstance.getPickingItems(userId,this::handlePickingItemsResponseNext, this::handlePickingItemsErrorNext)
     }
 
     private fun handlePickingItemsResponseNext(pickingItems: Array<PickingItems?>) {
@@ -58,7 +60,9 @@ class PickingViewModel : ViewModel() {
     fun loadPickingItems() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = emptyArray()
-        RemoteRepository.singleInstance.getPickingItems(this::handlePickingItemsResponse, this::handlePickingItemsError)
+        val id = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().id, "");
+        val userId = id.toInt();
+        RemoteRepository.singleInstance.getPickingItems(userId,this::handlePickingItemsResponse, this::handlePickingItemsError)
     }
 
     fun loadPickingScannedItems() {

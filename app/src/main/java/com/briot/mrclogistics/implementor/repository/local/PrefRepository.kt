@@ -39,8 +39,6 @@ class PrefRepository {
 }
 
 class PrefConstants {
-
-
     public val USER_TOKEN = "USERTOKEN"
     public val USER_ID = "USER_ID"
     public val id = "id"

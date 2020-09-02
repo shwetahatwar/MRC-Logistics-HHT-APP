@@ -197,7 +197,7 @@ class PutawayFragment : Fragment() {
                     foundFlag = true
                 }
             }
-            viewModel.binBarcodeSerial = inputBin
+                viewModel.binBarcodeSerial = inputBin
             viewModel.materialBarcodeSerial = inputMaterial
             viewModel.rackBarcodeSerial = inputRack
 

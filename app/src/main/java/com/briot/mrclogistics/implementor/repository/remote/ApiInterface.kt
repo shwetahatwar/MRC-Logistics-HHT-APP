@@ -120,9 +120,13 @@ interface ApiInterface {
 
     @GET("pickings/get/dashboardCount")
     fun getPickingsCount(): Observable<PickingsDashboardData?>
+//old
+//    @GET("putaways")
+//    fun getPutaway(): Observable<Array<PutawayItems?>>
 
-    @GET("putaways")
-    fun getPutaway(): Observable<Array<PutawayItems?>>
+    //new
+    @GET("/putaways")
+    fun getPutaway(@Query("userId") userId: Int): Observable<Array<PutawayItems?>>
 
     @GET("putaways/scanned")
     fun getPutawayScannedItems(): Observable<Array<PutawayItemsScanned?>>
@@ -137,7 +141,7 @@ interface ApiInterface {
     fun putPutawayItems(@Body requestbody: PutawayItems): Observable<PutPutawayResponse?>
 
     @GET("pickings")
-    fun getPickingItems():Observable<Array<PickingItems?>>
+    fun getPickingItems(@Query("userId") userId: Int):Observable<Array<PickingItems?>>
 
     @POST("pickings/post/update")
     fun putPickingItems(@Body requestbody: PickingItems): Observable<PutPickingResponse?>

@@ -33,9 +33,9 @@ class RemoteRepository {
                 .subscribe(handleResponse, handleError)
     }
 
-    fun getPutaway( handleResponse: KFunction1<Array<PutawayItems?>, Unit>, handleError: (Throwable) -> Unit) {
+    fun getPutaway( userId:Int,handleResponse: KFunction1<Array<PutawayItems?>, Unit>, handleError: (Throwable) -> Unit) {
         RetrofitHelper.retrofit.create(ApiInterface::class.java)
-                .getPutaway()
+                .getPutaway(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(handleResponse, handleError)
@@ -90,9 +90,9 @@ class RemoteRepository {
                 .subscribe(handleResponse, handleError)
     }
 
-    fun getPickingItems(handleResponse: KFunction1<Array<PickingItems?>, Unit>, handleError: (Throwable) -> Unit) {
+    fun getPickingItems(userId:Int,handleResponse: KFunction1<Array<PickingItems?>, Unit>, handleError: (Throwable) -> Unit) {
         RetrofitHelper.retrofit.create(ApiInterface::class.java)
-                .getPickingItems()
+                .getPickingItems(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(handleResponse, handleError)  

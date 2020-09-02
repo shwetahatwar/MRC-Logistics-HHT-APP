@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.briot.mrclogistics.implementor.LoginClass
 import com.briot.mrclogistics.implementor.UiHelper
+import com.briot.mrclogistics.implementor.repository.local.PrefConstants
+import com.briot.mrclogistics.implementor.repository.local.PrefRepository
 import com.briot.mrclogistics.implementor.repository.remote.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,7 +39,9 @@ class PutawayViewModel : ViewModel() {
     fun loadPutawayItemsNext() {
         // (networkError as MutableLiveData<Boolean>).value = false
         // (this.pickingItems as MutableLiveData<Array<PickingItems?>>).value = emptyArray()
-        RemoteRepository.singleInstance.getPutaway(this::handlePickingItemsResponseNext, this::handlePickingItemsErrorNext)
+        val id = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().id, "");
+        val userId = id.toInt();
+        RemoteRepository.singleInstance.getPutaway(userId,this::handlePickingItemsResponseNext, this::handlePickingItemsErrorNext)
     }
 
     private fun handlePickingItemsResponseNext(putawayItems: Array<PutawayItems?>) {
@@ -60,7 +64,9 @@ class PutawayViewModel : ViewModel() {
     fun loadPutawayItems() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = emptyArray()
-        RemoteRepository.singleInstance.getPutaway(this::handlePutawayItemsResponse, this::handlePutawayItemsError)
+        val id = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().id, "");
+        val userId = id.toInt();
+        RemoteRepository.singleInstance.getPutaway(userId,this::handlePutawayItemsResponse, this::handlePutawayItemsError)
     }
     fun loadPutawayScannedItems() {
         Log.d(TAG,"submit call loadPutwayScanned --->")
@@ -113,8 +119,10 @@ class PutawayViewModel : ViewModel() {
     fun loadPutawayRefreshItems() {
         (networkError as MutableLiveData<Boolean>).value = false
         (this.putawayItems as MutableLiveData<Array<PutawayItems?>>).value = emptyArray()
-        RemoteRepository.singleInstance.getPutaway(this::handlePutawayRefreshItemsResponse, this::handlePutawayRefreshItemsError)
-    }
+        val id = PrefRepository.singleInstance.getValueOrDefault(PrefConstants().id, "");
+        val userId = id.toInt();
+    RemoteRepository.singleInstance.getPutaway(userId,this::handlePutawayRefreshItemsResponse, this::handlePutawayRefreshItemsError)
+}
 
     private fun handlePutawayRefreshItemsResponse(putawayItems: Array<PutawayItems?>) {
 
