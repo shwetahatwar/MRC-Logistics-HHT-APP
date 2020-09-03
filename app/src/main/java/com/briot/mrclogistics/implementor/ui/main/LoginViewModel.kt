@@ -9,6 +9,7 @@ import com.briot.mrclogistics.implementor.repository.remote.RemoteRepository
 import com.briot.mrclogistics.implementor.repository.remote.SignInResponse
 import com.briot.mrclogistics.implementor.repository.remote.User
 import com.google.gson.JsonParser
+import io.reactivex.exceptions.CompositeException
 import retrofit2.HttpException
 import java.net.SocketException
 import java.net.SocketTimeoutException
@@ -38,17 +39,22 @@ class LoginViewModel : ViewModel() {
         if (error is HttpException) {
             if (error.code() >= 401) {
                 var msg = error.response()?.errorBody()?.string()
-                var message = JsonParser().parse(msg)
-                        .asJsonObject["message"]
-                        .asString
-                if (message != null && message.isNotEmpty()) {
-                    errorMessage = message + " Please enter valid Credentials."
-                } else {
-                    errorMessage = error.message()
+                try{
+                    var message = JsonParser().parse(msg)
+                            .asJsonObject["message"]
+                            .asString
+                    if (message != null && message.isNotEmpty()) {
+                        errorMessage = message + " Please enter valid Credentials."
+                    } else {
+                        errorMessage = error.message()
+                    }
+                } catch (e: Exception){
+                    errorMessage = "Please enter valid Credentials."
                 }
+
             }
             (networkError as MutableLiveData<Boolean>).value = true
-        } else if (error is SocketException || error is SocketTimeoutException) {
+        } else if (error is SocketException || error is SocketTimeoutException || error is CompositeException) {
             (networkError as MutableLiveData<Boolean>).value = true
         } else {
 //            (this.user as MutableLiveData<PopulatedUser>).value = invalidUser
